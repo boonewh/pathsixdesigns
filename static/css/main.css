@@ -44,7 +44,6 @@ header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  border-bottom: 25px solid var(--light-background);
 }
 
 .header-top {
@@ -162,6 +161,7 @@ button:hover {
 main img {
   width: 100%;
   height: 100%;
+  border-top: 15px solid var(--light-background);
   border-bottom: 15px solid var(--light-background);
   margin-top: 40px;
 }
@@ -178,7 +178,7 @@ section {
 
 section h2,
 section h1 {
-  color: var(--secondary-text);
+  color: var(--text);
   font-size: 2.5em;
   font-family: alkatra;
   margin: 60px 0 0 0;
@@ -201,6 +201,49 @@ section h1 {
   background: var(--light-gray-color);
   flex: 1 1 300px;
   margin: 10px;
+}
+
+.benefits {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 80px;
+  font-family: Arial, Helvetica, sans-serif;
+  flex-wrap: wrap;
+  text-align: left;
+  list-style-image: url(../images/check.svg);
+}
+
+footer {
+  display: flex;
+  color: white;
+  background-color: var(--primary-background);
+  text-align: left;
+  padding: 20px 0;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 30px;
+  justify-content: space-around;
+}
+
+footer div {
+  padding: 0 10px;
+  width: 25%;
+}
+
+footer ul {
+  list-style: none;
+}
+
+footer li {
+  margin: 10px 0;
+}
+
+footer ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+footer ul li a:hover {
+  color: var(--light-color);
 }
 
 @media (max-width: 768px) {
