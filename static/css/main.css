@@ -90,6 +90,10 @@ header p {
   margin: auto 0;
 }
 
+.rocket {
+  display: none;
+}
+
 /* Navigation Styles */
 
 nav {
@@ -121,14 +125,25 @@ nav ul li a:hover {
   color: var(--light-color);
 }
 
+.navicon {
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  color: white;
+}
+
+#nav-toggle {
+  display: none;
+}
+
+/* Button Styles */
+
 .buttons {
   display: flex;
   justify-content: center;
   margin-top: 20px;
   width: 45%;
 }
-
-/* Button Styles */
 
 button {
   background-color: var(--light-color);
@@ -213,6 +228,71 @@ section h1 {
   list-style-image: url(../images/check.svg);
 }
 
+/* Contact Styles*/
+
+.form-container {
+  margin-left: 40px;
+}
+
+/* Base styles for form elements, optimized for mobile */
+form label {
+  font-size: 1.2em;
+  font-weight: bold;
+  display: block;
+  padding: 10px 0;
+}
+
+form input[type="text"],
+form input[type="email"],
+form textarea,
+form input[type="submit"] {
+  width: 40%;
+  background-color: var(--light-gray-color);
+  border-radius: 3px;
+  border: 1px solid black;
+  padding: 10px;
+  font-size: 1.1em;
+  box-sizing: border-box; /* Ensure padding does not add to the width */
+}
+
+/* Adjust the height for textarea specifically */
+form textarea {
+  height: 150px;
+}
+
+/* Style for the submit button */
+form input#submit {
+  display: block;
+  margin-top: 10px; /* Add some space above the submit button */
+  font-weight: bold;
+  color: #000;
+  background: var(--light-color);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect for submit button */
+form input#submit:hover {
+  cursor: pointer;
+  border-color: #c1c1c1;
+  background-color: #dbdbdb;
+  background-image: linear-gradient(to bottom, #dbdbdb, #cccccc);
+}
+
+/* Flash message and form container - full width */
+.flash,
+.form-container {
+  width: 100%;
+}
+
+/* Ensure inputs and textarea fill their containers */
+input[type="text"],
+input[type="email"],
+textarea {
+  box-sizing: border-box;
+}
+
+/* Footer Styles */
+
 footer {
   display: flex;
   color: white;
@@ -246,7 +326,70 @@ footer ul li a:hover {
   color: var(--light-color);
 }
 
+/* Responsive Styles */
 @media (max-width: 768px) {
+  .navicon {
+    display: block;
+    width: 10%;
+  }
+
+  nav ul {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #nav-toggle:checked + .navicon + nav ul {
+    display: flex;
+  }
+
+  #nav-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    background: none;
+    height: auto;
+    padding: 20px;
+  }
+
+  .rocket {
+    display: block;
+    width: 100%;
+  }
+
+  .header-top {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .logo {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  header h1,
+  header h2,
+  header p {
+    font-size: 1.5em;
+    width: 100%;
+  }
+
+  section {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  main img {
+    display: none;
+  }
+
+  .benefits {
+    margin: 0;
+  }
+
   .services {
     flex-direction: column;
     margin: 0 20px; /* Adjust margin for smaller screens */
@@ -254,5 +397,21 @@ footer ul li a:hover {
 
   .serv {
     margin: 10px 0; /* Adjust margin for smaller screens */
+  }
+
+  .buttons {
+    width: 90%;
+    margin: 20px auto; /* Center the buttons container */
+  }
+
+  footer {
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    text-align: left;
+  }
+
+  footer div {
+    width: 100%;
   }
 }

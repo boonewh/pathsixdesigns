@@ -1,1 +1,46 @@
 {% extends "base.html" %}
+
+{% block title %}PathSix Contact Page{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+{% block header %}
+<div class="header-banner">
+    <h1>Contact Us</h1>
+    {% if success %}
+    <p>Thank you for your message. We'll get back to you shortly.</p>
+    {% else %}
+    {% for message in form.name.errors %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% for message in form.email.errors %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% for message in form.subject.errors %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% for message in form.message.errors %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    <div class="form-container">
+        <form action="{{ url_for('contact') }}" method=post>
+            {{ form.hidden_tag() }}
+            {{ form.name.label }}
+            {{ form.name }}
+            {{ form.email.label }}
+            {{ form.email }}
+            {{ form.subject.label }}
+            {{ form.subject }}
+            {{ form.message.label }}
+            {{ form.message }}
+            {{ form.submit }}
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

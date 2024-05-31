@@ -2,6 +2,10 @@
 
 {% block title %}PathSix Web Designs{% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
 {% block header %}
         <div class="header-banner">
             <h1>Boost Your Business Online</h1>
@@ -9,18 +13,18 @@
             <br><br>
             <p>Custom websites start at just $120 a month!</p>
             <div class="buttons">
-            <button><a href="contact.html">Request my FREE website preview</a></button>
+            <button><a href="{{ url_for('contact') }}">Request my FREE website preview</a></button>
             </div>
         </div>
 {% endblock %}
 
 {% block content %}
-        <img src="static/images/code_pic1.png" alt="html logo tag">
+        <img src="{{ url_for('static', filename='images/code_pic1.png') }}" alt="html logo tag">
         <section>
             <h1>PathSix</h1>
             <p>PathSix is a web development company that specializes in creating custom websites for small businesses.We believe a monthly subscription benefits small businesses.</p>
             <div class="benefits">
-                <ul class="bullets">
+                <ul>
                     <li>We will be here for you! We are not going to disappear.</li>
                     <li>Hosting and maintenance included.</li>
                     <li>No long term commitment, cancel when you want.</li>
@@ -29,10 +33,10 @@
             </div>
             <p>Our goal is to help small businesses succeed online by providing affordable web solutions. Choose the plan that suits your business best and we'll do the customization to give you the boost you need.</p>
             <div>
-            <button><a href="pricing.html">See our pricing</a></button>
+            <button><a href="{{ url_for('pricing') }}">See our pricing</a></button>
             </div>
         </section>
-        <img src="static/images/code_pic2.png" alt="html logo tag">
+        <img src="{{ url_for('static', filename='images/code_pic2.png') }}" alt="html services tag">
         <section>
             <h2>Our Services</h2>
             <p>PathSix offers a variety of services to help your business succeed online.</p>
@@ -67,28 +71,28 @@
                 </div>
             </div>
         </div>
-        <img src="static/images/code_pic3.png" alt="html logo tag">
+        <img src="{{ url_for('static', filename='images/code_pic3.png') }}" alt="html get started">
         <section id="contact">
             <h2>Let's Get Started!</h2>
             <p>Contact us today to learn more about our services and how we can help your business succeed online.</p>
             <div>
-                <button><a href="contact.html">Request my FREE website preview</a></button>
+                <button><a href="{{ url_for('contact') }}">Request my FREE website preview</a></button>
             </div>
         </section>
         <footer>
             <div>
                 <ul>
-                    <li>Navigation:</li>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="services.html">Pricing</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+                    <li><u>Navigation:</u></li>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('pricing') }}">Pricing</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
                 </ul>
             </div>
             <div>
                 <p>&copy; 2024 PathSix Web Design</p>
             </div>
             <div>
-                <p>Customer Support:</p>
+                <p><u>Customer Support:</u></p>
                 <p>email us: support@pathsixdesigns.com</p>
                 <p>call or text: 325-305-9446</p>
             </div>
