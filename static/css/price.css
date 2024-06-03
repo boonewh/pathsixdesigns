@@ -2,7 +2,6 @@
   --dark-color: #050a30;
   --light-color: #16b8e7;
   --light-gray-color: lightgrey;
-  --accent-color: #f51720;
   --text: #050a30;
   --secondary-text: #fa26a0;
   --link-text: white;
@@ -261,6 +260,10 @@ footer ul li a {
 
 footer ul li a:hover {
   color: var(--light-color);
+}
+
+.phone {
+  color: var(--secondary-text);
 }
 
 /* Responsive Styles */

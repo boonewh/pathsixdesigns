@@ -11,41 +11,40 @@
     <h1>Contact Us</h1>
     {% if success %}
     <p>Thank you for your message. We'll get back to you shortly.</p>
-    {% else %}
+  {% else %}
     {% for message in form.name.errors %}
-    <div class="flash">{{ message }}</div>
+      <div class="flash">{{ message }}</div>
     {% endfor %}
     {% for message in form.email.errors %}
-    <div class="flash">{{ message }}</div>
+      <div class="flash">{{ message }}</div>
     {% endfor %}
     {% for message in form.subject.errors %}
-    <div class="flash">{{ message }}</div>
+      <div class="flash">{{ message }}</div>
     {% endfor %}
     {% for message in form.message.errors %}
-    <div class="flash">{{ message }}</div>
+      <div class="flash">{{ message }}</div>
     {% endfor %}
     <div class="form-container">
         <form action="{{ url_for('contact') }}" method=post>
-            {{ form.hidden_tag() }}
-            {{ form.name.label }}
-            {{ form.name }}
-            {{ form.email.label }}
-            {{ form.email }}
-            {{ form.subject.label }}
-            {{ form.subject }}
-            {{ form.message.label }}
-            {{ form.message }}
-            {{ form.submit }}
+        {{ form.hidden_tag() }}
+        {{ form.name.label }}
+        {{ form.name }}
+        {{ form.email.label }}
+        {{ form.email }}
+        {{ form.subject.label }}
+        {{ form.subject }}
+        {{ form.message.label }}
+        {{ form.message }}
+        {{ form.submit }}
         </form>
     </div>
-    {% endif %}
-</div>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
 <aside>
-    <h2>Or email Will, our web speicialist: boonewh@pathsixdesigns.com</h2>
-    <h2>You can call or text us at 325-305-9446</h2>
+    <h2>Or email Will, our web specialist: boonewh@pathsixdesigns.com</h2>
+    <h2>You can call or text us at <a href="tel:325-305-9446" class="phone-link">325-305-9446</a></h2>
     <p>
         Office hours are Monday through Friday, 9:00 am to 9:00 pm CST.
     </p>
