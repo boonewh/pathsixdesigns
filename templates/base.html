@@ -38,6 +38,33 @@
         <main>
             {% block content %}{% endblock %}
         </main>
+        
+        <footer>
+            <div>
+                <ul>
+                    <li><u>Navigation:</u></li>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('pricing') }}">Pricing</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <p>&copy; 2024 PathSix Web Design</p>
+            </div>
+            <div>
+                <p><u>Customer Support:</u></p>
+                <p>email us: support@pathsixdesigns.com</p>
+                <p>call or text: 325-305-9446</p>
+            </div>
+            <div>
+                <p>
+                    PathSix Web Designs is a full-service Website Design and
+                    Management Company. Our mission is to provide
+                    professional, effective, and manageable websites for small
+                    businesses, at a fraction of the cost of designer agencies.
+                </p>
+            </div>
+        </footer>
 
     </body>
 </html>

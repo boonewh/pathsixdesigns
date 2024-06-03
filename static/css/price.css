@@ -30,28 +30,25 @@ body {
 
 /* Header Styles */
 
-header,
 .image-container {
   position: relative;
 }
 
 header {
-  background: url(../images/rocket.jpg);
-  background-position: top 50% right; /* POSITION of background image */
-  background-repeat: no-repeat;
-  background-size: 60%;
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center; /* Horizontally centers items */
+  justify-content: center; /* Vertically centers items */
+  text-align: center;
 }
 
 .header-top {
-  width: 100%;
-  background-color: var(--primary-background);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  text-align: left;
+  width: 100%;
+  background-color: var(--primary-background);
   z-index: 3;
 }
 
@@ -60,8 +57,7 @@ header {
   margin-left: 10px;
 }
 
-.header-banner,
-.contact-banner {
+.header-banner {
   width: 100%;
   padding-left: 10px;
   z-index: 3;
@@ -69,34 +65,17 @@ header {
 }
 
 header h1,
-header h2 {
+header h2,
+header p {
   color: var(--text);
   z-index: 3;
   font-size: 2.9em;
   text-align: center;
-  width: 45%;
-  margin: auto 0;
-}
-
-.header-banner h1 {
-  margin-top: 8%;
-}
-
-.contact-banner h1 {
-  margin-top: 2%;
-}
-
-header p {
-  color: var(--secondary-text);
-  z-index: 3;
-  font-size: 2em;
-  text-align: center;
-  width: 45%;
-  margin: auto 0;
+  margin: 0;
 }
 
 .rocket {
-  display: none;
+  width: 30%;
 }
 
 /* Navigation Styles */
@@ -134,7 +113,7 @@ nav ul li a:hover {
   display: none;
   font-size: 2em;
   cursor: pointer;
-  color: white;
+  color: var(--link-text);
 }
 
 #nav-toggle {
@@ -142,13 +121,6 @@ nav ul li a:hover {
 }
 
 /* Button Styles */
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  width: 45%;
-}
 
 button {
   background-color: var(--light-color);
@@ -176,6 +148,14 @@ button:hover {
   background-color: gold;
 }
 
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Horizontally centers items */
+  justify-content: center; /* Vertically centers items */
+  text-align: center;
+}
+
 /* Main Styles */
 
 main img {
@@ -184,6 +164,53 @@ main img {
   border-top: 15px solid var(--light-background);
   border-bottom: 15px solid var(--light-background);
   margin-top: 40px;
+}
+
+/* Pricing Styles */
+
+.pricing-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+.plan {
+  background: #fff;
+  padding: 20px;
+  flex: 1 1 300px;
+  width: 32%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.price-tab {
+  background: var(--light-background);
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
+  border: 1px solid var(--secondary-text);
+}
+
+h2 {
+  color: var(--text);
+  font-family: Alkatra, Arial, Helvetica, sans-serif;
+}
+
+.price-tab h3 {
+  color: var(--link-text);
+  font-size: 2.2em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.price-tab p {
+  font-size: 20px;
+  line-height: 1.6;
+  color: #333;
 }
 
 section {
@@ -196,109 +223,9 @@ section {
   font-size: 1.2em;
 }
 
-section h2,
-section h1 {
-  color: var(--text);
-  font-size: 2.5em;
-  font-family: alkatra;
-  margin: 60px 0 0 0;
-}
-
-.services {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin: 0 80px;
-  font-family: Arial, Helvetica, sans-serif;
-  flex-wrap: wrap;
-}
-
-.serv {
-  text-align: center;
-  border: 1px solid var(--secondary-text);
-  border-radius: var(--border-radius);
-  padding: 20px;
-  background: var(--light-gray-color);
-  flex: 1 1 300px;
-  margin: 10px;
-}
-
-.benefits {
-  display: flex;
-  justify-content: space-around;
-  margin: 0 80px;
-  font-family: Arial, Helvetica, sans-serif;
-  flex-wrap: wrap;
-  text-align: left;
-  list-style-image: url(../favicon-32x32.png);
-}
-
-/* Contact Styles*/
-
-.form-container {
-  margin-left: 40px;
-}
-
-/* Base styles for form elements, optimized for mobile */
-form label {
-  font-size: 1.2em;
-  font-weight: bold;
-  display: block;
-  padding: 10px 0;
-}
-
-form input[type="text"],
-form input[type="email"],
-form textarea,
-form input[type="submit"] {
-  width: 40%;
-  background-color: var(--light-gray-color);
-  border-radius: 3px;
-  border: 1px solid black;
-  padding: 10px;
-  font-size: 1.1em;
-  box-sizing: border-box; /* Ensure padding does not add to the width */
-}
-
-/* Adjust the height for textarea specifically */
-form textarea {
-  height: 150px;
-}
-
-/* Style for the submit button */
-form input#submit {
-  display: block;
-  margin-top: 10px; /* Add some space above the submit button */
-  font-weight: bold;
-  color: #000;
-  background: var(--light-color);
-  transition: all 0.3s ease-in-out;
-}
-
-/* Hover effect for submit button */
-form input#submit:hover {
-  cursor: pointer;
-  border-color: #c1c1c1;
-  background-color: #dbdbdb;
-  background-image: linear-gradient(to bottom, #dbdbdb, #cccccc);
-}
-
-/* Flash message and form container - full width */
-.flash,
-.form-container {
-  width: 100%;
-}
-
-/* Ensure inputs and textarea fill their containers */
-input[type="text"],
-input[type="email"],
-textarea {
-  box-sizing: border-box;
-}
-
-aside h2,
-aside p {
-  text-align: center;
+section ul {
+  list-style: none;
+  padding: 0;
 }
 
 /* Footer Styles */
@@ -407,22 +334,6 @@ footer ul li a:hover {
 
   .serv {
     margin: 10px 0; /* Adjust margin for smaller screens */
-  }
-
-  .buttons {
-    width: 90%;
-    margin: 20px auto; /* Center the buttons container */
-  }
-
-  .form-container {
-    margin: 0;
-  }
-
-  form input[type="text"],
-  form input[type="email"],
-  form textarea,
-  form input[type="submit"] {
-    width: 100%;
   }
 
   footer {
