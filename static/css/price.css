@@ -155,17 +155,68 @@ button:hover {
   text-align: center;
 }
 
-/* Main Styles */
+/* Pricing Styles */
 
-main img {
-  width: 100%;
-  height: 100%;
-  border-top: 15px solid var(--light-background);
-  border-bottom: 15px solid var(--light-background);
-  margin-top: 40px;
+.price-toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px 20px 0 20px;
 }
 
-/* Pricing Styles */
+.toggle-label {
+  margin: 0 20px;
+  font-size: 2.5em;
+  color: var(--text);
+  font-family: Alkatra, Arial, Helvetica, sans-serif;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: 68px;
+  border: 1px solid var(--secondary-text);
+  border-radius: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 60px;
+  width: 60px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(52px);
+}
 
 .pricing-container {
   display: flex;
