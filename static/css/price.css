@@ -1,14 +1,11 @@
 :root {
   --dark-color: #050a30;
   --light-color: #16b8e7;
-  --light-gray-color: lightgrey;
   --text: #050a30;
   --secondary-text: #fa26a0;
   --link-text: white;
   --primary-background: rgba(5, 10, 48, 0.95);
   --light-background: #16b8e7;
-  --light-gray-background: rgba(147, 156, 161, 0.9);
-  --darker-gray-background: rgba(137, 144, 151, 0.9);
   --border-radius: 30px;
   --transition: all 0.3s linear;
 }
@@ -28,10 +25,6 @@ body {
 }
 
 /* Header Styles */
-
-.image-container {
-  position: relative;
-}
 
 header {
   display: flex;
@@ -54,13 +47,6 @@ header {
 .logo {
   width: 50%;
   margin-left: 10px;
-}
-
-.header-banner {
-  width: 100%;
-  padding-left: 10px;
-  z-index: 3;
-  font-family: Alkatra;
 }
 
 header h1,
@@ -205,7 +191,7 @@ button:hover {
   width: 60px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--link-text);
   transition: 0.4s;
   border-radius: 50%;
 }
@@ -373,21 +359,37 @@ footer ul li a:hover {
     margin: 0 auto;
   }
 
-  main img {
-    display: none;
-  }
-
-  .benefits {
-    margin: 0;
-  }
-
-  .services {
+  .price-toggle-container {
     flex-direction: column;
-    margin: 0 20px; /* Adjust margin for smaller screens */
+    align-items: center;
   }
 
-  .serv {
-    margin: 10px 0; /* Adjust margin for smaller screens */
+  .toggle-label {
+    margin: 5px 0;
+    font-size: 2em;
+  }
+
+  .switch {
+    width: 100px; /* Adjusted width for mobile */
+    height: 50px; /* Adjusted height for mobile */
+  }
+
+  .slider {
+    border-radius: 25px; /* Adjusted border radius for mobile */
+  }
+
+  .slider:before {
+    height: 42px; /* Adjusted height for mobile */
+    width: 42px; /* Adjusted width for mobile */
+    transform: translateX(
+      0px
+    ); /* Adjust this value based on the new width for mobile */
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(
+      48px
+    ); /* Adjust this value based on the new width for mobile */
   }
 
   footer {
