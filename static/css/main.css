@@ -306,6 +306,7 @@ form label {
   font-weight: bold;
   display: block;
   padding: 10px 0;
+  width: 45%;
 }
 
 form input[type="text"],
@@ -339,9 +340,7 @@ form input#submit {
 /* Hover effect for submit button */
 form input#submit:hover {
   cursor: pointer;
-  border-color: #c1c1c1;
-  background-color: #dbdbdb;
-  background-image: linear-gradient(to bottom, #dbdbdb, #cccccc);
+  background-color: gold;
 }
 
 /* Flash message and form container - full width */
@@ -355,6 +354,10 @@ input[type="text"],
 input[type="email"],
 textarea {
   box-sizing: border-box;
+}
+
+aside {
+  margin-top: 150px;
 }
 
 aside h2,
@@ -407,6 +410,12 @@ footer ul li a:hover {
 }
 
 /* Responsive Styles */
+@media only screen and (min-width: 768px) and (max-width: 1500px) {
+  aside {
+    margin-top: 300px;
+  }
+}
+
 @media (max-width: 768px) {
   .navicon {
     display: block;
@@ -511,6 +520,14 @@ footer ul li a:hover {
 
   .form-container {
     margin: 0;
+  }
+
+  form label {
+    width: 100%;
+  }
+
+  .aside {
+    margin-top: 0;
   }
 
   form input[type="text"],
