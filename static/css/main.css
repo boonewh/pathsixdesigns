@@ -206,6 +206,14 @@ section h1 {
   margin: 60px 0 0 0;
 }
 
+section h3 {
+  color: var(--text);
+  font-size: 1.8em;
+  font-family: alkatra;
+  margin: 0;
+  text-align: center;
+}
+
 .services {
   display: flex;
   flex-direction: row;
@@ -289,9 +297,12 @@ section h1 {
 }
 
 .portfolio {
-  text-align: center;
-  color: var(--text);
-  font-size: 1.5em;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 20px 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--light-background);
 }
 
 /* Contact Styles*/
