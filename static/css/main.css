@@ -3,12 +3,8 @@
   --light-color: #13bbe3;
   --light-gray-color: lightgrey;
   --text: #050a30;
-  --secondary-text: #05133d;
+  --secondary-text: #fa26a0;
   --link-text: white;
-  --primary-background: #13bbe3;
-  --light-background: #13bbe3;
-  --light-gray-background: rgba(147, 156, 161, 0.9);
-  --darker-gray-background: rgba(137, 144, 151, 0.9);
   --transition: all 0.3s linear;
 }
 
@@ -47,7 +43,7 @@ header {
   margin: 20px auto; /* Centers the header-top div */
   display: flex;
   align-items: center;
-  background: var(--primary-background);
+  background: var(--light-color);
   border-radius: 25px;
   z-index: 3;
 }
@@ -72,7 +68,7 @@ header h2 {
   z-index: 3;
   font-size: 2.9em;
   text-align: center;
-  width: 45%;
+  width: 55%;
   margin: auto 0;
   background: rgb(250, 250, 250, 0.5);
 }
@@ -90,7 +86,7 @@ header p {
   z-index: 3;
   font-size: 2em;
   text-align: center;
-  width: 45%;
+  width: 55%;
   margin: auto 0;
   background: rgb(250, 250, 250, 0.5);
 }
@@ -151,12 +147,12 @@ nav ul li a:hover {
   display: flex;
   justify-content: center;
   margin-top: 20px;
-  width: 45%;
+  width: 55%;
 }
 
 button {
   background-color: var(--light-color);
-  border: 2px solid var(--secondary-text);
+  border: 2px solid var(--text);
   font-size: 1.5em;
   padding: 10px 20px;
   border-radius: var(--border-radius);
@@ -187,14 +183,6 @@ button:hover {
 
 /* Main Styles */
 
-.border {
-  width: 100%;
-  height: 100%;
-  border-bottom: 15px solid var(--light-background);
-  border-top: 1px solid var(--text);
-  margin-top: 40px;
-}
-
 section {
   display: flex;
   width: 50%;
@@ -221,6 +209,11 @@ section h3 {
   text-align: center;
 }
 
+.info {
+  background: linear-gradient(to bottom, var(--light-color) 0%, white 50%);
+  border-top: 3px solid black;
+}
+
 .services {
   display: flex;
   flex-direction: row;
@@ -232,12 +225,13 @@ section h3 {
 }
 
 .blue {
-  background: var(--light-background);
+  background: var(--light-color);
+  border-top: 3px solid black;
 }
 
 .serv {
   text-align: center;
-  border: 1px solid var(--secondary-text);
+  border: 1px solid var(--text);
   border-radius: var(--border-radius);
   padding: 20px;
   background: var(--light-gray-color);
@@ -283,6 +277,11 @@ section h3 {
   padding: 0;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
+  background: var(--light-color);
+}
+
+.grad {
+  background: linear-gradient(to bottom, var(--light-color) 0%, white 50%);
 }
 
 .testimonials {
@@ -303,12 +302,21 @@ section h3 {
   border-radius: 10px;
 }
 
+.grad img {
+  width: 60%;
+  display: block;
+  margin: 0 auto;
+}
+
 .portfolio {
   display: flex;
   justify-content: center;
   margin: 0;
   padding: 20px 0;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.bottom {
   background: var(--light-background);
 }
 
@@ -385,10 +393,12 @@ aside p {
 
 /* Footer Styles */
 
+/* Footer Styles */
+
 footer {
   display: flex;
-  color: var(--text);
-  background-color: var(--primary-background);
+  color: var(--link-text);
+  background-color: var(--dark-color);
   text-align: left;
   padding: 20px 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -410,28 +420,27 @@ footer li {
 }
 
 footer ul li a {
-  color: var(--text);
+  color: var(--link-text);
   text-decoration: none;
-  font-weight: bold;
 }
 
 footer ul li a:hover {
-  color: gold;
+  color: var(--light-color);
 }
 
 .phone {
   color: var(--secondary-text);
 }
 
-.phone-link {
-  color: var(--text);
-  text-decoration: none;
-}
-
 /* Responsive Styles */
 @media only screen and (min-width: 768px) and (max-width: 1500px) {
   aside {
     margin-top: 300px;
+  }
+
+  header h1,
+  header h2 {
+    font-size: 2.2em;
   }
 }
 
