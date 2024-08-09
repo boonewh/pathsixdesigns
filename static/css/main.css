@@ -3,13 +3,12 @@
   --light-color: #13bbe3;
   --light-gray-color: lightgrey;
   --text: #050a30;
-  --secondary-text: #fa26a0;
+  --secondary-text: #05133d;
   --link-text: white;
   --primary-background: #13bbe3;
   --light-background: #13bbe3;
   --light-gray-background: rgba(147, 156, 161, 0.9);
   --darker-gray-background: rgba(137, 144, 151, 0.9);
-  --border-radius: 30px;
   --transition: all 0.3s linear;
 }
 
@@ -100,6 +99,9 @@ header p {
   display: none;
 }
 
+.rocket_back {
+  display: none;
+}
 /* Navigation Styles */
 
 nav {
@@ -129,7 +131,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-  color: var(--light-color);
+  color: gold;
 }
 
 .navicon {
@@ -161,6 +163,7 @@ button {
   cursor: pointer;
   transition: var(--transition);
   margin: 0 20px;
+  border-radius: 25px;
 }
 
 button a {
@@ -384,7 +387,7 @@ aside p {
 
 footer {
   display: flex;
-  color: white;
+  color: var(--text);
   background-color: var(--primary-background);
   text-align: left;
   padding: 20px 0;
@@ -407,12 +410,13 @@ footer li {
 }
 
 footer ul li a {
-  color: white;
+  color: var(--text);
   text-decoration: none;
+  font-weight: bold;
 }
 
 footer ul li a:hover {
-  color: var(--light-color);
+  color: gold;
 }
 
 .phone {
@@ -459,7 +463,7 @@ footer ul li a:hover {
     padding: 20px;
   }
 
-  .rocket {
+  .rocket_back {
     display: block;
     width: 100%;
   }
