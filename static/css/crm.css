@@ -40,7 +40,6 @@ body {
   margin: 0;
   padding: 0;
   background: #f8f9f3;
-  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 main {
@@ -54,19 +53,6 @@ main {
 
 /* Header Styles */
 
-.price-banner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.rocket {
-  margin: 0 auto;
-  width: 30%;
-}
-
 .header-top {
   width: 80%;
   margin: 20px auto; /* Centers the header-top div */
@@ -77,67 +63,67 @@ main {
   z-index: 3;
 }
 
-.logo {
-  width: 45%;
-  padding: 0 10px;
-  padding-top: 5px;
-}
-
-header h1,
-header h2,
-header p {
-  color: var(--text);
-  z-index: 3;
-  font-size: 2.9em;
-  text-align: center;
-  margin: 0;
-}
-
-.rocket_back {
-  display: none;
-}
-
 /* Navigation Styles */
 
-nav {
+/* This is styling for the floating navigation bar */
+.header-top {
   display: flex;
-  justify-content: flex-end;
-  margin-right: 60px;
-  padding: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: var(--light-background);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-nav ul {
+.header-top nav {
+  flex-grow: 1;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-top nav ul {
   list-style: none;
-  margin: 0;
   padding: 0;
+  margin: 0;
+  display: flex;
 }
 
-nav ul li {
-  margin: 0 45px;
+.header-top nav ul:first-of-type {
+  margin-right: auto;
 }
 
-nav ul li a {
-  color: var(--text);
+.header-top nav ul li {
+  margin: 0 15px;
+}
+
+.header-top nav ul li a {
   text-decoration: none;
+  color: var(--text);
   font-size: 1.5em;
   transition: var(--transition);
 }
 
-nav ul li a:hover {
+.header-top nav ul li a:hover {
   color: gold;
 }
 
+.nav-toggle,
 .navicon {
-  display: none;
-  font-size: 2em;
-  cursor: pointer;
-  color: var(--text);
+  display: none; /* Hide checkbox and icon for desktop */
 }
 
-#nav-toggle {
-  display: none;
+/* Logo Styles */
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-logo {
+  max-width: 30%;
+  height: auto;
 }
 
 /* CRM Table Styles */
@@ -172,7 +158,7 @@ footer {
   text-align: left;
   padding: 20px 0;
   font-family: Arial, Helvetica, sans-serif;
-  margin-top: 30px;
+  margin-top: 150px;
   justify-content: space-around;
 }
 
@@ -200,4 +186,24 @@ footer ul li a:hover {
 
 .phone {
   color: var(--secondary-text);
+}
+
+@media (max-width: 768px) {
+  .header-top {
+    flex-direction: column;
+  }
+
+  .nav-toggle,
+  .navicon {
+    display: block;
+  }
+
+  nav ul {
+    flex-direction: column;
+    display: none;
+  }
+
+  .nav-toggle:checked + .navicon + nav ul {
+    display: flex;
+  }
 }

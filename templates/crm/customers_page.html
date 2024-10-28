@@ -1,13 +1,12 @@
-{% extends "base.html" %}
+{% extends "crm/crm-base.html" %}
 
-{% block title %}PathSix Web Designs CRM Start Page{% endblock %}
+{% block title %}PathSix Web Designs CRM Customer Page{% endblock %}
 
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/crm.css') }}">
 {% endblock %}
 
 {% block content %}
-    <h1>CRM Customer Page</h1>
     <div class="customer">
         <table class="cust-table">
             <tr class="thead">

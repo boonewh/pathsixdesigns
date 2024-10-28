@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Email, ValidationError
 
+# Next three items (two functions and a class) are for the form validation
 # Existing validator for the 'name' field
 def validate_name(form, field):
     if "RobertHiene" in field.data:
@@ -19,3 +20,5 @@ class ContactForm(FlaskForm):
     message = TextAreaField("Briefly describe what you need in your new website. 'Not sure' is a valid response.", validators=[DataRequired(message="Please enter a message. I don't know or I want to talk about it are good responses.")])
     recaptcha = RecaptchaField()
     submit = SubmitField("Send")
+
+#Below here the CRM forms are defined. They will be split out when we transition to a package w/blueprints.

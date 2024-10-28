@@ -62,8 +62,8 @@ def contact():
     
 @app.route('/crm')
 def crm():
-    return render_template('crm.html') 
+    return render_template('crm/crm.html') 
 
 @app.route('/customers_page')
 def customers_page():
-    return render_template('customers_page.html', customers=customers)
+    return render_template('crm/customers_page.html', customers=customers)

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="The PathSix CRM is a customer management software designed and distributed by PathSix Web Design.">
+        <meta name="Author" content="Will Boone">
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SGC6ERQK8S"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-SGC6ERQK8S');
+        </script>
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Alkatra:wght@400..700&display=swap" rel="stylesheet">
+        <title>{% block title %}{% endblock %}</title> <!-- Title Variable -->
+        {% block styles %}{% endblock %} <!-- Stylesheet Variable -->  
+    </head>
+    <body>
+        <header>
+            <div class="header-top">
+                <input type="checkbox" id="nav-toggle" class="nav-toggle">
+                <label for="nav-toggle" class="navicon">&#9776;</label>
+                <nav>
+                    <ul>
+                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <li><a href="{{ url_for('pricing') }}">Pricing</a></li>
+                        <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                    </ul>
+                <!-- Navbar Right Side -->
+                    <ul>
+                        <li><a href="{{ url_for('index') }}">Login</a></li>
+                        <li><a href="{{ url_for('index') }}">Register</a></li>
+                    </ul>
+                </nav>
+            </div>
+            {% block header %}{% endblock %}  
+        </header>
+
+        <main>
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/rocket_logo_full.png') }}" alt="PathSix Logo" class="main-logo">
+            </div>
+            {% block content %}{% endblock %}
+        </main>
+        
+        <footer>
+            <div>
+                <ul>
+                    <li><u>Navigation:</u></li>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('pricing') }}">Pricing</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <p>&copy; 2024 PathSix Web Design</p>
+            </div>
+            <div>
+                <p><u>Customer Support:</u></p>
+                <p>email us: support@pathsixdesigns.com</p>
+                <p>call or text: <a href="tel:325-305-9446" class="phone">325-305-9446</a></p>
+            </div>
+            <div>
+                <p>
+                    PathSix Web Designs is a full-service Website Design and
+                    Management Company. Our mission is to provide
+                    professional, effective, and manageable websites for small
+                    businesses, at a fraction of the cost of designer agencies.
+                </p>
+            </div>
+        </footer>
+        {% block scripts %}{% endblock %} <!-- Scripts Variable -->
+    </body>
+</html>
