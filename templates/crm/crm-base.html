@@ -37,8 +37,9 @@
                     </ul>
                 <!-- Navbar Right Side -->
                     <ul>
-                        <li><a href="{{ url_for('index') }}">Login</a></li>
-                        <li><a href="{{ url_for('index') }}">Register</a></li>
+                        <li><a href="{{ url_for('crm') }}">CRM</a></li>
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        <li><a href="{{ url_for('register') }}">Register</a></li>
                     </ul>
                 </nav>
             </div>
@@ -49,6 +50,15 @@
             <div class="logo-container">
                 <img src="{{ url_for('static', filename='images/rocket_logo_full.png') }}" alt="PathSix Logo" class="main-logo">
             </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul>
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
             {% block content %}{% endblock %}
         </main>
         

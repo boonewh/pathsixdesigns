@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, TextAreaField, SubmitField
-from wtforms.validators import DataRequired, Email, ValidationError
+from wtforms import StringField, TextAreaField, SubmitField, PasswordField, BooleanField
+from wtforms.validators import DataRequired, Email, ValidationError, Length, EqualTo
 
 # Next three items (two functions and a class) are for the form validation
 # Existing validator for the 'name' field
@@ -22,3 +22,16 @@ class ContactForm(FlaskForm):
     submit = SubmitField("Send")
 
 #Below here the CRM forms are defined. They will be split out when we transition to a package w/blueprints.
+
+class RegistrationFrom(FlaskForm):
+    username = StringField("Username", validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    confirm_password = PasswordField("Confirm Password", validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField("Register")
+
+class LoginFrom(FlaskForm):
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    remember = BooleanField("Remember Me")
+    submit = SubmitField("Login")
