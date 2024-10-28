@@ -1,0 +1,203 @@
+:root {
+  --dark-color: #05133d;
+  --light-color: #13bbe3;
+  --light-gray-color: lightgrey;
+  --text: #050a30;
+  --secondary-text: #fa26a0;
+  --link-text: white;
+  --transition: all 0.3s linear;
+}
+
+/* Global Styles */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --dark-color: #050a30;
+  --light-color: #16b8e7;
+  --text: #050a30;
+  --secondary-text: #fa26a0;
+  --link-text: white;
+  --primary-background: rgba(5, 10, 48, 0.95);
+  --light-background: #16b8e7;
+  --border-radius: 30px;
+  --transition: all 0.3s linear;
+}
+
+/* Global Styles */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #f8f9f3;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+main {
+  width: 80%;
+  margin: 0 auto;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Header Styles */
+
+.price-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.rocket {
+  margin: 0 auto;
+  width: 30%;
+}
+
+.header-top {
+  width: 80%;
+  margin: 20px auto; /* Centers the header-top div */
+  display: flex;
+  align-items: center;
+  background: var(--light-background);
+  border-radius: 25px;
+  z-index: 3;
+}
+
+.logo {
+  width: 45%;
+  padding: 0 10px;
+  padding-top: 5px;
+}
+
+header h1,
+header h2,
+header p {
+  color: var(--text);
+  z-index: 3;
+  font-size: 2.9em;
+  text-align: center;
+  margin: 0;
+}
+
+.rocket_back {
+  display: none;
+}
+
+/* Navigation Styles */
+
+nav {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 60px;
+  padding: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 0 45px;
+}
+
+nav ul li a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.5em;
+  transition: var(--transition);
+}
+
+nav ul li a:hover {
+  color: gold;
+}
+
+.navicon {
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  color: var(--text);
+}
+
+#nav-toggle {
+  display: none;
+}
+
+/* CRM Table Styles */
+
+.cust-table {
+  width: 100%; /* Full width for the table */
+  border-collapse: collapse; /* Remove double borders */
+  margin: 20px 0; /* Add space above and below the table */
+}
+
+.cust-table th,
+.cust-table td {
+  border: 1px solid #ddd; /* Add a thin border around each cell */
+  padding: 10px; /* Add padding for spacing within cells */
+}
+
+.cust-table th {
+  background-color: lightblue; /* Add a background color to headers */
+  font-weight: bold;
+}
+
+.cust-table tr:nth-child(even) {
+  background-color: lightgrey; /* Optional: add alternating row colors */
+}
+
+/* Footer Styles */
+
+footer {
+  display: flex;
+  color: var(--link-text);
+  background-color: var(--dark-color);
+  text-align: left;
+  padding: 20px 0;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 30px;
+  justify-content: space-around;
+}
+
+footer div {
+  padding: 0 10px;
+  width: 25%;
+}
+
+footer ul {
+  list-style: none;
+}
+
+footer li {
+  margin: 10px 0;
+}
+
+footer ul li a {
+  color: var(--link-text);
+  text-decoration: none;
+}
+
+footer ul li a:hover {
+  color: var(--light-color);
+}
+
+.phone {
+  color: var(--secondary-text);
+}

@@ -8,6 +8,27 @@ app.config.from_object(Config)
 
 mail = Mail(app)
 
+customers = [
+    {
+        'company': 'Acme, Inc.',
+        'address': '130 Main St.',
+        'city': 'Boston',
+        'state': 'MA',
+        'zipcode': '02108',
+        'email': 'doe@acme.com',
+        'phone': '555-555-5555'
+    },
+    {
+        'company': 'Widgets, LLC',
+        'address': '123 Main St.',
+        'city': 'Boston',
+        'state': 'MA',
+        'zipcode': '02108',
+        'email': 'jane@widgets.com',
+        'phone': '555-555-5556'
+    },
+]
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -38,3 +59,11 @@ def contact():
             return render_template('contact.html', success=True)
     elif request.method == 'GET':
         return render_template('contact.html', form=form)
+    
+@app.route('/crm')
+def crm():
+    return render_template('crm.html') 
+
+@app.route('/customers_page')
+def customers_page():
+    return render_template('customers_page.html', customers=customers)

@@ -7,11 +7,11 @@ def validate_name(form, field):
     if "RobertHiene" in field.data:
         raise ValidationError("Your message has been rejected. Please Stop.")
 
-# New validator for the 'subject' field
 def validate_subject(form, field):
-    if "xevil" in field.data.lower():
-        raise ValidationError("Your message has been rejected.")
-
+    blocked_words = ["write", "writing", "wrote"]
+    if any(word in field.data.lower() for word in blocked_words):
+        raise ValidationError("Your message has been marked as spam. If this is a mistake, please email us directly at boonewh@pathsixdesigns.com")
+        
 class ContactForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired(message="Please enter your name."), validate_name])
     email = StringField("Email", validators=[DataRequired(message="Please enter your email address"), Email()])
