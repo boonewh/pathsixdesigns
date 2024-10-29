@@ -8,7 +8,7 @@ app.config.from_object(Config)
 
 mail = Mail(app)
 
-customers = [
+companies = [
     {
         'company': 'Acme, Inc.',
         'address': '130 Main St.',
@@ -70,9 +70,9 @@ def contact():
 def crm():
     return render_template('crm/crm.html') 
 
-@app.route('/customers_page')
-def customers_page():
-    return render_template('crm/customers_page.html', customers=customers)
+@app.route('/customers')
+def customers():
+    return render_template('crm/customers.html', companies=companies)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

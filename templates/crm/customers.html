@@ -1,0 +1,51 @@
+{% extends "crm/crm-base.html" %}
+
+{% block title %}PathSix Web Designs CRM Customer Page{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crm.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="body-container">
+        <aside class="report-nav">
+            <nav>
+                <ul>
+                    <li><a href="#">Customer Overview</a></li>
+                    <li><a href="#">Emails</a></li>
+                    <li><a href="#">Phone Numbers</a></li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <div class="customer">
+            <table class="cust-table">
+                <tr class="thead">
+                    <th colspan="7">CUSTOMERS</th>
+                </tr>
+                <tr class="sm-thead">
+                    <th>Company</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zipcode</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+                {% for company in companies %}
+                <tr>
+                    <td>{{ company.company }} </td>
+                    <td>{{ company.address }} </td>
+                    <td>{{ company.city }} </td>
+                    <td>{{ company.state }} </td>
+                    <td>{{ company.zipcode }} </td>
+                    <td>{{ company.email }} </td>
+                    <td>{{ company.phone }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+            
+{% endblock %}

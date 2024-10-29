@@ -1,27 +1,4 @@
 :root {
-  --dark-color: #05133d;
-  --light-color: #13bbe3;
-  --light-gray-color: lightgrey;
-  --text: #050a30;
-  --secondary-text: #fa26a0;
-  --link-text: white;
-  --transition: all 0.3s linear;
-}
-
-/* Global Styles */
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scroll */
-}
-
-* {
-  box-sizing: border-box;
-}
-
-:root {
   --dark-color: #050a30;
   --light-color: #16b8e7;
   --text: #050a30;
@@ -40,11 +17,6 @@ body {
   margin: 0;
   padding: 0;
   background: #f8f9f3;
-}
-
-main {
-  width: 80%;
-  margin: 0 auto;
 }
 
 * {
@@ -126,7 +98,70 @@ main {
   height: auto;
 }
 
+/* Left Navigation Styles */
+
+.body-container {
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+}
+
+.report-nav nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--dark-color);
+}
+
+.report-nav nav ul li {
+  border: 1px solid var(--dark-color);
+}
+
+.report-nav nav ul li a {
+  color: var(--text);
+  text-decoration: none;
+  padding: 15px 20px;
+  display: block;
+}
+
+.report-nav nav ul li a:hover {
+  background-color: #555; /* Change color on hover */
+}
+
+/* Style for the left-side nav (aside) */
+.report-nav {
+  width: 250px; /* Adjust width as needed */
+  color: var(--text);
+  padding-top: 20px;
+  overflow-y: auto; /* Enables scroll if nav gets too long */
+}
+
+/* Options Styles */
+
+.options {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 60px;
+}
+
+.options img {
+  width: 20%;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+}
+
+.options img:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
 /* CRM Table Styles */
+
+.customer {
+  width: 80%;
+}
 
 .cust-table {
   width: 100%; /* Full width for the table */
