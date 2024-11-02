@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
 from pathsix import app, mail, bcrypt, db
-from pathsix.forms import ContactForm, RegistrationForm, LoginForm
+from pathsix.forms import ContactForm, RegistrationForm, LoginForm, UpdateAccountForm
 from flask_mail import Message
 from pathsix.models import User, Client, Address, ContactNote, Sale, BillingCycle, WebsiteUpdate, MailingList, ClientWebsite, Reminder
 from flask_login import login_user, current_user, logout_user, login_required
@@ -103,7 +103,17 @@ def logout():
     logout_user()
     return redirect(url_for('crm'))
 
-@app.route('/account')
+@app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-    return render_template('crm/account.html')
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Your account has been updated.', 'success')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    return render_template('crm/account.html', form=form)

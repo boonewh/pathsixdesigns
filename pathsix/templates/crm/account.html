@@ -6,4 +6,49 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/crm.css') }}">
 {% endblock %}
 
-{% block content %}{% endblock %}
+{% block content %}
+    <section class="account">
+        <h1>Account Information</h1>
+        <p>Username: {{ current_user.username }}</p>
+        <p>Email: {{ current_user.email }}</p>
+    </section>
+    <div class="register-container">
+        <form action="" method="POST" class="register-form">
+            {{ form.hidden_tag() }}
+            <fieldset>
+                <legend>Reset Account Information</legend>
+                <div class="form-group">
+                    {{ form.username.label(class="form-label") }}
+
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-input error-input") }}  
+                        {% for error in form.username.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.username(class="form-input") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    {% if form.email.errors %}
+                    {{ form.email(class="form-input error-input") }}  
+                    {% for error in form.email.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                {% else %}
+                    {{ form.email(class="form-input") }}
+                {% endif %}
+                </div>
+                {{ form.submit(class="submit-btn") }} 
+            </fieldset>
+        </form>
+        <small class="login-link">
+            Already have an account? <a href="{{ url_for('login') }}">Login</a>
+        </small>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/crm.js') }}"></script>
+{% endblock %}
