@@ -1,8 +1,9 @@
 from flask import render_template, request, redirect, url_for, flash
-from pathsix import app, mail
+from pathsix import app, mail, bcrypt, db
 from pathsix.forms import ContactForm, RegistrationForm, LoginForm
 from flask_mail import Message
-from pathsix.models import Client, Address, ContactNote, Sale, BillingCycle, WebsiteUpdate, MailingList, ClientWebsite, Reminder
+from pathsix.models import User, Client, Address, ContactNote, Sale, BillingCycle, WebsiteUpdate, MailingList, ClientWebsite, Reminder
+from flask_login import login_user, current_user, logout_user, login_required
 
 # Sample data for the customers page
 companies = [
@@ -66,24 +67,43 @@ def crm():
     return render_template('crm/crm.html') 
 
 @app.route('/customers')
+@login_required
 def customers():
     return render_template('crm/customers.html', companies=companies)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('crm'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('crm'))
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Account created! You can now log in.', 'success')
+        return redirect(url_for('login'))
     return render_template('crm/register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
-            flash('You have been logged in!', 'success')
-            return redirect(url_for('crm'))
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('crm'))   
         else:
-            flash('Login Unsuccessful. Please check email and password', 'danger')
+            flash('Login Unsuccessful. Please check email and password', 'error')
     return render_template('crm/login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('crm'))
+
+@app.route('/account')
+@login_required
+def account():
+    return render_template('crm/account.html')
