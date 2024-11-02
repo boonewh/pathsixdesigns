@@ -1,13 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from forms import ContactForm, RegistrationFrom, LoginFrom
-from flask_mail import Mail, Message
-from config import Config
+from flask import render_template, request, redirect, url_for, flash
+from pathsix import app, mail
+from pathsix.forms import ContactForm, RegistrationForm, LoginForm
+from flask_mail import Message
+from pathsix.models import Client, Address, ContactNote, Sale, BillingCycle, WebsiteUpdate, MailingList, ClientWebsite, Reminder
 
-app = Flask(__name__)
-app.config.from_object(Config)
-
-mail = Mail(app)
-
+# Sample data for the customers page
 companies = [
     {
         'company': 'Acme, Inc.',
@@ -42,13 +39,11 @@ def contact():
     form = ContactForm()
     if request.method == 'POST':
         if not form.validate():
-            # Flash error messages for each field
-            for field, errors in form.errors.items():
-                for error in errors:
-                    flash(error, 'error')  # 'error' is the flash category for styling purposes
-            return redirect(url_for('contact'))  # Redirect to display flash messages
+            for field_errors in form.errors.values():
+                for error in field_errors:
+                    flash(error, 'error')
+            return redirect(url_for('contact'))
         else:
-            # Prepare and send the email
             msg = Message(
                 subject=form.subject.data,
                 sender=app.config['MAIL_USERNAME'],
@@ -63,9 +58,9 @@ def contact():
             """
             mail.send(msg)
             flash("Your message has been sent successfully!", "success")
-            return redirect(url_for('contact'))  # Redirect after success
+            return redirect(url_for('contact'))
     return render_template('contact.html', form=form)
-    
+
 @app.route('/crm')
 def crm():
     return render_template('crm/crm.html') 
@@ -76,7 +71,7 @@ def customers():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegistrationFrom()
+    form = RegistrationForm()
     if form.validate_on_submit():
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('crm'))
@@ -84,7 +79,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginFrom()
+    form = LoginForm()
     if form.validate_on_submit():
         if form.email.data == 'admin@blog.com' and form.password.data == 'password':
             flash('You have been logged in!', 'success')
@@ -92,6 +87,3 @@ def login():
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('crm/login.html', form=form)
-
-if __name__ == '__main__':
-    app.run(debug=True)
