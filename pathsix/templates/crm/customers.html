@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-
+    <div class="link-new"><a href="{{ url_for('create_client') }}">+Add New Client</a></div>
     <div class="body-container">
         <aside class="report-nav">
             <nav>
@@ -22,30 +22,29 @@
         <div class="customer">
             <table class="cust-table">
                 <tr class="thead">
-                    <th colspan="7">CUSTOMERS</th>
+                    <th colspan="6">CLIENTS</th>
                 </tr>
                 <tr class="sm-thead">
-                    <th>Company</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Zipcode</th>
+                    <th>ID</th>
+                    <th>Client Name</th>
+                    <th>Website</th>
+                    <th>Pricing Tier</th>
                     <th>Email</th>
                     <th>Phone</th>
                 </tr>
-                {% for company in companies %}
+                {% for client in clients %}
                 <tr>
-                    <td>{{ company.company }} </td>
-                    <td>{{ company.address }} </td>
-                    <td>{{ company.city }} </td>
-                    <td>{{ company.state }} </td>
-                    <td>{{ company.zipcode }} </td>
-                    <td>{{ company.email }} </td>
-                    <td>{{ company.phone }} </td>
+                    <td>{{ client.client_id }}</td>
+                    <td>{{ client.name }}</td>
+                    <td>{{ client.website }}</td>
+                    <td>{{ client.pricing_tier }}</td>
+                    <td>{{ client.email or 'N/A' }}</td>
+                    <td>{{ client.phone or 'N/A' }}</td>
+                    </td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
-    </div>
+        
             
 {% endblock %}

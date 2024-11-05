@@ -1,31 +1,9 @@
 from flask import render_template, request, redirect, url_for, flash
 from pathsix import app, mail, bcrypt, db
-from pathsix.forms import ContactForm, RegistrationForm, LoginForm, UpdateAccountForm
+from pathsix.forms import ContactForm, RegistrationForm, LoginForm, UpdateAccountForm, ClientForm
 from flask_mail import Message
-from pathsix.models import User, Client, Address, ContactNote, Sale, BillingCycle, WebsiteUpdate, MailingList, ClientWebsite, Reminder
+from pathsix.models import User, Client, Address, Contact, ContactNote, Sale, BillingCycle, WebsiteUpdate, MailingList, ClientWebsite, Reminder
 from flask_login import login_user, current_user, logout_user, login_required
-
-# Sample data for the customers page
-companies = [
-    {
-        'company': 'Acme, Inc.',
-        'address': '130 Main St.',
-        'city': 'Boston',
-        'state': 'MA',
-        'zipcode': '02108',
-        'email': 'doe@acme.com',
-        'phone': '555-555-5555'
-    },
-    {
-        'company': 'Widgets, LLC',
-        'address': '123 Main St.',
-        'city': 'Boston',
-        'state': 'MA',
-        'zipcode': '02108',
-        'email': 'jane@widgets.com',
-        'phone': '555-555-5556'
-    },
-]
 
 @app.route('/')
 def index():
@@ -69,7 +47,9 @@ def crm():
 @app.route('/customers')
 @login_required
 def customers():
-    return render_template('crm/customers.html', companies=companies)
+    # Query all clients and eager load related addresses
+    clients = Client.query.all()
+    return render_template('crm/customers.html', clients=clients)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -117,3 +97,62 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     return render_template('crm/account.html', form=form)
+
+@app.route('/customers/new', methods=['GET', 'POST'])
+@login_required
+def create_client():
+    form = ClientForm()
+    if request.method == 'GET':
+        # Prefill the website field with "https://"
+        form.website.data = 'https://'
+
+    if form.validate_on_submit():
+        # Create the primary Client entry
+        new_client = Client(
+            name=form.name.data,
+            website=form.website.data,
+            pricing_tier=form.pricing_tier.data,
+            email=form.email.data,
+            phone=form.phone.data,
+            user_id=current_user.id
+        )
+        db.session.add(new_client)
+        db.session.flush()  # Temporarily writes new_client to get its client_id
+
+        # Create the Contact entry
+        contact = Contact(
+            client_id=new_client.client_id,
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            email=form.contact_email.data,
+            phone=form.contact_phone.data
+        )
+        db.session.add(contact)
+
+        # Create related entries
+        address = Address(
+            client_id=new_client.client_id,
+            street=form.street.data,
+            city=form.city.data,
+            state=form.state.data,
+            zip_code=form.zip_code.data
+        )
+        db.session.add(address)
+
+        contact_note = ContactNote(
+            client_id=new_client.client_id,
+            note=form.contact_note.data
+        )
+        db.session.add(contact_note)
+
+        # Commit all changes as a single transaction
+        db.session.commit()
+        flash('Client and related information added successfully!', 'success')
+        return redirect(url_for('customers'))
+    return render_template('crm/create_client.html', form=form)
+
+@app.route('/customers/<int:client_id>', methods=['GET', 'POST'])
+@login_required
+def client(client_id):
+    client = Client.query.get_or_404(client_id)
+    return render_template('crm/client.html', client=client)

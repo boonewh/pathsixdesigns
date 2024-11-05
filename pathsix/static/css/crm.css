@@ -104,7 +104,7 @@ body {
   margin: 0 auto;
   font-family: Arial, sans-serif;
   display: flex;
-  width: 90%;
+  width: 95%;
   justify-content: space-between;
 }
 
@@ -132,7 +132,6 @@ body {
 
 /* Style for the left-side nav (aside) */
 .report-nav {
-  width: 250px; /* Adjust width as needed */
   color: var(--text);
   padding-top: 20px;
   overflow-y: auto; /* Enables scroll if nav gets too long */
@@ -160,7 +159,7 @@ body {
 /* CRM Table Styles */
 
 .customer {
-  width: 80%;
+  width: 83%;
 }
 
 .cust-table {
@@ -221,6 +220,27 @@ body {
 }
 
 /* Label and Input Styling */
+
+.link-new {
+  width: 90%;
+  text-align: end;
+  margin-top: 10px;
+}
+
+.link-new a {
+  color: var(--text);
+  text-decoration: none;
+  padding: 5px;
+  transition: background-color 0.7s ease;
+  border: 1px solid var(--dark-color);
+  border-radius: 10px;
+  background-color: lightblue;
+}
+
+.link-new a:hover {
+  background-color: gold;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -283,13 +303,95 @@ body {
   color: var(--text);
 }
 
+/* Create Client Form Styles */
+/* Create Client Form Styles */
+.create-client-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 20px;
+  background-color: #f8f9f3;
+}
+
+.create-client-form {
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.create-client-form fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.create-client-form legend {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: var(--dark-color);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Label and Input Styling for Create Client Form */
+.create-client-form .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.create-client-form .form-label {
+  font-size: 1.1em;
+  color: var(--text);
+  margin-bottom: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.create-client-form .form-input {
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.create-client-form .form-input:focus {
+  border-color: var(--light-color);
+  outline: none;
+}
+
+/* Submit Button Styling for Create Client Form */
+.create-client-form .submit-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  color: white;
+  background-color: var(--light-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-client-form .submit-btn:hover {
+  background-color: gold;
+  color: var(--text);
+}
+
 /* Success message styling */
 .success {
   background-color: #d4edda;
   color: #155724;
   padding: 10px;
   border-radius: 4px;
-  border: 1px solid #c3e6cb;
+  border: 1px solid lightgrey;
   margin-bottom: 10px;
 }
 

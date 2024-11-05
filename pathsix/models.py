@@ -6,9 +6,9 @@ from flask_login import UserMixin
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Login Manager
+# 1. User Table
 class User(db.Model, UserMixin):
-    __tablename__ = 'users' 
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -21,38 +21,40 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
-# 1. Client Table
+# 2. Client Table
 class Client(db.Model):
     __tablename__ = 'clients'
 
     client_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     website = db.Column(db.String(255))
-    pricing_tier = db.Column(db.Integer)
+    pricing_tier = db.Column(db.String(20))
+    email = db.Column(db.String(120), nullable=True)
+    phone = db.Column(db.String(20), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
     # Relationships
     addresses = db.relationship('Address', backref='client', lazy=True)
+    contacts = db.relationship('Contact', backref='client', lazy=True)
     contact_notes = db.relationship('ContactNote', backref='client', lazy=True)
     sales = db.relationship('Sale', backref='client', lazy=True)
-    reminders = db.relationship('Reminder', backref='client', lazy=True)
     billing_cycles = db.relationship('BillingCycle', backref='client', lazy=True)
     website_updates = db.relationship('WebsiteUpdate', backref='client', lazy=True)
     mailing_lists = db.relationship('MailingList', backref='client', lazy=True)
     client_websites = db.relationship('ClientWebsite', backref='client', lazy=True)
+    reminders = db.relationship('Reminder', backref='client', lazy=True)
 
     def __repr__(self):
         return f"Client('{self.name}', '{self.website}')"
 
-# 2. Address Table
+# 3. Address Table
 class Address(db.Model):
     __tablename__ = 'addresses'
 
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
-    name = db.Column(db.String(100))
     street = db.Column(db.String(255), nullable=False)
     city = db.Column(db.String(100), nullable=False)
     state = db.Column(db.String(2), nullable=False)
@@ -63,7 +65,23 @@ class Address(db.Model):
     def __repr__(self):
         return f"Address('{self.street}', '{self.city}', '{self.state}', '{self.zip_code}')"
 
-# 3. ContactNote Table
+# 4. Contact Table
+class Contact(db.Model):
+    __tablename__ = 'contacts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), nullable=True)
+    phone = db.Column(db.String(20), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+
+    def __repr__(self):
+        return f"Contact('{self.first_name}', '{self.last_name}', '{self.email}', '{self.phone}')"
+
+# 5. ContactNote Table
 class ContactNote(db.Model):
     __tablename__ = 'contact_notes'
 
@@ -75,7 +93,7 @@ class ContactNote(db.Model):
     def __repr__(self):
         return f"ContactNote('Client ID: {self.client_id}', 'Note: {self.note[:30]}...')"
 
-# 4. Sales Table
+# 6. Sale Table
 class Sale(db.Model):
     __tablename__ = 'sales'
 
@@ -90,7 +108,7 @@ class Sale(db.Model):
     def __repr__(self):
         return f"Sale('Client ID: {self.client_id}', 'Amount: {self.sale_amount}', 'Date: {self.sale_date}')"
 
-# 5. BillingCycle Table
+# 7. BillingCycle Table
 class BillingCycle(db.Model):
     __tablename__ = 'billing_cycles'
 
@@ -105,7 +123,7 @@ class BillingCycle(db.Model):
     def __repr__(self):
         return f"BillingCycle('Client ID: {self.client_id}', 'Cycle: {self.billing_cycle}', 'Status: {self.payment_status}')"
 
-# 6. Website Updates Table
+# 8. WebsiteUpdate Table
 class WebsiteUpdate(db.Model):
     __tablename__ = 'website_updates'
 
@@ -120,7 +138,7 @@ class WebsiteUpdate(db.Model):
     def __repr__(self):
         return f"WebsiteUpdate('Client ID: {self.client_id}', 'Date: {self.update_date}')"
 
-# 7. Mailing List Table
+# 9. MailingList Table
 class MailingList(db.Model):
     __tablename__ = 'mailing_list'
 
@@ -135,7 +153,7 @@ class MailingList(db.Model):
     def __repr__(self):
         return f"MailingList('Client ID: {self.client_id}', 'Address: {self.address}', 'Postcard Sent: {self.postcard_sent}')"
 
-# 8. Client Websites Table
+# 10. ClientWebsite Table
 class ClientWebsite(db.Model):
     __tablename__ = 'client_websites'
 
@@ -152,7 +170,7 @@ class ClientWebsite(db.Model):
     def __repr__(self):
         return f"ClientWebsite('Client ID: {self.client_id}', 'Domain: {self.domain}', 'SSL Status: {self.ssl_status}')"
 
-# 9. Reminders Table
+# 11. Reminder Table
 class Reminder(db.Model):
     __tablename__ = 'reminders'
 
