@@ -46,7 +46,7 @@
             </table>
             {% if clients.total > 25 %}
             <div class="pagination">
-                {% for page_num in clients.iter_pages() %}
+                {% for page_num in clients.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                     {% if page_num %}
                         {% if clients.page == page_num %}
                             <a href="{{ url_for('customers', page=page_num) }}" class="active">{{ page_num }}</a>
