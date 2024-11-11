@@ -32,7 +32,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                 </tr>
-                {% for client in clients %}
+                {% for client in clients.items %}
                 <tr>
                     <td>{{ client.client_id }}</td>
                     <td><a href="{{ url_for('client', client_id=client.client_id) }}">{{ client.name }}</a></td>
@@ -44,6 +44,21 @@
                 </tr>
                 {% endfor %}
             </table>
+            {% if clients.total > 25 %}
+            <div class="pagination">
+                {% for page_num in clients.iter_pages() %}
+                    {% if page_num %}
+                        {% if clients.page == page_num %}
+                            <a href="{{ url_for('customers', page=page_num) }}" class="active">{{ page_num }}</a>
+                        {% else %}
+                            <a href="{{ url_for('customers', page=page_num) }}">{{ page_num }}</a>
+                        {% endif %}
+                    {% else %}
+                        <span>...</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
         </div>
         
             

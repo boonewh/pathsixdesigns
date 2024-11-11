@@ -47,8 +47,9 @@ def crm():
 @app.route('/customers')
 @login_required
 def customers():
-    # Query all clients and eager load related addresses
-    clients = Client.query.all()
+    # Fetch all clients and paginate the results
+    page = request.args.get('page', 1, type=int)
+    clients = Client.query.paginate(page=page, per_page=25)
     return render_template('crm/customers.html', clients=clients)
 
 @app.route('/register', methods=['GET', 'POST'])
