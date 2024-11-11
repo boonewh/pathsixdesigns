@@ -1,7 +1,152 @@
-PathSix CRM
+# PathSix CRM
+
+# Documentation
+
+## Introduction
+
+### Overview of the PathSix CRM
+
+The PathSix CRM is a comprehensive customer relationship management tool developed by PathSix Web Designs. Designed to streamline client management for small and medium-sized businesses, the CRM offers an intuitive interface that helps users efficiently organize, track, and maintain customer information. It includes functionalities such as client management, contact tracking, and user account handling to ensure that businesses can maintain strong relationships with their customers and improve their workflow.
+
+### Key Features and Intended Usage
+
+- **Client Management**: Easily create, view, and manage client profiles, complete with contact details and relevant notes.
+- **Contact Tracking**: Link multiple contact persons to each client and store their individual information, such as phone numbers and emails.
+- **User Account Management**: Manage user profiles, including registration, login, and account updates, with built-in authentication.
+- **Flexible Data Handling**: Add, update, and delete client records, ensuring data accuracy and maintaining an organized database.
+- **User-Friendly Interface**: Simplified navigation and well-structured templates to improve user experience and productivity.
+- **Security Prompts**: Confirmation processes for sensitive actions like deleting client data, to prevent accidental data loss.
+- **Responsive Design**: Optimized for a range of devices to allow users to manage client data anytime, anywhere.
+
+The PathSix CRM is intended for use by businesses looking for an efficient way to manage their customer relationships, providing essential tools for clear record-keeping and easy access to client data.
+
+### System Requirements and Prerequisites
+
+**Server Requirements**:
+
+- Flask web framework installed
+- Python version 3.7 or higher
+- Database setup (e.g., SQLite or a configured relational database)
+- Web server (e.g., Nginx, Apache)
+
+**Client-Side Requirements**:
+
+- Modern web browser (Chrome, Firefox, Edge, Safari)
+- Internet connection for remote access and updates
+
+**Development Environment**:
+
+- Flask-WTF for form handling
+- SQLAlchemy for database interactions
+- Properly configured Flask project with template and static file structure
+
+**Security**:
+
+- SSL/TLS for secure data transfer
+- User authentication implemented with secure password handling (e.g., bcrypt)
+
+The PathSix CRM is designed to be easy to deploy, allowing businesses to quickly start using it with minimal technical complexity while offering powerful, customizable functionality.
+
+---
+
+# PathSix CRM User Instruction Guide
+
+Welcome to the PathSix CRM! This guide will help you navigate and use the main features of the CRM to manage your clients effectively.
+
+## 1. General Navigation
+
+The PathSix CRM is designed with an intuitive layout that allows for seamless navigation. The top navigation bar is your main tool for moving between pages.
+
+### Navigation Menu
+
+- **Home**: Returns to the CRM homepage.
+- **Pricing**: View pricing details for PathSix services.
+- **Contact**: Get in touch with PathSix Web Designs support.
+- **CRM**: Access the CRM dashboard.
+- **Login/Register**: Log in to or create an account.
+- **Account/Logout**: Manage your account or log out if already logged in.
+
+## 2. Pages Overview
+
+### Home Page (`crm.html`)
+
+- **Purpose**: The entry point for the CRM, with links to start managing clients.
+- **Main Action**: Click on the relevant sections to navigate to client management or other tools.
+
+### Customer List Page (`customers.html`)
+
+- **Purpose**: View and manage all clients.
+- **Features**:
+  - **Client Table**: Displays a list of all clients with information like ID, name, website, pricing tier, email, and phone.
+  - **Add New Client**: Click the “+Add New Client” link to go to the add client page.
+  - **Reports Sidebar**: Use the left sidebar to view specific client information, such as email or phone reports.
+
+### Add New Client Page (`create_client.html`)
+
+- **Purpose**: Enter information for a new client.
+- **Instructions**:
+  1. Fill out the required fields under "Client Information," "Contact Person," and "Address Information."
+  2. Add a note if necessary under "Contact Note."
+  3. Click the submit button to save the new client.
+- **Form Validation**: If any field has an error, the system will display an error message in red.
+
+### Client Details Page (`client.html`)
+
+- **Purpose**: View detailed information about a specific client.
+- **Features**:
+  - **Edit Client**: Click the “Edit Client” button to modify client details.
+  - **Delete Client**: Use the delete form to remove a client after confirming the action.
+- **Contact Information**: View associated contacts for the client or a message stating no contacts are available.
+
+### Account Page (`account.html`)
+
+- **Purpose**: View and update user account details.
+- **Instructions**:
+  - View your current username and email.
+  - Fill in new information in the form and submit to update account details.
+
+### Registration Page (`register.html`)
+
+- **Purpose**: Create a new account for the CRM.
+- **Instructions**:
+  1. Enter a username, email, password, and confirm your password.
+  2. Submit the form to register a new account.
+  - **Error Handling**: Any form validation errors will be shown in red under the respective fields.
+
+### Login Page (`login.html`)
+
+- **Purpose**: Log in to the CRM.
+- **Instructions**:
+  1. Enter your registered email and password.
+  2. Check "Remember Me" if desired for persistent login.
+  3. Submit the form to log in.
+- **Note**: A "Forgot password?" link is available for password reset.
+
+### Delete Client Confirmation Page (`delete_client.html`)
+
+- **Purpose**: Confirm and process the deletion of a client.
+- **Instructions**:
+  - Confirm the client name and click "Yes, Delete" to proceed.
+  - Click “Cancel” to return to the client list without making changes.
+
+## 3. Common Features and Tips
+
+- **Form Validation**: Input fields show error messages in red if validation fails.
+- **Flash Messages**: Important feedback messages may appear at the top of the page.
+- **Responsive Design**: The CRM is optimized for use on both desktop and mobile devices.
+
+## 4. Support and Contact
+
+For any issues or support, please contact:
+
+- **Email**: support@pathsixdesigns.com
+- **Phone**: 325-305-9446
+
+PathSix Web Designs aims to provide professional and efficient tools for your business needs. Happy client management!
 
 <!-- prettier-ignore-start -->
 
+NOTE: Below here is developer notes. 
 
 I. Business Info
     a. name
@@ -53,248 +198,95 @@ VIII. Scheduling software
 
 <!-- prettier-ignore-end -->
 
-Create a JavaScript-based client-side search that uses the cached data (companies) to filter results without making any server requests. This approach will be fast, especially for smaller to moderate-sized datasets, as it only involves searching through the already-loaded data.
+# Notes on Enhancing PathSix CRM with JavaScript
 
-Here’s how to do it:
+## Creating a Client-Side Search Feature
 
-Filter the Data Array: Use JavaScript to filter the companies array based on the search term.
-Update the Display: Display the filtered results in the same way we set up the different report views.
-Step-by-Step Example:
-Assuming you have your companies data array already defined, you can add a search input and filter the table based on the search term.
+### Key Steps for Client-Side Search:
 
-HTML
-Add a search input at the top of the page:
+- Use cached data (like the `companies` array) to filter results. This makes the search fast and avoids unnecessary server requests.
+- Display the filtered results directly on the page using JavaScript.
 
-html
-Copy code
-<input type="text" id="search" placeholder="Search customers" onkeyup="filterCustomers()">
+### Setting Up the Search:
+
+#### HTML
+
+Add a search input at the top of the page for users to type in:
+
+```html
+<input
+  type="text"
+  id="search"
+  placeholder="Search customers"
+  onkeyup="filterCustomers()"
+/>
 
 <table id="reportTable">
-    <!-- Initial table will load here -->
+  <!-- Initial table content will go here -->
 </table>
-JavaScript
-Now, add a function to filter the data and update the table display based on the search input.
 
-// Sample data for demonstration
-const companies = [
-{ company: "Acme Inc.", address: "123 Street", city: "Somewhere", state: "TX", zipcode: "12345", email: "contact@acme.com", phone: "123-456-7890" },
-// Add more sample company data as needed
-];
-
-// Function to render the full customer overview table
-function renderTable(data) {
-const table = document.getElementById("reportTable");
-table.innerHTML = `        
-    <tr class="sm-thead">
-            <th>Company</th><th>Address</th><th>City</th><th>State</th><th>Zipcode</th><th>Email</th><th>Phone</th>
-        </tr>
-        ${data.map(company =>`
-
+// Sample data for testing and development const companies = [ { company: "Acme
+Inc.", address: "123 Street", city: "Somewhere", state: "TX", zipcode: "12345",
+email: "contact@acme.com", phone: "123-456-7890" }, // Add more sample data as
+needed for testing ]; // Function to render the customer table function
+renderTable(data) { const table = document.getElementById("reportTable");
+table.innerHTML = `
+<tr class="sm-thead">
+  <th>Company</th>
+  <th>Address</th>
+  <th>City</th>
+  <th>State</th>
+  <th>Zipcode</th>
+  <th>Email</th>
+  <th>Phone</th>
+</tr>
+${data.map(company => `
 <tr>
-<td>${company.company}</td>
-                <td>${company.address}</td>
-<td>${company.city}</td>
-                <td>${company.state}</td>
-<td>${company.zipcode}</td>
-                <td>${company.email}</td>
-<td>${company.phone}</td>
-</tr>`).join('')}
-    `;
-}
-
-// Call this function to initially load all data
-renderTable(companies);
-
-// Function to filter customers based on search input
-function filterCustomers() {
-const query = document.getElementById("search").value.toLowerCase();
-const filteredData = companies.filter(company =>
-company.company.toLowerCase().includes(query) ||
+  <td>${company.company}</td>
+  <td>${company.address}</td>
+  <td>${company.city}</td>
+  <td>${company.state}</td>
+  <td>${company.zipcode}</td>
+  <td>${company.email}</td>
+  <td>${company.phone}</td>
+</tr>
+`).join('')} `; } // Load the table initially with all data
+renderTable(companies); // Function to filter the table based on search input
+function filterCustomers() { const query =
+document.getElementById("search").value.toLowerCase(); const filteredData =
+companies.filter(company => company.company.toLowerCase().includes(query) ||
 company.city.toLowerCase().includes(query) ||
-company.email.toLowerCase().includes(query) ||
-company.phone.includes(query)
-);
-renderTable(filteredData); // Update table with filtered data
-}
-
-Explanation
-Initial Table Load: renderTable(companies) is called once to load all customer data when the page first loads.
-Filter Function: filterCustomers is called each time the user types in the search input (using onkeyup). It filters the companies array by checking if any fields (e.g., company, city, email, or phone) contain the search term.
-Dynamic Display Update: After filtering, renderTable(filteredData) updates the table to display only the search results.
-This approach is efficient, and because it only manipulates data in memory, it provides a smooth and immediate search experience without requiring AJAX or additional server requests.
-
-Ways to use JavaScript to enhance the user experience for the custom CRM:
-
-1. Client-Side Form Validation
-   Use JavaScript to validate form fields before they are submitted to the server. For example:
-   Check if all required fields are filled out.
-   Verify the format of email addresses or phone numbers.
-   Provide instant error messages or feedback without a page reload, allowing users to correct mistakes immediately.
-2. AJAX for Asynchronous Data Updates
-   Create New Records: When adding a new client, JavaScript with AJAX can send the form data to Flask, and update the list of clients on the page without refreshing.
-   Edit Records: Allow editing of client information in a modal or inline form and update the back-end using AJAX, which keeps the page smooth.
-   Delete Records: Instead of a full-page reload after deleting, send a request via AJAX and remove the client from the view without reloading the entire page.
-3. Dynamic Search and Filtering
-   Add a search bar with JavaScript that filters clients, sales records, or updates as the user types. This gives immediate feedback and helps users find information quickly.
-   You could use JavaScript to send a request to Flask to retrieve filtered data without reloading the page.
-4. Interactive UI Elements
-   Modals for Adding/Editing Data: Use JavaScript to show modals for adding or editing client info instead of navigating to a different page. This will keep users on the same page, making the experience feel smoother.
-   Expandable Sections: Have expandable panels for different sections like "Business Info," "Reports," etc., allowing users to collapse/expand sections as needed.
-   Date Pickers: For scheduling reminders, use a JavaScript-based date picker widget to make selecting dates more intuitive and less error-prone.
-5. Real-Time Updates
-   For sections like Continuing Work On Websites, you could use JavaScript to periodically poll the server or use WebSockets to get real-time updates on changes, ensuring users always see the most recent data.
-6. Drag and Drop Features
-   Implement a drag-and-drop feature for rearranging the order of clients or projects, which can be intuitive for users managing lists.
-7. Inline Editing
-   Allow inline editing of data fields. For example, users could click on a client’s address, edit it directly in place, and click away to save it via AJAX. This avoids having to navigate to an "edit" page, making data management quicker.
-8. Notifications and Alerts
-   Use JavaScript to create custom notifications for reminders or alerts. For instance, if a billing cycle is due, display an alert using JavaScript instead of relying on page refreshes.
-9. Loading Spinners/Progress Indicators
-   Whenever data is being fetched or an action is being processed, show a loading spinner to indicate progress. This helps improve user experience, especially when waiting for AJAX requests to complete.
-10. Autocomplete for Form Inputs
-    For input fields like "Business Name" or "Contact Person," use JavaScript to implement an autocomplete feature. This can help users quickly find existing records, which is especially useful if you have repeat clients or contacts.
-
-from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-
-# 1. Clients Table
-
-class Client(db.Model):
-**tablename** = 'clients'
-
-    client_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    website = db.Column(db.String(255))  # New column for the website name
-    pricing_tier = db.Column(db.Integer)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
-
-    # Relationships to link related data
-    addresses = db.relationship('Address', backref='client', lazy=True)
-    contact_notes = db.relationship('ContactNote', backref='client', lazy=True)
-    sales = db.relationship('Sale', backref='client', lazy=True)
-    reminders = db.relationship('Reminder', backref='client', lazy=True)
-    billing_cycles = db.relationship('BillingCycle', backref='client', lazy=True)
-    website_updates = db.relationship('WebsiteUpdate', backref='client', lazy=True)
-    mailing_lists = db.relationship('MailingList', backref='client', lazy=True)
-    client_websites = db.relationship('ClientWebsite', backref='client', lazy=True)
-
-    def __repr__(self):
-        return f"Client('{self.name}', '{self.website}')"
-
-# 2. Address Table
-
-class Address(db.Model):
-**tablename** = 'addresses'
-
-    id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)  # Foreign key to Client
-    name = db.Column(db.String(100))  # Name associated with this address, if applicable
-    street = db.Column(db.String(255), nullable=False)
-    city = db.Column(db.String(100), nullable=False)
-    state = db.Column(db.String(2), nullable=False)
-    zip_code = db.Column(db.String(10), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
-
-
-    def __repr__(self):
-        return f"Address('{self.street}', '{self.city}', '{self.state}', '{self.zip_code}')"
-
-# 3. ContactNote Table
-
-class ContactNote(db.Model):
-**tablename** = 'contact_notes'
-
-    id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
-    note = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"ContactNote('Client ID: {self.client_id}', 'Note: {self.note[:30]}...')"
-
-# 4. Sales Table
-
-class Sale(db.Model):
-**tablename** = 'sales'
-
-    id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
-    sale_amount = db.Column(db.Float)
-    sale_date = db.Column(db.DateTime, default=datetime.utcnow)
-    extras_sold = db.Column(db.Text)
-    notes = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-
-    def __repr__(self):
-        return f"Sale('Client ID: {self.client_id}', 'Amount: {self.sale_amount}', 'Date: {self.sale_date}')"
-
-# 5. BillingCycle Table
-
-class BillingCycle(db.Model):
-**tablename** = 'billing_cycles'
-
-    id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
-    billing_cycle = db.Column(db.String(10))  # 'monthly' or 'yearly'
-    last_billed = db.Column(db.DateTime)
-    next_billing = db.Column(db.DateTime)
-    payment_status = db.Column(db.String(10))  # e.g., 'pending', 'paid', 'overdue'
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"BillingCycle('Client ID: {self.client_id}', 'Cycle: {self.billing_cycle}', 'Status: {self.payment_status}')"
-
-# 6. Website Updates Table
-
-class WebsiteUpdate(db.Model):
-**tablename** = 'website_updates'
-
-    id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
-    update_date = db.Column(db.DateTime, default=datetime.utcnow)
-    pages_updated = db.Column(db.JSON)  # List of pages updated
-    sections_updated = db.Column(db.JSON)  # Sections on each page updated
-    notes = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"WebsiteUpdate('Client ID: {self.client_id}', 'Date: {self.update_date}')"
-
-# 7. Mailing List Table
-
-class MailingList(db.Model):
-**tablename** = 'mailing_list'
-
-    id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
-    address = db.Column(db.String(255))
-    postcard_sent = db.Column(db.Boolean, default=False)
-    date_sent = db.Column(db.DateTime)
-    notes = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"MailingList('Client ID: {self.client_id}', 'Address: {self.address}', 'Postcard Sent: {self.postcard_sent}')"
-
-# 8. Domains and Hosting Table
-
-class ClientWebsite(db.Model):
-**tablename** = 'client_websites'
-
-    id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
-    domain = db.Column(db.String(100), nullable=False)
-    hosting_site = db.Column(db.String(100))
-    ssl_status = db.Column(db.String(20))  # e.g., 'active', 'expiring', 'expired'
-    renewal_date = db.Column(db.DateTime)
-    hosting_cost = db.Column(db.Float)
-    notes = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"ClientWebsite('Client ID: {self.client_id}', 'Domain: {self.domain}', 'SSL Status: {self.ssl_status}')"
+company.email.toLowerCase().includes(query) || company.phone.includes(query) );
+renderTable(filteredData); } ## JavaScript Enhancements to Consider for the CRM
+### 1. Client-Side Form Validation - **Why**: Avoid unnecessary server requests
+and give users instant feedback. - **How**: Use JavaScript to check if all
+required fields are filled and if formats are correct (like email or phone). -
+**Note**: Instant feedback means fewer errors on form submissions, which users
+will appreciate. ### 2. AJAX for Asynchronous Updates - **Idea**: Use AJAX to
+handle creating, updating, and deleting records without page reloads. - **Create
+New Records**: Send form data to Flask via AJAX and update the client list
+dynamically. - **Edit Records**: Implement modals or inline forms for editing,
+with AJAX handling the updates. - **Delete Records**: Remove clients via AJAX to
+avoid full-page refreshes. ### 3. Dynamic Search and Filtering - **Immediate
+Feedback**: Add search bars with JavaScript that filter results as users type. -
+**Note to Self**: For larger datasets, consider debouncing or lazy-loading
+results. ### 4. Interactive UI Elements - **Modals**: Use them for adding or
+editing data without moving to a different page. - **Expandable Sections**: Let
+users toggle sections like "Business Info" or "Reports" for a cleaner UI. -
+**Date Pickers**: Add a JavaScript date picker for scheduling reminders. ### 5.
+Real-Time Updates - **Approach**: Use `setInterval()` or WebSockets for
+real-time data updates. Great for seeing the latest status without refreshing.
+### 6. Drag and Drop - **Feature**: Add drag-and-drop functionality for
+rearranging clients or tasks. Users might love this for managing their workflow
+visually. ### 7. Inline Editing - **Concept**: Make fields directly editable
+(e.g., click a client’s phone number to edit it in place). - **Plan**: Save
+changes with AJAX to keep things smooth and fast. ### 8. Notifications and
+Alerts - **Reminders**: Use JavaScript to create custom alerts (e.g., billing
+cycle due soon). - **Tip**: This is more user-friendly than relying on page
+refreshes for notifications. ### 9. Loading Spinners/Progress Indicators -
+**Why**: Users need visual cues when data is loading or actions are processing.
+- **Add**: Show spinners when AJAX requests are pending. ### 10. Autocomplete
+for Form Inputs - **Use Case**: Autocomplete for "Business Name" or "Contact
+Person" fields can speed up data entry. - **Implementation Note**: Keep the UI
+intuitive, so users can easily find existing records.
+```

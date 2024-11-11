@@ -221,13 +221,14 @@ body {
 
 /* Label and Input Styling */
 
-.link-new {
+.link-new,
+.link-create {
   width: 90%;
   text-align: end;
   margin-top: 10px;
 }
 
-.link-new a {
+.link-create a {
   color: var(--text);
   text-decoration: none;
   padding: 5px;
@@ -237,7 +238,33 @@ body {
   background-color: lightblue;
 }
 
-.link-new a:hover {
+.link-a {
+  color: var(--text);
+  text-decoration: none;
+  padding: 5px;
+  transition: background-color 0.7s ease;
+  border: 1px solid var(--dark-color);
+  border-radius: 10px;
+  background-color: lightblue;
+}
+
+.link-new a {
+  text-decoration: none;
+}
+
+.link-new button {
+  color: var(--text);
+  text-decoration: none;
+  padding: 5px;
+  transition: background-color 0.7s ease;
+  border: 1px solid var(--dark-color);
+  border-radius: 10px;
+  background-color: lightblue;
+  box-sizing: border-box; /* Consistent box-sizing */
+  margin: 0; /* Removes any default margin */
+}
+
+.link-new button:hover {
   background-color: gold;
 }
 
@@ -304,7 +331,7 @@ body {
 }
 
 /* Create Client Form Styles */
-/* Create Client Form Styles */
+
 .create-client-container {
   display: flex;
   flex-direction: column;
@@ -337,6 +364,47 @@ body {
   color: var(--dark-color);
   text-align: center;
   margin-bottom: 10px;
+}
+
+/* Single Client Detail Styles */
+
+.client-detail {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.client-detail h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.client-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.client-table th {
+  text-align: left;
+  width: 30%;
+  padding: 10px;
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.client-table td {
+  padding: 10px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Optional: Styling for N/A values */
+.client-table td:empty::before {
+  content: "N/A";
+  color: #888;
 }
 
 /* Label and Input Styling for Create Client Form */

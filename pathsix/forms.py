@@ -92,4 +92,4 @@ class ClientForm(FlaskForm):
     contact_note = TextAreaField('Contact Note', validators=[Optional(), Length(max=500)])
 
     # Submit button
-    submit = SubmitField('Create Client')
+    submit = SubmitField('Submit')

@@ -8,9 +8,9 @@
 
 {% block content %} 
 <div class="create-client-container">
-    <h1>Create New Client</h1>
+    <h1>{{ legend }}</h1>
 
-    <form method="POST" action="{{ url_for('create_client') }}" class="create-client-form">
+    <form method="POST" action="" class="create-client-form">
         {{ form.hidden_tag() }}
 
         <!-- Client Information -->

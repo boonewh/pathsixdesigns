@@ -35,19 +35,20 @@ class Client(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-    # Relationships
-    addresses = db.relationship('Address', backref='client', lazy=True)
-    contacts = db.relationship('Contact', backref='client', lazy=True)
-    contact_notes = db.relationship('ContactNote', backref='client', lazy=True)
-    sales = db.relationship('Sale', backref='client', lazy=True)
-    billing_cycles = db.relationship('BillingCycle', backref='client', lazy=True)
-    website_updates = db.relationship('WebsiteUpdate', backref='client', lazy=True)
-    mailing_lists = db.relationship('MailingList', backref='client', lazy=True)
-    client_websites = db.relationship('ClientWebsite', backref='client', lazy=True)
-    reminders = db.relationship('Reminder', backref='client', lazy=True)
+    # Relationships with cascading delete
+    addresses = db.relationship('Address', backref='client', lazy=True, cascade="all, delete-orphan")
+    contacts = db.relationship('Contact', backref='client', lazy=True, cascade="all, delete-orphan")
+    contact_notes = db.relationship('ContactNote', backref='client', lazy=True, cascade="all, delete-orphan")
+    sales = db.relationship('Sale', backref='client', lazy=True, cascade="all, delete-orphan")
+    billing_cycles = db.relationship('BillingCycle', backref='client', lazy=True, cascade="all, delete-orphan")
+    website_updates = db.relationship('WebsiteUpdate', backref='client', lazy=True, cascade="all, delete-orphan")
+    mailing_lists = db.relationship('MailingList', backref='client', lazy=True, cascade="all, delete-orphan")
+    client_websites = db.relationship('ClientWebsite', backref='client', lazy=True, cascade="all, delete-orphan")
+    reminders = db.relationship('Reminder', backref='client', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"Client('{self.name}', '{self.website}')"
+
 
 # 3. Address Table
 class Address(db.Model):

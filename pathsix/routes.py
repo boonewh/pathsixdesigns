@@ -155,4 +155,81 @@ def create_client():
 @login_required
 def client(client_id):
     client = Client.query.get_or_404(client_id)
-    return render_template('crm/client.html', client=client)
+    contacts = client.contacts # Access the related Contact entries via the relationship
+    return render_template('crm/client.html', client=client, contacts=contacts)
+
+
+@app.route('/customers/<int:client_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_client(client_id):
+    # Retrieve the existing client and related entries
+    client = Client.query.get_or_404(client_id)
+    
+    # Initialize the form with data from the Client table
+    form = ClientForm(obj=client)
+
+    # Fetch related entries if they exist
+    address = Address.query.filter_by(client_id=client_id).first()
+    contact = Contact.query.filter_by(client_id=client_id).first()
+    contact_note = ContactNote.query.filter_by(client_id=client_id).first()
+
+    if request.method == 'GET':
+        # Populate the form fields for Address if it exists
+        if address:
+            form.street.data = address.street
+            form.city.data = address.city
+            form.state.data = address.state
+            form.zip_code.data = address.zip_code
+
+        # Populate the form fields for Contact if it exists
+        if contact:
+            form.first_name.data = contact.first_name
+            form.last_name.data = contact.last_name
+            form.contact_email.data = contact.email
+            form.contact_phone.data = contact.phone
+
+        # Populate the form field for ContactNote if it exists
+        if contact_note:
+            form.contact_note.data = contact_note.note
+
+    if form.validate_on_submit():
+        # Update the Client information
+        client.name = form.name.data
+        client.website = form.website.data
+        client.pricing_tier = form.pricing_tier.data
+        client.email = form.email.data
+        client.phone = form.phone.data
+
+        # Update Address information
+        if address:
+            address.street = form.street.data
+            address.city = form.city.data
+            address.state = form.state.data
+            address.zip_code = form.zip_code.data
+
+        # Update Contact information
+        if contact:
+            contact.first_name = form.first_name.data
+            contact.last_name = form.last_name.data
+            contact.email = form.contact_email.data
+            contact.phone = form.contact_phone.data
+
+        # Update ContactNote if it exists
+        if contact_note:
+            contact_note.note = form.contact_note.data
+
+        db.session.commit()
+        flash("Client information has been updated!", "success")
+        return redirect(url_for('client', client_id=client.client_id))
+
+    return render_template('crm/create_client.html', form=form, legend="Edit Client Information")
+
+@app.route('/customers/<int:client_id>/delete', methods=['POST'])
+@login_required
+def delete_client(client_id):
+    client = Client.query.get_or_404(client_id)
+    db.session.delete(client)
+    db.session.commit()
+    flash('Client has been deleted!', 'success')
+    return redirect(url_for('customers'))
+

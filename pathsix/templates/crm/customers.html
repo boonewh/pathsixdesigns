@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="link-new"><a href="{{ url_for('create_client') }}">+Add New Client</a></div>
+    <div class="link-create"><a href="{{ url_for('create_client') }}">+Add New Client</a></div>
     <div class="body-container">
         <aside class="report-nav">
             <nav>
@@ -35,7 +35,7 @@
                 {% for client in clients %}
                 <tr>
                     <td>{{ client.client_id }}</td>
-                    <td>{{ client.name }}</td>
+                    <td><a href="{{ url_for('client', client_id=client.client_id) }}">{{ client.name }}</a></td>
                     <td>{{ client.website }}</td>
                     <td>{{ client.pricing_tier }}</td>
                     <td>{{ client.email or 'N/A' }}</td>
