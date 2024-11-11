@@ -269,49 +269,47 @@ Add a search input at the top of the page for users to type in:
 - **Use Case**: Autocomplete for "Business Name" or "Contact Person" fields can speed up data entry.
 - **Implementation Note**: Keep the UI intuitive, so users can easily find existing records.
 
-```html
-<input
-  type="text"
-  id="search"
-  placeholder="Search customers"
-  onkeyup="filterCustomers()"
-/>
+<!-- prettier-ignore-start -->
 
-<table id="reportTable">
-  <!-- Initial table content will go here -->
-</table>
+// Sample data for testing and development
+const companies = [
+    { company: "Acme Inc.", address: "123 Street", city: "Somewhere", state: "TX", zipcode: "12345", email: "contact@acme.com", phone: "123-456-7890" },
+    // Add more sample data as needed for testing
+];
 
-// Sample data for testing and development const companies = [ { company: "Acme
-Inc.", address: "123 Street", city: "Somewhere", state: "TX", zipcode: "12345",
-email: "contact@acme.com", phone: "123-456-7890" }, // Add more sample data as
-needed for testing ]; // Function to render the customer table function
-renderTable(data) { const table = document.getElementById("reportTable");
-table.innerHTML = `
-<tr class="sm-thead">
-  <th>Company</th>
-  <th>Address</th>
-  <th>City</th>
-  <th>State</th>
-  <th>Zipcode</th>
-  <th>Email</th>
-  <th>Phone</th>
-</tr>
-${data.map(company => `
-<tr>
-  <td>${company.company}</td>
-  <td>${company.address}</td>
-  <td>${company.city}</td>
-  <td>${company.state}</td>
-  <td>${company.zipcode}</td>
-  <td>${company.email}</td>
-  <td>${company.phone}</td>
-</tr>
-`).join('')} `; } // Load the table initially with all data
-renderTable(companies); // Function to filter the table based on search input
-function filterCustomers() { const query =
-document.getElementById("search").value.toLowerCase(); const filteredData =
-companies.filter(company => company.company.toLowerCase().includes(query) ||
-company.city.toLowerCase().includes(query) ||
-company.email.toLowerCase().includes(query) || company.phone.includes(query) );
-renderTable(filteredData); }
-```
+// Function to render the customer table
+function renderTable(data) {
+    const table = document.getElementById("reportTable");
+    table.innerHTML = `
+        <tr class="sm-thead">
+            <th>Company</th><th>Address</th><th>City</th><th>State</th><th>Zipcode</th><th>Email</th><th>Phone</th>
+        </tr>
+        ${data.map(company => `
+            <tr>
+                <td>${company.company}</td>
+                <td>${company.address}</td>
+                <td>${company.city}</td>
+                <td>${company.state}</td>
+                <td>${company.zipcode}</td>
+                <td>${company.email}</td>
+                <td>${company.phone}</td>
+            </tr>`).join('')}
+    `;
+}
+
+// Load the table initially with all data
+renderTable(companies);
+
+// Function to filter the table based on search input
+function filterCustomers() {
+    const query = document.getElementById("search").value.toLowerCase();
+    const filteredData = companies.filter(company =>
+        company.company.toLowerCase().includes(query) ||
+        company.city.toLowerCase().includes(query) ||
+        company.email.toLowerCase().includes(query) ||
+        company.phone.includes(query)
+    );
+    renderTable(filteredData);
+}
+
+<!-- prettier-ignore-end -->
