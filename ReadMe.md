@@ -1,4 +1,6 @@
-# PathSix CRM
+# PathSix CRM Version 0
+
+## Python Only Version For Now.
 
 # Documentation
 
