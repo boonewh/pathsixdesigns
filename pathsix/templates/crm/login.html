@@ -1,6 +1,6 @@
 {% extends "crm/crm-base.html" %}
 
-{% block title %}PathSix Web Designs CRM Register Page{% endblock %}
+{% block title %}PathSix Web Designs CRM Login Page{% endblock %}
 
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/crm.css') }}">
@@ -43,8 +43,13 @@
                 {{ form.submit(class="submit-btn") }} 
             </fieldset>
             <small class="login-link">
-                Forgot password? <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('reset_request') }}">Forgot Your Password?</a>
             </small>
+            <div class="login-link">
+                <small>
+                    Need An Account? <a href="{{ url_for('register') }}">Sign Up Now</a>
+                </small>
+            </div>
         </form>
     </div>
 {% endblock %}

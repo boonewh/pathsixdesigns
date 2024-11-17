@@ -1,4 +1,6 @@
 from datetime import datetime
+from itsdangerous import URLSafeTimedSerializer as Serializer
+from flask import current_app
 from pathsix import db, login_manager
 from flask_login import UserMixin
 
@@ -17,6 +19,20 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     
     clients = db.relationship('Client', backref='user', lazy=True)
+
+    def get_reset_token(self, expires_sec=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], salt='email-reset')
+        return s.dumps({'user_id': self.id})
+
+    @staticmethod
+    def verify_reset_token(token, expires_sec=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], salt='email-reset')
+        try:
+            user_id = s.loads(token, max_age=expires_sec)['user_id']
+        except Exception as e:
+            print(f"Token verification failed: {e}")
+            return None
+        return User.query.get(user_id)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"

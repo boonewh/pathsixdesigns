@@ -1,6 +1,9 @@
 # PathSix CRM PRE-Version 0
 
-## Python Only Version For Now.
+### Need to Knows
+
+- **This is a Python only version currently. JavaScript is in the future.**
+- **The left menu links on the /customers page do not work right now.**
 
 # Documentation
 
