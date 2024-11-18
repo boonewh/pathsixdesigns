@@ -55,8 +55,6 @@ def account():
         form.email.data = current_user.email
     return render_template('crm/account.html', form=form)
 
-
-
 @users.route('/reset_password', methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated:
