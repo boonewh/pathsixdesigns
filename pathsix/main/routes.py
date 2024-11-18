@@ -1,8 +1,10 @@
+from flask import render_template, request, redirect, url_for, flash
+from pathsix import app, mail
+from pathsix.forms import ContactForm
+from flask_mail import Message
 from flask import Blueprint
 
 main = Blueprint('main', __name__)
-
-
 
 @main.route('/')
 def index():
