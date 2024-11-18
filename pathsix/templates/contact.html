@@ -21,7 +21,7 @@
         {% endfor %}
         
         <div class="form-container">
-            <form action="{{ url_for('contact') }}" method="POST">
+            <form action="{{ url_for('main.contact') }}" method="POST">
                 {{ form.hidden_tag() }}
                 
                 {{ form.name.label }}

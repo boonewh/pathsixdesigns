@@ -1,9 +1,14 @@
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_required, current_user
+from pathsix import db  
+from pathsix.models import Client, Contact, Address, ContactNote  
+from pathsix.pathsix_crm.customer.forms import ClientForm  
 from flask import Blueprint
 
-customers = Blueprint('customers', __name__)
+customer = Blueprint('customer', __name__)
 
 
-@customers.route('/customers')
+@customer.route('/customers')
 @login_required
 def customers():
     # Fetch all clients and paginate the results
@@ -12,7 +17,7 @@ def customers():
     return render_template('crm/customers.html', clients=clients)
 
 
-@customers.route('/customers/new', methods=['GET', 'POST'])
+@customer.route('/customers/new', methods=['GET', 'POST'])
 @login_required
 def create_client():
     form = ClientForm()
@@ -62,10 +67,10 @@ def create_client():
         # Commit all changes as a single transaction
         db.session.commit()
         flash('Client and related information added successfully!', 'success')
-        return redirect(url_for('customers'))
+        return redirect(url_for('crm.customer.customers'))
     return render_template('crm/create_client.html', form=form)
 
-@customers.route('/customers/<int:client_id>', methods=['GET', 'POST'])
+@customer.route('/customers/<int:client_id>', methods=['GET', 'POST'])
 @login_required
 def client(client_id):
     client = Client.query.get_or_404(client_id)
@@ -73,7 +78,7 @@ def client(client_id):
     return render_template('crm/client.html', client=client, contacts=contacts)
 
 
-@customers.route('/customers/<int:client_id>/edit', methods=['GET', 'POST'])
+@customer.route('/customers/<int:client_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_client(client_id):
     # Retrieve the existing client and related entries
@@ -134,15 +139,15 @@ def edit_client(client_id):
 
         db.session.commit()
         flash("Client information has been updated!", "success")
-        return redirect(url_for('client', client_id=client.client_id))
+        return redirect(url_for('crm.customer.client', client_id=client.client_id))
 
     return render_template('crm/create_client.html', form=form, legend="Edit Client Information")
 
-@customers.route('/customers/<int:client_id>/delete', methods=['POST'])
+@customer.route('/customers/<int:client_id>/delete', methods=['POST'])
 @login_required
 def delete_client(client_id):
     client = Client.query.get_or_404(client_id)
     db.session.delete(client)
     db.session.commit()
     flash('Client has been deleted!', 'success')
-    return redirect(url_for('customers'))
+    return redirect(url_for('crm.customer.customers'))

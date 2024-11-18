@@ -31,19 +31,19 @@
                 <label for="nav-toggle" class="navicon">&#9776;</label>
                 <nav>
                     <ul>
-                        <li><a href="{{ url_for('index') }}">Home</a></li>
-                        <li><a href="{{ url_for('pricing') }}">Pricing</a></li>
-                        <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                        <li><a href="{{ url_for('main.pricing') }}">Pricing</a></li>
+                        <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
                     </ul>
                 <!-- Navbar Right Side -->
                     <ul>
-                        <li><a href="{{ url_for('crm') }}">CRM</a></li>
+                        <li><a href="{{ url_for('crm_main.crm') }}">CRM</a></li>
                         {% if current_user.is_authenticated %}
-                            <li><a href="{{ url_for('account') }}">Account</a></li>
-                            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                            <li><a href="{{ url_for('users.account') }}">Account</a></li>
+                            <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
                         {% else %}
-                            <li><a href="{{ url_for('login') }}">Login</a></li>
-                            <li><a href="{{ url_for('register') }}">Register</a></li>
+                            <li><a href="{{ url_for('users.login') }}">Login</a></li>
+                            <li><a href="{{ url_for('users.register') }}">Register</a></li>
                         {% endif %}
                     </ul>
                 </nav>
@@ -71,9 +71,9 @@
             <div>
                 <ul>
                     <li><u>Navigation:</u></li>
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('pricing') }}">Pricing</a></li>
-                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                    <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <li><a href="{{ url_for('main.pricing') }}">Pricing</a></li>
+                    <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
                 </ul>
             </div>
             <div>

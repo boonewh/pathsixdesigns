@@ -43,11 +43,11 @@
                 {{ form.submit(class="submit-btn") }} 
             </fieldset>
             <small class="login-link">
-                <a href="{{ url_for('reset_request') }}">Forgot Your Password?</a>
+                <a href="{{ url_for('users.reset_request') }}">Forgot Your Password?</a>
             </small>
             <div class="login-link">
                 <small>
-                    Need An Account? <a href="{{ url_for('register') }}">Sign Up Now</a>
+                    Need An Account? <a href="{{ url_for('users.register') }}">Sign Up Now</a>
                 </small>
             </div>
         </form>

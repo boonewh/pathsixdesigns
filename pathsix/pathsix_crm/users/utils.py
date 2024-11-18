@@ -1,3 +1,9 @@
+from flask_mail import Message
+from flask import url_for
+import urllib.parse
+from pathsix import mail
+
+
 def send_reset_email(user):
     token = user.get_reset_token()
     encoded_token = urllib.parse.quote(token)  # URL-encode the token
