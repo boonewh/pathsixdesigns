@@ -20,7 +20,7 @@ def register():
         db.session.commit()
         flash(f'Account created! You can now log in.', 'success')
         return redirect(url_for('users.login'))
-    return render_template('crm/register.html', form=form)
+    return render_template('crm/user/register.html', form=form)
 
 @users.route('/login', methods=['GET', 'POST'])
 def login():
@@ -33,7 +33,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('crm_main.crm'))   
         else:
             flash('Login Unsuccessful. Please check email and password', 'error')
-    return render_template('crm/login.html', form=form)
+    return render_template('crm/user/login.html', form=form)
 
 @users.route('/logout')
 def logout():
@@ -53,7 +53,7 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    return render_template('crm/account.html', form=form)
+    return render_template('crm/user/account.html', form=form)
 
 @users.route('/reset_password', methods=['GET', 'POST'])
 def reset_request():
@@ -65,7 +65,7 @@ def reset_request():
         send_reset_email(user)
         flash('An email has been sent with instructions to reset your password.', 'info')
         return redirect(url_for('users.login'))
-    return render_template('crm/reset_request.html', form=form)
+    return render_template('crm/user/reset_request.html', form=form)
 
 @users.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_token(token):
@@ -82,4 +82,4 @@ def reset_token(token):
         db.session.commit()
         flash(f'Your password has been updated! You can now log in.', 'success')
         return redirect(url_for('users.login'))
-    return render_template('crm/reset_token.html', form=form)
+    return render_template('crm/user/reset_token.html', form=form)
