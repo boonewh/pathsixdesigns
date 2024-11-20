@@ -1,0 +1,19 @@
+{% extends "crm/crm-base.html" %}
+
+{% block title %}PathSix Web Designs Error Page{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crm.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div>
+                <h1>500</h1>
+                <h2>Something went wrong (500)</h2>
+                <p>I appears we are experiencing problems on our end. Please try again later. </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, url_for, flash
-from pathsix import app, mail
+from pathsix import mail
 from pathsix.main.forms import ContactForm
 from flask_mail import Message
-from flask import Blueprint
+from flask import Blueprint, current_app
 
 main = Blueprint('main', __name__)
 
@@ -26,8 +26,8 @@ def contact():
         else:
             msg = Message(
                 subject=form.subject.data,
-                sender=app.config['MAIL_USERNAME'],
-                recipients=[app.config['MAIL_USERNAME']]
+                sender=current_app.config['MAIL_USERNAME'],
+                recipients=[current_app.config['MAIL_USERNAME']]
             )
             msg.body = f"""
             This message was sent from the PathSix Web Design contact form.

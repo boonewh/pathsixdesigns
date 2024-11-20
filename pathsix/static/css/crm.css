@@ -23,28 +23,19 @@ body {
   box-sizing: border-box;
 }
 
-/* Header Styles */
+/* Header and Navigation Styles */
 
 .header-top {
   width: 80%;
   margin: 20px auto; /* Centers the header-top div */
   display: flex;
   align-items: center;
-  background: var(--light-background);
-  border-radius: 25px;
-  z-index: 3;
-}
-
-/* Navigation Styles */
-
-/* This is styling for the floating navigation bar */
-.header-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* Space between elements in the header */
   padding: 10px 20px;
-  background-color: var(--light-background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--light-background); /* Consistent background variable */
+  border-radius: 25px; /* Rounded corners */
+  font-family: Arial, Helvetica, sans-serif; /* Consistent font styling */
+  z-index: 3; /* Ensures it stays above other elements */
 }
 
 .header-top nav {
@@ -495,6 +486,25 @@ body {
 }
 
 /* Error message styling */
+
+.container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-align: center;
+  padding: 20px;
+}
+
+.row {
+  max-width: 600px; /* Limit content width for readability */
+  width: 100%; /* Full width on smaller screens */
+  background-color: #ffffff; /* White background for the message */
+  padding: 40px;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border: 1px solid #e0e0e0; /* Light border for contrast */
+}
+
 .error {
   background-color: #f8d7da;
   color: #721c24;
@@ -588,5 +598,9 @@ footer ul li a:hover {
 
   .nav-toggle:checked + .navicon + nav ul {
     display: flex;
+  }
+
+  .row {
+    padding: 20px;
   }
 }

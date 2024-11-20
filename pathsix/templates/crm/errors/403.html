@@ -1,0 +1,19 @@
+{% extends "crm/crm-base.html" %}
+
+{% block title %}PathSix Web Designs Error Page{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crm.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div>
+                <h1>403</h1>
+                <h2>Forbidden</h2>
+                <p>Sorry, you don't have permission to access this page.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
