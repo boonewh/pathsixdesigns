@@ -14,7 +14,7 @@ def customers():
     # Fetch all clients and paginate the results
     page = request.args.get('page', 1, type=int)
     clients = Client.query.paginate(page=page, per_page=25)
-    return render_template('crm/customers.html', clients=clients)
+    return render_template('crm/customer/customers.html', clients=clients)
 
 
 @customer.route('/customers/new', methods=['GET', 'POST'])
@@ -67,15 +67,15 @@ def create_client():
         # Commit all changes as a single transaction
         db.session.commit()
         flash('Client and related information added successfully!', 'success')
-        return redirect(url_for('crm.customer.customers'))
-    return render_template('crm/create_client.html', form=form)
+        return redirect(url_for('customer.customers'))
+    return render_template('crm/customer/create_client.html', form=form)
 
 @customer.route('/customers/<int:client_id>', methods=['GET', 'POST'])
 @login_required
 def client(client_id):
     client = Client.query.get_or_404(client_id)
     contacts = client.contacts # Access the related Contact entries via the relationship
-    return render_template('crm/client.html', client=client, contacts=contacts)
+    return render_template('crm/customer/client.html', client=client, contacts=contacts)
 
 
 @customer.route('/customers/<int:client_id>/edit', methods=['GET', 'POST'])
@@ -139,9 +139,9 @@ def edit_client(client_id):
 
         db.session.commit()
         flash("Client information has been updated!", "success")
-        return redirect(url_for('crm.customer.client', client_id=client.client_id))
+        return redirect(url_for('customer.client', client_id=client.client_id))
 
-    return render_template('crm/create_client.html', form=form, legend="Edit Client Information")
+    return render_template('crm/customer/create_client.html', form=form, legend="Edit Client Information")
 
 @customer.route('/customers/<int:client_id>/delete', methods=['POST'])
 @login_required
@@ -150,4 +150,4 @@ def delete_client(client_id):
     db.session.delete(client)
     db.session.commit()
     flash('Client has been deleted!', 'success')
-    return redirect(url_for('crm.customer.customers'))
+    return redirect(url_for('customer.customers'))
