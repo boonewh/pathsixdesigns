@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template
 from flask_limiter.errors import RateLimitExceeded
 
 errors = Blueprint('errors', __name__)

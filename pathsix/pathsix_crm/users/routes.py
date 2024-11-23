@@ -9,17 +9,19 @@ from flask import Blueprint
 users = Blueprint('users', __name__)
 
 @users.route('/register', methods=['GET', 'POST'])
+@login_required 
 def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('crm_main.crm'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash(f'Account created! You can now log in.', 'success')
-        return redirect(url_for('users.login'))
+        flash(f'User added successfully, they may now log in.', 'success')
+        
+        # Clear the form so the admin can easily add another user
+        return redirect(url_for('users.register'))  # Redirect to the same page to add more users
+    
     return render_template('crm/user/register.html', form=form)
 
 @users.route('/login', methods=['GET', 'POST'])
