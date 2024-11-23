@@ -4,6 +4,8 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
 from config import Config
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 db = SQLAlchemy()
 mail = Mail()
@@ -11,6 +13,7 @@ bcrypt = Bcrypt()
 login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
+limiter = Limiter(get_remote_address)
 
 
 def create_app(config_class=Config):
@@ -21,6 +24,7 @@ def create_app(config_class=Config):
     mail.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    limiter.init_app(app)
 
     from pathsix.main.routes import main
     from pathsix.errors.handlers import errors

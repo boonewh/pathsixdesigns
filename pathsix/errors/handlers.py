@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, jsonify
+from flask_limiter.errors import RateLimitExceeded
 
 errors = Blueprint('errors', __name__)
 
@@ -14,3 +15,7 @@ def error_403(error):
 @errors.app_errorhandler(500)
 def error_500(error):
     return render_template('crm/errors/500.html'), 500
+
+@errors.app_errorhandler(RateLimitExceeded)
+def error_429(error):
+    return render_template('crm/errors/429.html'), 429

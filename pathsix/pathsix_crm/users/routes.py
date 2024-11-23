@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-from pathsix import db, bcrypt
+from pathsix import db, bcrypt, limiter
 from pathsix.models import User
 from pathsix.pathsix_crm.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
 from pathsix.pathsix_crm.users.utils import send_reset_email
@@ -23,6 +23,7 @@ def register():
     return render_template('crm/user/register.html', form=form)
 
 @users.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")  # Allows 5 login attempts per minute <------------------ Rate Limiting
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -56,6 +57,7 @@ def account():
     return render_template('crm/user/account.html', form=form)
 
 @users.route('/reset_password', methods=['GET', 'POST'])
+@limiter.limit("3 per minute")  # Allows 3 password reset attempts per minute <------------------ Rate Limiting
 def reset_request():
     if current_user.is_authenticated:
         return redirect(url_for('crm_main.crm'))
