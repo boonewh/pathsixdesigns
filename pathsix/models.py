@@ -3,6 +3,7 @@ from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask import current_app
 from pathsix import db, login_manager
 from flask_login import UserMixin
+from sqlalchemy import event
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -36,6 +37,18 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+    
+@event.listens_for(User.__table__, 'after_create')
+def insert_default_admin(target, connection, **kwargs):
+    from werkzeug.security import generate_password_hash
+    connection.execute(
+        target.insert().values(
+            username='admin',
+            email='admin@example.com',
+            password=generate_password_hash('admin123', method='sha256')
+        )
+    )
+
 
 # 2. Client Table
 class Client(db.Model):

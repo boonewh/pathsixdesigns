@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from pathsix import db, bcrypt, limiter
 from pathsix.models import User
-from pathsix.pathsix_crm.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
+from pathsix.pathsix_crm.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, UserForm
 from pathsix.pathsix_crm.users.utils import send_reset_email
 from flask import Blueprint
 
@@ -87,3 +87,35 @@ def reset_token(token):
         flash(f'Your password has been updated! You can now log in.', 'success')
         return redirect(url_for('users.login'))
     return render_template('crm/user/reset_token.html', form=form)
+
+
+# Admin routes: Could be moved to Admin Blueprint ideally.
+@users.route('/users', methods=['GET'])
+@login_required
+def users_page():
+    users_list = User.query.all()  # Fetch all users from the database
+    form = UserForm()  # Assuming you have a UserForm for creating users
+    return render_template('crm/user/users_page.html', users_list=users_list, form=form)
+
+@users.route('/users/add', methods=['POST'])
+@login_required
+def add_user():
+    form = UserForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('New user added successfully!', 'success')
+        return redirect(url_for('user.users_page'))
+    flash('Failed to add user. Please check the form for errors.', 'danger')
+    return redirect(url_for('users.users_page'))
+
+@users.route('/users/delete/<int:user_id>', methods=['POST'])
+@login_required
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash('User deleted successfully!', 'success')
+    return redirect(url_for('users.users_page'))
