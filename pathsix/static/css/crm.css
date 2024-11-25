@@ -250,7 +250,7 @@ body {
   margin-top: 10px;
 }
 
-.link-create a {
+.link-create button {
   color: var(--text);
   text-decoration: none;
   padding: 5px;
