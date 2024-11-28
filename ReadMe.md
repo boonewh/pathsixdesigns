@@ -149,6 +149,72 @@ For any issues or support, please contact:
 
 PathSix Web Designs aims to provide professional and efficient tools for your business needs. Happy client management!
 
+---
+
+# tl;dr
+
+Develop an advanced CRM system for small businesses primarily with sales teams, including features like search, RBAC, project management, lead handling, and real-time communication.
+
+## Goals
+
+### Business Goals
+
+- Increase client retention by 20% in the first year of release.
+- Drive sales efficiency by equipping salespeople with real-time data and communication tools.
+- Capture the small business market by offering tailored, impactful CRM tools.
+
+### User Goals
+
+- Empower sales teams with streamlined workflow and access to client data.
+- Enhance office communication with field teams for quicker response times.
+
+### Non-Goals
+
+- This iteration will not focus on integrating third-party marketing tools.
+
+## User Stories
+
+- As a salesperson, I want to access lead information with a search bar, so I can quickly contact potential clients.
+- As a manager, I need RBAC to ensure the right team members have access to specific client data.
+- As a project manager, I want a projects section linked to customers, so I can track project progress effectively.
+- As an office administrator, I want to push leads to field salespeople in real-time, so they can immediately act on fresh opportunities.
+
+## User Experience
+
+- **Search Functionality**: Users will readily find customer details using a dynamic search bar with filters and auto-complete options.
+- **RBAC**: An intuitive admin dashboard to assign roles and access levels, ensuring data security.
+- **Projects Section**: Newly designed dashboard for linking projects with customers, including a 'recently viewed' panel for quick access.
+- **Leads Section**: Can filter, assign, and push lead information to salespeople's mobile devices or desktops.
+- **Communication Platform**: Integrated real-time chat, supporting both group and private messages, along with a lead-pushing feature.
+
+## Narrative
+
+Small businesses often face the challenge of managing client relations effectively, a burden especially heavy on their sales teams. By harnessing the power of an integrated CRM system, sales teams break the shackles of organizational chaos. Imagine a day where salespeople in the field have instant data access, real-time office sync, and clear project visibility at their fingertips. This CRM tool not only boosts efficiency but also propels businesses ahead in a competitive market, holding a personal, powerful edge that clients love.
+
+## Success Metrics
+
+- 90% user satisfaction reported in user feedback.
+- 25% reduction in time spent on administrative tasks.
+- Increased conversion rates of leads by 15% within the first 6 months.
+
+## Technical Considerations
+
+- Search functionality may involve setting up Elasticsearch for optimized searches.
+- RBAC will require securely storing and managing user roles and permissions.
+- Projects and recently viewed functionality will need dynamic databases for mapping and quick retrieval.
+- The communication platform may leverage WebSockets for real-time updates.
+
+## Milestones & Sequencing
+
+1. Complete search bar development and integrate into the CRM.
+2. Implement and test RBAC system.
+3. Develop the project section and include the 'recently viewed' feature.
+4. Implement leads section with real-time push notifications.
+5. Develop the communication platform.
+6. Conduct beta testing with initial users and iterate based on feedback.
+
+---
+
 **NOTE: Below here is developer notes.**
 
 ## I. Business Info
