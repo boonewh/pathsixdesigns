@@ -354,18 +354,28 @@ Add a search input at the top of the page for users to type in:
 ```javascript
 // Sample data for testing and development
 const companies = [
-    { company: "Acme Inc.", address: "123 Street", city: "Somewhere", state: "TX", zipcode: "12345", email: "contact@acme.com", phone: "123-456-7890" },
-    // Add more sample data as needed for testing
+  {
+    company: "Acme Inc.",
+    address: "123 Street",
+    city: "Somewhere",
+    state: "TX",
+    zipcode: "12345",
+    email: "contact@acme.com",
+    phone: "123-456-7890",
+  },
+  // Add more sample data as needed for testing
 ];
 
 // Function to render the customer table
 function renderTable(data) {
-    const table = document.getElementById("reportTable");
-    table.innerHTML = `
+  const table = document.getElementById("reportTable");
+  table.innerHTML = `
         <tr class="sm-thead">
             <th>Company</th><th>Address</th><th>City</th><th>State</th><th>Zipcode</th><th>Email</th><th>Phone</th>
         </tr>
-        ${data.map(company => `
+        ${data
+          .map(
+            (company) => `
             <tr>
                 <td>${company.company}</td>
                 <td>${company.address}</td>
@@ -374,7 +384,9 @@ function renderTable(data) {
                 <td>${company.zipcode}</td>
                 <td>${company.email}</td>
                 <td>${company.phone}</td>
-            </tr>`).join('')}
+            </tr>`
+          )
+          .join("")}
     `;
 }
 
@@ -383,16 +395,14 @@ renderTable(companies);
 
 // Function to filter the table based on search input
 function filterCustomers() {
-    const query = document.getElementById("search").value.toLowerCase();
-    const filteredData = companies.filter(company =>
-        company.company.toLowerCase().includes(query) ||
-        company.city.toLowerCase().includes(query) ||
-        company.email.toLowerCase().includes(query) ||
-        company.phone.includes(query)
-    );
-    renderTable(filteredData);
+  const query = document.getElementById("search").value.toLowerCase();
+  const filteredData = companies.filter(
+    (company) =>
+      company.company.toLowerCase().includes(query) ||
+      company.city.toLowerCase().includes(query) ||
+      company.email.toLowerCase().includes(query) ||
+      company.phone.includes(query)
+  );
+  renderTable(filteredData);
 }
-
-
-<!-- prettier-ignore-end -->
 ```
