@@ -1,0 +1,70 @@
+{% extends "crm/crm-base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crm.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <h1>Search Results</h1>
+    <p>Results for: <strong>{{ query }}</strong></p>
+    
+    {% if client_results %}
+        <h2>Clients</h2>
+        <ul>
+            {% for client in client_results %}
+                <li><a href="{{ url_for('customer.client', client_id=client.client_id) }}"><strong>{{ client.name }}</strong></a></li>
+                <li>{{ client.email }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    {% if address_results %}
+        <h2>Addresses</h2>
+        <ul>
+            {% for address in address_results %}
+                <li>
+                    <strong>Company:</strong>
+                    <a href="{{ url_for('customer.client', client_id=address.client.client_id) }}"><strong>{{ address.client.name }}</strong></a><br>
+                    {{ address.street }}, {{ address.city }}, {{ address.state }} {{ address.zip_code }}
+                </li>
+            
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    {% if contact_results %}
+        <h2>Contacts</h2>
+        <ul>
+            {% for contact in contact_results %}
+                <li>
+                    <strong>Company:</strong>
+                    <a href="{{ url_for('customer.client', client_id=contact.client.client_id) }}"><strong>{{ contact.client.name }}</strong></a><br>
+                    {{ contact.first_name }} {{ contact.last_name }} - {{ contact.email }}
+                </li>
+            
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    {% if note_results %}
+        <h2>Contact Notes</h2>
+        <ul>
+            {% for note in note_results %}
+                <li>
+                    <strong>Company:</strong>
+                    <a href="{{ url_for('customer.client', client_id=note.client.client_id) }}"><strong>{{ note.client.name }}</strong></a><br>
+                    {{ note.note }}
+                </li>
+            
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    {% if not client_results and not address_results and not contact_results and not note_results %}
+        <p>No results found.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -43,10 +43,17 @@
                             <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
                         {% else %}
                             <li><a href="{{ url_for('users.login') }}">Login</a></li>
-                            <li><a href="{{ url_for('users.register') }}">Register</a></li>
                         {% endif %}
                     </ul>
                 </nav>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <form method="POST" action="{{ url_for('crm_main.search') }}">
+                    <input type="text" name="query" placeholder="Search clients, addresses or notes..." required>
+                    <button type="submit">Search</button>
+                </form>
             </div>
             {% block header %}{% endblock %}  
         </header>
