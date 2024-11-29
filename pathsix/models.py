@@ -38,7 +38,7 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
     
-@event.listens_for(User.__table__, 'after_create')
+@event.listens_for(User.__table__, 'after_create')  # Event listener to insert default admin user, NEEDS TO BE REMOVED IN PRODUCTION!!!!
 def insert_default_admin(target, connection, **kwargs):
     from werkzeug.security import generate_password_hash
     connection.execute(
@@ -49,12 +49,12 @@ def insert_default_admin(target, connection, **kwargs):
         )
     )
 
-
 # 2. Client Table
 class Client(db.Model):
     __tablename__ = 'clients'
 
     client_id = db.Column(db.Integer, primary_key=True)
+    account = db.Column(db.String(20), nullable=True)
     name = db.Column(db.String(100), nullable=False)
     website = db.Column(db.String(255))
     pricing_tier = db.Column(db.String(20))
@@ -78,6 +78,15 @@ class Client(db.Model):
     def __repr__(self):
         return f"Client('{self.name}', '{self.website}')"
 
+# Event Listener to Set Default Account equal to Client ID if no account was set during creation.
+@event.listens_for(Client, 'after_insert')
+def set_default_account(mapper, connection, target):
+    if not target.account:  # If no account was set during initialization
+        connection.execute(
+            Client.__table__.update()
+            .where(Client.client_id == target.client_id)
+            .values(account=str(target.client_id))
+        )
 
 # 3. Address Table
 class Address(db.Model):
