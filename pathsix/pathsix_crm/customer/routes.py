@@ -80,6 +80,7 @@ def client(client_id):
     client = Client.query.get_or_404(client_id)
     contacts = client.contacts  # Access related contacts
     addresses = client.addresses  # Access related addresses
+    notes = client.contact_notes  # Access related notes
 
     # Initialize the form with client data
     form = ClientForm(obj=client)
@@ -104,7 +105,14 @@ def client(client_id):
         first_note = client.contact_notes[0]  # Assuming one primary note
         form.contact_note.data = first_note.note
 
-    return render_template('crm/customer/client.html', client=client, contacts=contacts, addresses=client.addresses, form=form)
+    return render_template(
+        'crm/customer/client.html', 
+        client=client, 
+        contacts=contacts, 
+        addresses=client.addresses, 
+        notes=notes, 
+        form=form
+    )
 
 @customer.route('/customers/<int:client_id>/edit', methods=['POST'])
 @login_required

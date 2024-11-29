@@ -23,7 +23,7 @@
 <div class="client-detail">
     <table class="client-table">
         <tr>
-            <th>ID:</th>
+            <th>Account #:</th>
             <td>{{ client.client_id }}</td>
         </tr>
         <tr>
@@ -101,6 +101,24 @@
     {% else %}
         <p>No contact information available for this client.</p>
     {% endif %}
+</div>
+<div class="client-detail">
+    <div class="client-table">
+        {% if notes %}
+        <h3>Notes</h3>
+            <ul>
+                {% for note in notes %}
+                    <li>
+                        <strong>Created On:</strong> {{ note.created_at.strftime('%Y-%m-%d') }}<br>
+                        <p>{{ note.note }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No notes available for this client.</p>
+        {% endif %}
+    </div>
+
 </div>
 
 <!-- Modal -->
