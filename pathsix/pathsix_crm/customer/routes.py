@@ -125,6 +125,7 @@ def edit_client(client_id):
     # Validate the form
     if form.validate_on_submit():
         # Update the Client information
+        client.account = form.account.data
         client.name = form.name.data
         client.website = form.website.data
         client.pricing_tier = form.pricing_tier.data

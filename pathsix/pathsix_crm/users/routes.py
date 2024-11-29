@@ -107,7 +107,7 @@ def add_user():
         db.session.add(new_user)
         db.session.commit()
         flash('New user added successfully!', 'success')
-        return redirect(url_for('user.users_page'))
+        return redirect(url_for('users.users_page'))
     flash('Failed to add user. Please check the form for errors.', 'danger')
     return redirect(url_for('users.users_page'))
 

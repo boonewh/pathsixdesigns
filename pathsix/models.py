@@ -4,6 +4,7 @@ from flask import current_app
 from pathsix import db, login_manager
 from flask_login import UserMixin
 from sqlalchemy import event
+import bcrypt
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -40,12 +41,11 @@ class User(db.Model, UserMixin):
     
 @event.listens_for(User.__table__, 'after_create')  # Event listener to insert default admin user, NEEDS TO BE REMOVED IN PRODUCTION!!!!
 def insert_default_admin(target, connection, **kwargs):
-    from werkzeug.security import generate_password_hash
     connection.execute(
         target.insert().values(
             username='admin',
             email='admin@example.com',
-            password=generate_password_hash('admin123', method='sha256')
+            password=bcrypt.hashpw(b'admin123', bcrypt.gensalt()).decode('utf-8')
         )
     )
 
