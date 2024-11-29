@@ -206,12 +206,14 @@ Small businesses often face the challenge of managing client relations effective
 
 ## Milestones & Sequencing
 
-1. Complete search bar development and integrate into the CRM.
+1. Complete search bar development and integrate into the CRM. (Completed)
 2. Implement and test RBAC system.
 3. Develop the project section and include the 'recently viewed' feature.
 4. Implement leads section with real-time push notifications.
 5. Develop the communication platform.
-6. Conduct beta testing with initial users and iterate based on feedback.
+6. Add a calendar to the app that will be used with feature #7.
+7. Develop a "follow up" form that allows date and time for a follow up contact that is automatically pushed to a calendar.
+8. Conduct beta testing with initial users and iterate based on feedback.
 
 ---
 
