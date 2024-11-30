@@ -10,7 +10,13 @@
 {% block content %}
     <div class="link-create">
         <!-- Trigger Modal -->
-        <button type="button" data-bs-toggle="modal" data-bs-target="#createClientModal">
+        <button 
+            type="button" 
+            data-bs-toggle="modal" 
+            data-bs-target="#createClientModal" 
+            id="openModalButton" 
+            {% if form.errors %}style="display: none;"{% endif %}
+            >
             + Add New Client
         </button>
     </div>
@@ -41,7 +47,7 @@
                 {% for client in clients.items %}
                 <tr>
                     <td>{{ client.client_id }}</td>
-                    <td><a href="{{ url_for('customer.client', client_id=client.client_id) }}">{{ client.name }}</a></td>
+                    <td><a href="{{ url_for('crm_main.report', client_id=client.client_id) }}">{{ client.name }}</a></td>
                     <td>{{ client.website }}</td>
                     <td>{{ client.pricing_tier }}</td>
                     <td>{{ client.email or 'N/A' }}</td>
@@ -51,24 +57,31 @@
                 {% endfor %}
             </table>
             {% if clients.total > 25 %}
-            <div class="pagination">
-                {% for page_num in clients.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-                    {% if page_num %}
-                        {% if clients.page == page_num %}
-                            <a href="{{ url_for('customer.customers', page=page_num) }}" class="active">{{ page_num }}</a>
+                <div class="pagination">
+                    {% for page_num in clients.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                        {% if page_num %}
+                            {% if clients.page == page_num %}
+                                <a href="{{ url_for('customer.customers', page=page_num) }}" class="active">{{ page_num }}</a>
+                            {% else %}
+                                <a href="{{ url_for('customer.customers', page=page_num) }}">{{ page_num }}</a>
+                            {% endif %}
                         {% else %}
-                            <a href="{{ url_for('customer.customers', page=page_num) }}">{{ page_num }}</a>
+                            <span>...</span>
                         {% endif %}
-                    {% else %}
-                        <span>...</span>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="createClientModal" tabindex="-1" aria-labelledby="createClientModalLabel" aria-hidden="true">
+        <div 
+            class="modal fade {% if form.errors %}show{% endif %}" 
+            id="createClientModal" 
+            tabindex="-1" 
+            aria-labelledby="createClientModalLabel" 
+            aria-hidden="{% if form.errors %}false{% else %}true{% endif %}" 
+            {% if form.errors %}style="display: block;"{% endif %} 
+        >
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -78,10 +91,7 @@
                     <div class="modal-body">
                         <form method="POST" action="{{ url_for('customer.create_client') }}">
                             {{ form.hidden_tag() }}
-
-                            <!-- Include the fields from create_client.html -->
                             {% include 'crm/customer/create_client_fields.html' %}
-
                             <div class="form-group">
                                 {{ form.submit(class="submit-btn") }}
                             </div>
@@ -90,6 +100,7 @@
                 </div>
             </div>
         </div>
+
     {% endblock %}
 
     {% block scripts %}

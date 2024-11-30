@@ -15,7 +15,7 @@
         <h2>Clients</h2>
         <ul>
             {% for client in client_results %}
-                <li><a href="{{ url_for('customer.client', client_id=client.client_id) }}"><strong>{{ client.name }}</strong></a></li>
+                <li><a href="{{ url_for('crm_main.report', client_id=client.client_id) }}"><strong>{{ client.name }}</strong></a></li>
                 <li>{{ client.email }}</li>
             {% endfor %}
         </ul>
@@ -27,7 +27,7 @@
             {% for address in address_results %}
                 <li>
                     <strong>Company:</strong>
-                    <a href="{{ url_for('customer.client', client_id=address.client.client_id) }}"><strong>{{ address.client.name }}</strong></a><br>
+                    <a href="{{ url_for('crm_main.report', client_id=address.client.client_id) }}"><strong>{{ address.client.name }}</strong></a><br>
                     {{ address.street }}, {{ address.city }}, {{ address.state }} {{ address.zip_code }}
                 </li>
             
@@ -41,7 +41,7 @@
             {% for contact in contact_results %}
                 <li>
                     <strong>Company:</strong>
-                    <a href="{{ url_for('customer.client', client_id=contact.client.client_id) }}"><strong>{{ contact.client.name }}</strong></a><br>
+                    <a href="{{ url_for('crm_main.report', client_id=contact.client.client_id) }}"><strong>{{ contact.client.name }}</strong></a><br>
                     {{ contact.first_name }} {{ contact.last_name }} - {{ contact.email }}
                 </li>
             
@@ -55,7 +55,7 @@
             {% for note in note_results %}
                 <li>
                     <strong>Company:</strong>
-                    <a href="{{ url_for('customer.client', client_id=note.client.client_id) }}"><strong>{{ note.client.name }}</strong></a><br>
+                    <a href="{{ url_for('crm_main.report', client_id=note.client.client_id) }}"><strong>{{ note.client.name }}</strong></a><br>
                     {{ note.note }}
                 </li>
             
