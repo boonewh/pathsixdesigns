@@ -4,11 +4,20 @@ from flask import current_app
 from pathsix import db, login_manager
 from flask_login import UserMixin
 from sqlalchemy import event
+from flask_security import UserMixin, RoleMixin
+from datetime import datetime
 import bcrypt
+import uuid
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+# 0. Role model
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
 
 # 1. User Table
 class User(db.Model, UserMixin):
@@ -17,9 +26,9 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
-    
+    fs_uniquifier = db.Column(db.String(64), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+
     clients = db.relationship('Client', backref='user', lazy=True)
 
     def get_reset_token(self, expires_sec=3600):
@@ -48,6 +57,14 @@ def insert_default_admin(target, connection, **kwargs):
             password=bcrypt.hashpw(b'admin123', bcrypt.gensalt()).decode('utf-8')
         )
     )
+
+# 1.1 UserRoles Table
+class UserRoles(db.Model):
+    __tablename__ = 'user_roles'  # Explicitly define the table name
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) 
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)  
+
 
 # 2. Client Table
 class Client(db.Model):

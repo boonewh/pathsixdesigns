@@ -6,6 +6,8 @@ from flask_mail import Mail
 from config import Config
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_security import Security, SQLAlchemyUserDatastore
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 mail = Mail()
@@ -14,6 +16,8 @@ login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 limiter = Limiter(get_remote_address)
+security = Security()
+migrate = Migrate()
 
 
 def create_app(config_class=Config):
@@ -25,6 +29,15 @@ def create_app(config_class=Config):
     bcrypt.init_app(app)
     login_manager.init_app(app)
     limiter.init_app(app)
+    migrate.init_app(app, db)
+
+    # Importing User and Role models
+    from pathsix.models import User, Role
+
+    # Setup for Flask-Security-Too
+    from flask_security import SQLAlchemyUserDatastore
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    security.init_app(app, user_datastore)
 
     from pathsix.main.routes import main
     from pathsix.errors.handlers import errors
