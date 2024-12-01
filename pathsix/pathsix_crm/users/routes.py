@@ -10,7 +10,7 @@ from flask_security import roles_required
 users = Blueprint('users', __name__)
 
 @users.route('/register', methods=['GET', 'POST'])
-@login_required 
+@roles_required('admin') 
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -92,7 +92,7 @@ def reset_token(token):
 
 # Admin routes: Could be moved to Admin Blueprint ideally.
 @users.route('/users', methods=['GET'])
-@login_required
+@roles_required('admin')
 def users_page():
     users_list = User.query.all()  # Fetch all users from the database
     form = UserForm()  # Assuming you have a UserForm for creating users
