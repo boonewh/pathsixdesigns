@@ -2,11 +2,9 @@ from datetime import datetime
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask import current_app
 from pathsix import db, login_manager
-from flask_login import UserMixin
 from sqlalchemy import event
 from flask_security import UserMixin, RoleMixin
-from datetime import datetime
-import bcrypt
+from flask_security.utils import hash_password
 import uuid
 
 @login_manager.user_loader
@@ -26,9 +24,19 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.String(255), nullable=False)  # Adjusted length for hashed passwords
     fs_uniquifier = db.Column(db.String(64), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+    active = db.Column(db.Boolean, default=True, nullable=False)  # Added default=True for consistency
+    confirmed_at = db.Column(db.DateTime, nullable=True)
 
+    # Tracking fields
+    current_login_at = db.Column(db.DateTime, nullable=True)
+    last_login_at = db.Column(db.DateTime, nullable=True)
+    current_login_ip = db.Column(db.String(45), nullable=True)
+    last_login_ip = db.Column(db.String(45), nullable=True)
+    login_count = db.Column(db.Integer, nullable=True)
+
+    roles = db.relationship('Role', secondary='user_roles', backref=db.backref('users', lazy='dynamic'))
     clients = db.relationship('Client', backref='user', lazy=True)
 
     def get_reset_token(self, expires_sec=3600):
@@ -46,25 +54,25 @@ class User(db.Model, UserMixin):
         return User.query.get(user_id)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
-    
-@event.listens_for(User.__table__, 'after_create')  # Event listener to insert default admin user, NEEDS TO BE REMOVED IN PRODUCTION!!!!
+        return f"User('{self.username}', '{self.email}')"
+
+@event.listens_for(User.__table__, 'after_create')
 def insert_default_admin(target, connection, **kwargs):
     connection.execute(
         target.insert().values(
             username='admin',
             email='admin@example.com',
-            password=bcrypt.hashpw(b'admin123', bcrypt.gensalt()).decode('utf-8')
+            password=hash_password('admin123'),  # Uses Flask-Security-Too's hashing mechanism
+            active=True  # Ensure the admin is active
         )
     )
 
 # 1.1 UserRoles Table
 class UserRoles(db.Model):
-    __tablename__ = 'user_roles'  # Explicitly define the table name
+    __tablename__ = 'user_roles'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) 
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)  
-
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
 
 # 2. Client Table
 class Client(db.Model):

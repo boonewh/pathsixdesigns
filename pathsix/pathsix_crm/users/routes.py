@@ -5,6 +5,7 @@ from pathsix.models import User
 from pathsix.pathsix_crm.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, UserForm
 from pathsix.pathsix_crm.users.utils import send_reset_email
 from flask import Blueprint
+from flask_security import roles_required
 
 users = Blueprint('users', __name__)
 
