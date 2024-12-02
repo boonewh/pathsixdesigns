@@ -355,6 +355,12 @@ body {
   outline: none;
 }
 
+select {
+  -webkit-appearance: menulist; /* Restore default dropdown arrow */
+  -moz-appearance: menulist; /* For Firefox */
+  appearance: menulist; /* Standard */
+}
+
 /* Submit Button Styling */
 .submit-btn {
   width: 100%;
@@ -374,21 +380,64 @@ body {
   color: var(--text);
 }
 
-/* Login Link Styling */
-.login-link {
-  margin-top: 15px;
-  font-size: 0.9em;
-  text-align: center;
+.login-container {
+  max-width: 400px; /* Limits the width of the login form */
+  margin: 50px auto; /* Centers the form on the page */
+  padding: 20px; /* Adds spacing inside the form */
+  border: 1px solid #ddd; /* Light border for definition */
+  border-radius: 8px; /* Rounds the corners */
+  background-color: #f9f9f9; /* Light background color */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
-.login-link a {
-  color: #0066cc;
-  text-decoration: none;
-  transition: color 0.3s ease;
+.login-container h1 {
+  text-align: center; /* Centers the title */
+  font-size: 1.8rem; /* Adjusts the font size */
+  margin-bottom: 20px; /* Adds space below the title */
+  color: #333; /* Dark text color */
 }
 
-.login-link a:hover {
-  color: var(--text);
+.login-container .form-group {
+  margin-bottom: 15px; /* Adds space between form fields */
+}
+
+.login-container .form-group label {
+  display: block; /* Ensures the label is above the input */
+  font-weight: bold; /* Makes the label stand out */
+  margin-bottom: 5px; /* Adds space below the label */
+}
+
+.login-container .form-control {
+  width: 100%; /* Full width for input fields */
+  padding: 10px; /* Adds padding inside the input */
+  border: 1px solid #ccc; /* Light border for inputs */
+  border-radius: 4px; /* Rounds the corners */
+  font-size: 1rem; /* Standard font size */
+}
+
+.login-container .form-check {
+  display: flex;
+  align-items: center; /* Aligns the checkbox and label vertically */
+  margin-bottom: 15px; /* Adds space below the checkbox */
+}
+
+.login-container .form-check label {
+  margin-left: 5px; /* Adds space between the checkbox and label */
+}
+
+.login-container .btn {
+  width: 100%; /* Full width for the button */
+  padding: 10px; /* Adds padding inside the button */
+  background-color: #007bff; /* Blue background */
+  color: #fff; /* White text */
+  border: none; /* Removes the border */
+  border-radius: 4px; /* Rounds the corners */
+  font-size: 1rem; /* Standard font size */
+  cursor: pointer; /* Changes cursor to a pointer */
+}
+
+.login-container .btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
 }
 
 /* Create Client Form Styles */

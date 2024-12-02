@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from flask_login import current_user
-from pathsix.models import User
+from pathsix.models import User, Role
 
 
 
@@ -61,7 +61,22 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField("Reset Password")
 
 class UserForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=20)])
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+    password = PasswordField('Password', validators=[DataRequired()])
+    role = SelectField('Role', choices=[], coerce=str)  # Dropdown for roles
     submit = SubmitField('Add User')
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.role.choices = [(None, '--Choose Role--')] + [(role.name, role.name) for role in Role.query.order_by(Role.name).all()]
+
+    def validate_role(self, role):
+        print(f"Role data in validate_role: {role.data}")  # Debugging
+        if not role.data or role.data.strip() == '':
+            raise ValidationError('Please select a valid role.')
+        print("Validation passed.")  # Debugging
+
+
+
+

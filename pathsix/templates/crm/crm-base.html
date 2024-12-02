@@ -40,9 +40,9 @@
                         <li><a href="{{ url_for('crm_main.crm') }}">CRM</a></li>
                         {% if current_user.is_authenticated %}
                             <li><a href="{{ url_for('users.account') }}">Account</a></li>
-                            <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
+                            <li><a href="{{ url_for('security.logout') }}">Logout</a></li>
                         {% else %}
-                            <li><a href="{{ url_for('users.login') }}">Login</a></li>
+                            <li><a href="{{ url_for('security.login') }}">Login</a></li>
                         {% endif %}
                     </ul>
                 </nav>
