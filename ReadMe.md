@@ -1,8 +1,28 @@
-# PathSix CRM PRE-Version 0
+# PathSix CRM - Version 0.1.0
+
+Welcome to **PathSix CRM**, a lightweight and intuitive CRM solution designed for small businesses. This is the initial release, providing the following core features:
+
+## Features
+
+- **Customer Tracking**: Manage customer information easily.
+- **Authentication**: Secure user login and registration.
+- **Basic Account Management**: Update account details seamlessly.
+
+## Future Updates
+
+The following features are planned for upcoming releases:
+
+- **Projects Tracking**: Keep track of customer projects and deadlines.
+- **Leads Management**: Organize and manage potential customers effectively.
+- **Calendar**: automatically push follow-ups and appoinments. Send reminders.
+- **Chat platform**: Real-time communication with the ability to integrate leads into your sales pipeline.
+
+## About
+
+PathSix CRM is in active development and aims to provide an easy-to-use, scalable solution for growing businesses. Stay tuned for regular updates!
 
 ### Need to Knows
 
-- **This is a Python only version currently. JavaScript is in the future.**
 - **The left menu links on the /customers page do not work right now.**
 
 # Documentation
