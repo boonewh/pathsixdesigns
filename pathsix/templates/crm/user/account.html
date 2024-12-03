@@ -11,10 +11,12 @@
         <h1>Account Information</h1>
         <p>Username: {{ current_user.username }}</p>
         <p>Email: {{ current_user.email }}</p>
+        <p>Role: {{ current_user.roles[0].name if current_user.roles else 'No role assigned' }}</p>
     </section>
     <div class="register-container">
         <form action="" method="POST" class="register-form">
             {{ form.hidden_tag() }}
+            
             <fieldset>
                 <legend>Reset Account Information</legend>
                 <div class="form-group">
@@ -42,6 +44,9 @@
                 </div>
                 {{ form.submit(class="submit-btn") }} 
             </fieldset>
+            <div class="form-group">
+                <a href="{{ url_for('crm_main.crm') }}" class="cancel-btn">Back to CRM Main Page</a>
+            </div>
         </form>
     </div>
 {% endblock %}
