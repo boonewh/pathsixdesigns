@@ -35,7 +35,6 @@ def create_app(config_class=Config):
     from pathsix.models import User, Role
 
     # Setup for Flask-Security-Too
-    from flask_security import SQLAlchemyUserDatastore
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security.init_app(app, user_datastore)
 
@@ -44,11 +43,13 @@ def create_app(config_class=Config):
     from pathsix.pathsix_crm.crm_main.routes import crm_main
     from pathsix.pathsix_crm.customer.routes import customer
     from pathsix.pathsix_crm.users.routes import users
+    from pathsix.pathsix_crm.project.routes import project
     
     app.register_blueprint(main)
     app.register_blueprint(crm_main)
     app.register_blueprint(customer)
     app.register_blueprint(users)
     app.register_blueprint(errors)
+    app.register_blueprint(project)
 
     return app
