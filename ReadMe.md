@@ -233,7 +233,12 @@ Small businesses often face the challenge of managing client relations effective
 5. Develop the communication platform.
 6. Add a calendar to the app that will be used with feature #7.
 7. Develop a "follow up" form that allows date and time for a follow up contact that is automatically pushed to a calendar.
-8. Conduct beta testing with initial users and iterate based on feedback.
+8. Consider Adding Soft Deletes: Implement a deleted or is*active field for soft deletes instead of actual deletion:
+   is_active = db.Column(db.Boolean, default=True)
+   primaryjoin="and*(Client.client_id==Contact.client_id, Contact.active==True)"
+   Adds a filter: only include contacts where Contact.active == True.
+
+9. Conduct beta testing with initial users and iterate based on feedback.
 
 ---
 

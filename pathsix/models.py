@@ -3,6 +3,7 @@ from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask import current_app
 from pathsix import db, login_manager
 from sqlalchemy import event
+from sqlalchemy.sql import text  # Import for executing raw SQL
 from flask_security import UserMixin, RoleMixin
 from flask_security.utils import hash_password
 import uuid
@@ -11,22 +12,22 @@ import uuid
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# 0. Role model
+# 1. Role model
 class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
-# 1. User Table
+# 2. User Table
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)  # Adjusted length for hashed passwords
+    password = db.Column(db.String(255), nullable=False)
     fs_uniquifier = db.Column(db.String(64), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
-    active = db.Column(db.Boolean, default=True, nullable=False)  # Added default=True for consistency
+    active = db.Column(db.Boolean, default=True, nullable=False)
     confirmed_at = db.Column(db.DateTime, nullable=True)
 
     # Tracking fields
@@ -36,25 +37,19 @@ class User(db.Model, UserMixin):
     last_login_ip = db.Column(db.String(45), nullable=True)
     login_count = db.Column(db.Integer, nullable=True)
 
+    # Specify foreign keys explicitly for the relationship
+    clients = db.relationship(
+        'Client',
+        backref='user',
+        lazy=True,
+        foreign_keys='Client.user_id'  # Specify the correct foreign key
+    )
+
     roles = db.relationship('Role', secondary='user_roles', backref=db.backref('users', lazy='dynamic'))
-    clients = db.relationship('Client', backref='user', lazy=True)
-
-    def get_reset_token(self, expires_sec=3600):
-        s = Serializer(current_app.config['SECRET_KEY'], salt='email-reset')
-        return s.dumps({'user_id': self.id})
-
-    @staticmethod
-    def verify_reset_token(token, expires_sec=3600):
-        s = Serializer(current_app.config['SECRET_KEY'], salt='email-reset')
-        try:
-            user_id = s.loads(token, max_age=expires_sec)['user_id']
-        except Exception as e:
-            print(f"Token verification failed: {e}")
-            return None
-        return User.query.get(user_id)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
+
 
 @event.listens_for(User.__table__, 'after_create')
 def insert_default_admin(target, connection, **kwargs):
@@ -67,19 +62,49 @@ def insert_default_admin(target, connection, **kwargs):
         )
     )
 
-# 1.1 UserRoles Table
+# 3 UserRoles Table
 class UserRoles(db.Model):
     __tablename__ = 'user_roles'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
 
-# 2. Client Table
+# 4. Account Table
+class Account(db.Model):
+    __tablename__ = 'accounts'
+
+    account_number = db.Column(db.String(20), primary_key=True)
+    account_name = db.Column(db.String(100), nullable=False, unique=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+
+    def __repr__(self):
+        return f"Account('{self.account_number}', '{self.account_name}')"
+
+@event.listens_for(Account, 'before_insert')
+def generate_account_number(mapper, connection, target):
+    if not target.account_number:  # If no account number is provided
+        # Use raw SQL to get the highest account number
+        query = text('SELECT account_number FROM accounts ORDER BY account_number DESC LIMIT 1')
+        result = connection.execute(query).scalar()
+
+        if result:
+            # Extract the numeric part of the account number
+            numeric_part = ''.join(filter(str.isdigit, result))
+            new_number = int(numeric_part or 0) + 1
+            target.account_number = f"ACC{new_number:06}"  # Example: ACC000001
+        else:
+            # Default for the first account
+            target.account_number = "ACC000001"
+
+
+
+# 5. Client Table
 class Client(db.Model):
     __tablename__ = 'clients'
 
-    client_id = db.Column(db.Integer, primary_key=True)
-    account = db.Column(db.String(20), nullable=True)
+    client_id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     website = db.Column(db.String(255))
     pricing_tier = db.Column(db.String(20))
@@ -88,8 +113,10 @@ class Client(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    # Relationships with cascading delete
+    # Relationships
+    accounts = db.relationship('Account', backref='client', lazy=True, cascade="all, delete-orphan")
     addresses = db.relationship('Address', backref='client', lazy=True, cascade="all, delete-orphan")
     contacts = db.relationship('Contact', backref='client', lazy=True, cascade="all, delete-orphan")
     contact_notes = db.relationship('ContactNote', backref='client', lazy=True, cascade="all, delete-orphan")
@@ -103,17 +130,7 @@ class Client(db.Model):
     def __repr__(self):
         return f"Client('{self.name}', '{self.website}')"
 
-# Event Listener to Set Default Account equal to Client ID if no account was set during creation.
-@event.listens_for(Client, 'after_insert')
-def set_default_account(mapper, connection, target):
-    if not target.account:  # If no account was set during initialization
-        connection.execute(
-            Client.__table__.update()
-            .where(Client.client_id == target.client_id)
-            .values(account=str(target.client_id))
-        )
-
-# 3. Address Table
+# 6. Address Table
 class Address(db.Model):
     __tablename__ = 'addresses'
 
@@ -129,7 +146,7 @@ class Address(db.Model):
     def __repr__(self):
         return f"Address('{self.street}', '{self.city}', '{self.state}', '{self.zip_code}')"
 
-# 4. Contact Table
+# 7. Contact Table
 class Contact(db.Model):
     __tablename__ = 'contacts'
 
@@ -140,12 +157,13 @@ class Contact(db.Model):
     email = db.Column(db.String(120), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
     def __repr__(self):
         return f"Contact('{self.first_name}', '{self.last_name}', '{self.email}', '{self.phone}')"
 
-# 5. ContactNote Table
+# 8. ContactNote Table
 class ContactNote(db.Model):
     __tablename__ = 'contact_notes'
 
@@ -157,7 +175,32 @@ class ContactNote(db.Model):
     def __repr__(self):
         return f"ContactNote('Client ID: {self.client_id}', 'Note: {self.note[:30]}...')"
 
-# 6. Sale Table
+# 9. Project Table
+class Projects(db.Model):
+    __tablename__ = 'projects'
+
+    id = db.Column(db.Integer, primary_key=True)
+    project_name = db.Column(db.String(255), nullable=False)
+    project_description = db.Column(db.Text, nullable=True)
+    project_status = db.Column(db.String(20), nullable=False)  # e.g., 'in progress', 'completed'
+    project_start = db.Column(db.DateTime, nullable=True)
+    project_end = db.Column(db.DateTime, nullable=True)
+    project_worth = db.Column(db.Float, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Still linked to the user
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+
+    # Relationships (Only with User for tracking)
+    creator = db.relationship('User', foreign_keys=[created_by], backref='projects_created')
+    last_updater = db.relationship('User', foreign_keys=[last_updated_by], backref='projects_updated')
+
+    def __repr__(self):
+        return f"Project('{self.project_name}', 'Status: {self.project_status}')"
+
+
+
+# 10. Sale Table
 class Sale(db.Model):
     __tablename__ = 'sales'
 
@@ -172,7 +215,7 @@ class Sale(db.Model):
     def __repr__(self):
         return f"Sale('Client ID: {self.client_id}', 'Amount: {self.sale_amount}', 'Date: {self.sale_date}')"
 
-# 7. BillingCycle Table
+# 11. BillingCycle Table
 class BillingCycle(db.Model):
     __tablename__ = 'billing_cycles'
 
@@ -187,7 +230,7 @@ class BillingCycle(db.Model):
     def __repr__(self):
         return f"BillingCycle('Client ID: {self.client_id}', 'Cycle: {self.billing_cycle}', 'Status: {self.payment_status}')"
 
-# 8. WebsiteUpdate Table
+# 12. WebsiteUpdate Table
 class WebsiteUpdate(db.Model):
     __tablename__ = 'website_updates'
 
@@ -196,13 +239,12 @@ class WebsiteUpdate(db.Model):
     update_date = db.Column(db.DateTime, default=datetime.utcnow)
     pages_updated = db.Column(db.JSON)
     sections_updated = db.Column(db.JSON)
-    notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return f"WebsiteUpdate('Client ID: {self.client_id}', 'Date: {self.update_date}')"
 
-# 9. MailingList Table
+# 13. MailingList Table
 class MailingList(db.Model):
     __tablename__ = 'mailing_list'
 
@@ -211,13 +253,12 @@ class MailingList(db.Model):
     address = db.Column(db.String(255))
     postcard_sent = db.Column(db.Boolean, default=False)
     date_sent = db.Column(db.DateTime)
-    notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return f"MailingList('Client ID: {self.client_id}', 'Address: {self.address}', 'Postcard Sent: {self.postcard_sent}')"
 
-# 10. ClientWebsite Table
+# 14. ClientWebsite Table
 class ClientWebsite(db.Model):
     __tablename__ = 'client_websites'
 
@@ -228,13 +269,12 @@ class ClientWebsite(db.Model):
     ssl_status = db.Column(db.String(20))  # e.g., 'active', 'expiring', 'expired'
     renewal_date = db.Column(db.DateTime)
     hosting_cost = db.Column(db.Float)
-    notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return f"ClientWebsite('Client ID: {self.client_id}', 'Domain: {self.domain}', 'SSL Status: {self.ssl_status}')"
 
-# 11. Reminder Table
+# 15. Reminder Table
 class Reminder(db.Model):
     __tablename__ = 'reminders'
 

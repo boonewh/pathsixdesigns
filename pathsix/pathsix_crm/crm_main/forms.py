@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Optional, Email, Length, URL
 
-
 class ClientForm(FlaskForm):
     # Client information
     account = StringField('Account Number', validators=[Optional(), Length(max=50)])
@@ -18,7 +17,6 @@ class ClientForm(FlaskForm):
     contact_email = StringField('Contact Email', validators=[DataRequired(), Email()])
     contact_phone = StringField('Contact Phone', validators=[DataRequired(), Length(max=20)])
 
-    
     # Address information
     street = StringField('Street', validators=[DataRequired(), Length(max=255)])
     city = StringField('City', validators=[DataRequired(), Length(max=100)])
