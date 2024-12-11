@@ -12,7 +12,7 @@ Welcome to **PathSix CRM**, a lightweight and intuitive CRM solution designed fo
 
 The following features are planned for upcoming releases:
 
-- **Projects Tracking**: Keep track of customer projects and deadlines.
+- **Projects Tracking**: Keep track of project deadlines.
 - **Leads Management**: Organize and manage potential customers effectively.
 - **Calendar**: automatically push follow-ups and appoinments. Send reminders.
 - **Chat platform**: Real-time communication with the ability to integrate leads into your sales pipeline.
@@ -228,17 +228,20 @@ Small businesses often face the challenge of managing client relations effective
 
 1. Complete search bar development and integrate into the CRM. (Completed)
 2. Implement and test RBAC system. (Completed)
-3. Develop the project section and include the 'recently viewed' feature.
-4. Implement leads section with real-time push notifications.
-5. Develop the communication platform.
-6. Add a calendar to the app that will be used with feature #7.
-7. Develop a "follow up" form that allows date and time for a follow up contact that is automatically pushed to a calendar.
-8. Consider Adding Soft Deletes: Implement a deleted or is*active field for soft deletes instead of actual deletion:
-   is_active = db.Column(db.Boolean, default=True)
-   primaryjoin="and*(Client.client_id==Contact.client_id, Contact.active==True)"
-   Adds a filter: only include contacts where Contact.active == True.
+3. Develop the project section. (Completed)
+4. Implement leads section.
+5. Connect customers, projects and leads, ensuring that leads can become cumstomers and projects can be tied to both through table ids.
+6. Include 'recently viewed' feature in project, customers and leads.
+7. Develop the communication platform.
+8. Add a real-time feature to push leads out to sales people.
+9. Add a calendar to the app that will be used with feature #7.
+10. Develop a "follow up" form that allows date and time for a follow up contact that is automatically pushed to a calendar.
+11. Consider Adding Soft Deletes: Implement a deleted or is*active field for soft deletes instead of actual deletion:
+    is_active = db.Column(db.Boolean, default=True)
+    primaryjoin="and*(Client.client_id==Contact.client_id, Contact.active==True)"
+    Adds a filter: only include contacts where Contact.active == True.
 
-9. Conduct beta testing with initial users and iterate based on feedback.
+12. Conduct beta testing with initial users and iterate based on feedback.
 
 ---
 
