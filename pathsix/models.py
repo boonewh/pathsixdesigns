@@ -150,7 +150,8 @@ class Contact(db.Model):
     __tablename__ = 'contacts'
 
     id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)
+    lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'), nullable=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(120), nullable=True)
@@ -162,12 +163,14 @@ class Contact(db.Model):
     def __repr__(self):
         return f"Contact('{self.first_name}', '{self.last_name}', '{self.email}', '{self.phone}')"
 
+
 # 8. ContactNote Table
 class ContactNote(db.Model):
     __tablename__ = 'contact_notes'
 
     id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)
+    lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'), nullable=True)
     note = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
