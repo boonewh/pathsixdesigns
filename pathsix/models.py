@@ -98,8 +98,6 @@ def generate_account_number(mapper, connection, target):
             # Default for the first account
             target.account_number = "ACC000001"
 
-
-
 # 5. Client Table
 class Client(db.Model):
     __tablename__ = 'clients'
@@ -123,7 +121,6 @@ class Client(db.Model):
     sales = db.relationship('Sale', backref='client', lazy=True, cascade="all, delete-orphan")
     billing_cycles = db.relationship('BillingCycle', backref='client', lazy=True, cascade="all, delete-orphan")
     website_updates = db.relationship('WebsiteUpdate', backref='client', lazy=True, cascade="all, delete-orphan")
-    mailing_lists = db.relationship('MailingList', backref='client', lazy=True, cascade="all, delete-orphan")
     client_websites = db.relationship('ClientWebsite', backref='client', lazy=True, cascade="all, delete-orphan")
     reminders = db.relationship('Reminder', backref='client', lazy=True, cascade="all, delete-orphan")
 
@@ -135,7 +132,8 @@ class Address(db.Model):
     __tablename__ = 'addresses'
 
     id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)
+    lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'), nullable=True)
     street = db.Column(db.String(255), nullable=False)
     city = db.Column(db.String(100), nullable=False)
     state = db.Column(db.String(2), nullable=False)
@@ -145,6 +143,7 @@ class Address(db.Model):
 
     def __repr__(self):
         return f"Address('{self.street}', '{self.city}', '{self.state}', '{self.zip_code}')"
+
 
 # 7. Contact Table
 class Contact(db.Model):
@@ -174,12 +173,36 @@ class ContactNote(db.Model):
 
     def __repr__(self):
         return f"ContactNote('Client ID: {self.client_id}', 'Note: {self.note[:30]}...')"
+    
+# 9. Leads Table
+class Lead(db.Model):
+    __tablename__ = 'leads'
 
-# 9. Project Table
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    website = db.Column(db.String(255))
+    email = db.Column(db.String(120), nullable=True)
+    phone = db.Column(db.String(20), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    # Relationships
+    addresses = db.relationship('Address', backref='lead', lazy=True, cascade="all, delete-orphan")
+    contacts = db.relationship('Contact', backref='lead', lazy=True, cascade="all, delete-orphan")
+    contact_notes = db.relationship('ContactNote', backref='lead', lazy=True, cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return f"Lead('{self.name}', '{self.email}', '{self.phone}')"
+
+# 10. Projects Table
 class Projects(db.Model):
     __tablename__ = 'projects'
 
     id = db.Column(db.Integer, primary_key=True)
+    lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'), nullable=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)  # Add this foreign key
     project_name = db.Column(db.String(255), nullable=False)
     project_description = db.Column(db.Text, nullable=True)
     project_status = db.Column(db.String(20), nullable=False)  # e.g., 'in progress', 'completed'
@@ -187,20 +210,20 @@ class Projects(db.Model):
     project_end = db.Column(db.DateTime, nullable=True)
     project_worth = db.Column(db.Float, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Still linked to the user
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
     last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
-    # Relationships (Only with User for tracking)
+    # Relationships
     creator = db.relationship('User', foreign_keys=[created_by], backref='projects_created')
     last_updater = db.relationship('User', foreign_keys=[last_updated_by], backref='projects_updated')
+    lead = db.relationship('Lead', backref='lead_projects')  # Use renamed backref
+    client = db.relationship('Client', backref='projects')  # Retain this relationship
 
     def __repr__(self):
         return f"Project('{self.project_name}', 'Status: {self.project_status}')"
 
-
-
-# 10. Sale Table
+# 11. Sale Table
 class Sale(db.Model):
     __tablename__ = 'sales'
 
@@ -215,7 +238,7 @@ class Sale(db.Model):
     def __repr__(self):
         return f"Sale('Client ID: {self.client_id}', 'Amount: {self.sale_amount}', 'Date: {self.sale_date}')"
 
-# 11. BillingCycle Table
+# 12. BillingCycle Table
 class BillingCycle(db.Model):
     __tablename__ = 'billing_cycles'
 
@@ -230,7 +253,7 @@ class BillingCycle(db.Model):
     def __repr__(self):
         return f"BillingCycle('Client ID: {self.client_id}', 'Cycle: {self.billing_cycle}', 'Status: {self.payment_status}')"
 
-# 12. WebsiteUpdate Table
+# 13. WebsiteUpdate Table
 class WebsiteUpdate(db.Model):
     __tablename__ = 'website_updates'
 
@@ -243,20 +266,6 @@ class WebsiteUpdate(db.Model):
 
     def __repr__(self):
         return f"WebsiteUpdate('Client ID: {self.client_id}', 'Date: {self.update_date}')"
-
-# 13. MailingList Table
-class MailingList(db.Model):
-    __tablename__ = 'mailing_list'
-
-    id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
-    address = db.Column(db.String(255))
-    postcard_sent = db.Column(db.Boolean, default=False)
-    date_sent = db.Column(db.DateTime)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"MailingList('Client ID: {self.client_id}', 'Address: {self.address}', 'Postcard Sent: {self.postcard_sent}')"
 
 # 14. ClientWebsite Table
 class ClientWebsite(db.Model):

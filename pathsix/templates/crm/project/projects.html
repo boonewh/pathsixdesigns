@@ -33,7 +33,7 @@
         <div class="customer">
             <table class="cust-table">
                 <tr class="thead">
-                    <th colspan="6">PROJECTS</th>
+                    <th colspan="5">PROJECTS</th>
                 </tr>
                 <tr class="sm-thead">
                     <th>Project Name</th>
@@ -41,22 +41,14 @@
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Worth ($)</th>
-                    <th>Actions</th>
                 </tr>
                 {% for project in projects.items %}
                 <tr>
-                    <td>{{ project.project_name }}</td>
+                    <td><a href="{{ url_for('project.report', id=project.id) }}">{{ project.project_name }}</a></td>
                     <td>{{ project.project_status }}</td>
                     <td>{{ project.project_start.strftime('%Y-%m-%d') if project.project_start else 'N/A' }}</td>
                     <td>{{ project.project_end.strftime('%Y-%m-%d') if project.project_end else 'N/A' }}</td>
                     <td>{{ project.project_worth }}</td>
-                    <!-- BELOW LINKS! 1st should be edit_project, 2nd should be delete_project, but you have to create the routes -->
-                    <td>
-                        <a href="{{ url_for('project.create_project', project_id=project.id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form method="POST" action="{{ url_for('project.create_project', project_id=project.id) }}" style="display: inline-block;">
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this project?')">Delete</button>
-                        </form>
-                    </td>
                 </tr>
                 {% endfor %}
             </table>
@@ -95,44 +87,44 @@
                         <form method="POST" action="{{ url_for('project.create_project') }}">
                             {{ form.hidden_tag() }}
                                 <div class="mb-3">
-                                    {{ form.name.label(class="form-label") }}
-                                    {{ form.name(class="form-control") }}
-                                    {% for error in form.name.errors %}
+                                    {{ form.project_name.label(class="form-label") }}
+                                    {{ form.project_name(class="form-control") }}
+                                    {% for error in form.project_name.errors %}
                                     <div class="text-danger">{{ error }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="mb-3">
-                                    {{ form.description.label(class="form-label") }}
-                                    {{ form.description(class="form-control") }}
-                                    {% for error in form.description.errors %}
+                                    {{ form.project_description.label(class="form-label") }}
+                                    {{ form.project_description(class="form-control") }}
+                                    {% for error in form.project_description.errors %}
                                     <div class="text-danger">{{ error }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="mb-3">
-                                    {{ form.status.label(class="form-label") }}
-                                    {{ form.status(class="form-select") }}
-                                    {% for error in form.status.errors %}
+                                    {{ form.project_status.label(class="form-label") }}
+                                    {{ form.project_status(class="form-select") }}
+                                    {% for error in form.project_status.errors %}
                                     <div class="text-danger">{{ error }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="mb-3">
-                                    {{ form.start.label(class="form-label") }}
-                                    {{ form.start(class="form-control", type="date") }}
-                                    {% for error in form.start.errors %}
+                                    {{ form.project_start.label(class="form-label") }}
+                                    {{ form.project_start(class="form-control", type="date") }}
+                                    {% for error in form.project_start.errors %}
                                     <div class="text-danger">{{ error }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="mb-3">
-                                    {{ form.end.label(class="form-label") }}
-                                    {{ form.end(class="form-control", type="date") }}
-                                    {% for error in form.end.errors %}
+                                    {{ form.project_end.label(class="form-label") }}
+                                    {{ form.project_end(class="form-control", type="date") }}
+                                    {% for error in form.project_end.errors %}
                                     <div class="text-danger">{{ error }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="mb-3">
-                                    {{ form.worth.label(class="form-label") }}
-                                    {{ form.worth(class="form-control") }}
-                                    {% for error in form.worth.errors %}
+                                    {{ form.project_worth.label(class="form-label") }}
+                                    {{ form.project_worth(class="form-control") }}
+                                    {% for error in form.project_worth.errors %}
                                     <div class="text-danger">{{ error }}</div>
                                     {% endfor %}
                                 </div>

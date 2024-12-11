@@ -1,16 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField, DateField, FloatField, SubmitField
-from wtforms.validators import DataRequired, Optional, Length, NumberRange
+from wtforms import StringField, TextAreaField, SelectField, DateField, DecimalField, SubmitField
+from wtforms.validators import DataRequired, Length, Optional
 
 class ProjectForm(FlaskForm):
-    name = StringField('Project Name', validators=[DataRequired(), Length(max=255)])
-    description = TextAreaField('Project Description', validators=[Optional(), Length(max=1000)])
-    status = SelectField(
+    project_name = StringField('Project Name', validators=[DataRequired(), Length(max=255)])
+    project_description = TextAreaField('Description', validators=[Optional(), Length(max=1000)])
+    project_status = SelectField(
         'Status',
-        choices=[('won', 'Won'), ('lost', 'Lost'), ('In Progress', 'In Progress'), ('on hold', 'On Hold'), ('canceled', 'Canceled')],
+        choices=[('in progress', 'In Progress'), ('completed', 'Completed')],
         validators=[DataRequired()]
     )
-    start = DateField('Start Date', format='%Y-%m-%d', validators=[Optional()])
-    end = DateField('End Date', format='%Y-%m-%d', validators=[Optional()])
-    worth = FloatField('Project Worth ($)', validators=[Optional(), NumberRange(min=0)])
-    submit = SubmitField('Create Project')
+    project_start = DateField('Start Date', format='%Y-%m-%d', validators=[Optional()])
+    project_end = DateField('End Date', format='%Y-%m-%d', validators=[Optional()])
+    project_worth = DecimalField('Worth', places=2, validators=[Optional()])
+    submit = SubmitField('Save')
