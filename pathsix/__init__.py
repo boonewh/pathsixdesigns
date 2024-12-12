@@ -44,6 +44,7 @@ def create_app(config_class=Config):
     from pathsix.pathsix_crm.customer.routes import customer
     from pathsix.pathsix_crm.users.routes import users
     from pathsix.pathsix_crm.project.routes import project
+    from pathsix.pathsix_crm.lead.routes import lead
     
     app.register_blueprint(main)
     app.register_blueprint(crm_main)
@@ -51,5 +52,6 @@ def create_app(config_class=Config):
     app.register_blueprint(users)
     app.register_blueprint(errors)
     app.register_blueprint(project)
+    app.register_blueprint(lead)
 
     return app

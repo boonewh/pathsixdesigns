@@ -133,7 +133,7 @@ class Address(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)
-    lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'), nullable=True)
+    lead_id = db.Column(db.Integer, db.ForeignKey('leads.lead_id'), nullable=True)
     street = db.Column(db.String(255), nullable=False)
     city = db.Column(db.String(100), nullable=False)
     state = db.Column(db.String(2), nullable=False)
@@ -151,7 +151,7 @@ class Contact(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)
-    lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'), nullable=True)
+    lead_id = db.Column(db.Integer, db.ForeignKey('leads.lead_id'), nullable=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(120), nullable=True)
@@ -170,7 +170,7 @@ class ContactNote(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)
-    lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'), nullable=True)
+    lead_id = db.Column(db.Integer, db.ForeignKey('leads.lead_id'), nullable=True)
     note = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -181,7 +181,7 @@ class ContactNote(db.Model):
 class Lead(db.Model):
     __tablename__ = 'leads'
 
-    id = db.Column(db.Integer, primary_key=True)
+    lead_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     website = db.Column(db.String(255))
     email = db.Column(db.String(120), nullable=True)
@@ -204,7 +204,7 @@ class Projects(db.Model):
     __tablename__ = 'projects'
 
     id = db.Column(db.Integer, primary_key=True)
-    lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'), nullable=True)
+    lead_id = db.Column(db.Integer, db.ForeignKey('leads.lead_id'), nullable=True)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)  # Add this foreign key
     project_name = db.Column(db.String(255), nullable=False)
     project_description = db.Column(db.Text, nullable=True)
