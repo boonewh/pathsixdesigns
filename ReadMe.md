@@ -1,10 +1,12 @@
-# PathSix CRM - Version 0.1.0
+# PathSix CRM - Version 0.2.1
 
 Welcome to **PathSix CRM**, a lightweight and intuitive CRM solution designed for small businesses. This is the initial release, providing the following core features:
 
 ## Features
 
 - **Customer Tracking**: Manage customer information easily.
+- **Basic Projects Tracking**: Keep track of projects.
+- **Leads Management**: Organize and manage potential customers effectively.
 - **Authentication**: Secure user login and registration.
 - **Basic Account Management**: Update account details seamlessly.
 
@@ -12,8 +14,7 @@ Welcome to **PathSix CRM**, a lightweight and intuitive CRM solution designed fo
 
 The following features are planned for upcoming releases:
 
-- **Projects Tracking**: Keep track of project deadlines.
-- **Leads Management**: Organize and manage potential customers effectively.
+- **Expanded Projects and Leads Tracking**: Track deadlines and get follow-up reminders.
 - **Calendar**: automatically push follow-ups and appoinments. Send reminders.
 - **Chat platform**: Real-time communication with the ability to integrate leads into your sales pipeline.
 
@@ -229,7 +230,7 @@ Small businesses often face the challenge of managing client relations effective
 1. Complete search bar development and integrate into the CRM. (Completed)
 2. Implement and test RBAC system. (Completed)
 3. Develop the project section. (Completed)
-4. Implement leads section.
+4. Implement leads section. (Completed)
 5. Connect customers, projects and leads, ensuring that leads can become cumstomers and projects can be tied to both through table ids.
 6. Include 'recently viewed' feature in project, customers and leads.
 7. Develop the communication platform.
