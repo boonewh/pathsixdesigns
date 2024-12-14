@@ -4,12 +4,16 @@ from wtforms.validators import DataRequired, Optional, Email, Length, URL
 
 class ClientForm(FlaskForm):
     # Client information
-    account = StringField('Account Number', validators=[Optional(), Length(max=50)])
+    account_number = StringField('Account Number', validators=[Optional(), Length(max=50)])
     name = StringField('Client Name', validators=[DataRequired(), Length(max=50)])
     website = StringField('Website', validators=[Optional(), URL(), Length(max=50)])
     pricing_tier = StringField('Pricing Tier', validators=[DataRequired(), Length(max=10)])
     email = StringField("Email", validators=[Optional(), Email()])
     phone = StringField("Phone", validators=[Optional(), Length(max=20)])
+
+    # Account information
+    account_number = StringField('Account Number', validators=[Optional(), Length(max=20)])  # Add this line
+
 
     # Contact information
     first_name = StringField('Contact First Name', validators=[DataRequired(), Length(max=50)])

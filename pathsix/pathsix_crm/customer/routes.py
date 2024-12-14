@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from pathsix import db
 from pathsix.models import Client, Address, Contact, ContactNote, Account
-from pathsix.pathsix_crm.crm_main.forms import ClientForm
+from pathsix.pathsix_crm.customer.forms import ClientForm
 from flask_login import login_required, current_user
 
 
@@ -19,18 +19,19 @@ def customers():
     form = ClientForm()
     return render_template('crm/customer/customers.html', clients=clients, form=form)
 
-
 @customer.route('/customers/new', methods=['GET', 'POST'])
 @login_required
 def create_client():
     """
-    Create a new client, including associated contacts, addresses, and notes.
+    Create a new client, including associated account, contacts, addresses, and notes.
     """
     form = ClientForm()
+    page = request.args.get('page', 1, type=int)  # Pagination for the clients list
+    clients = Client.query.paginate(page=page, per_page=25)  # Query for all clients
 
     if form.validate_on_submit():
         try:
-            # Create the primary Client entry
+            # Create the Client entry
             new_client = Client(
                 name=form.name.data,
                 website=form.website.data,
@@ -40,12 +41,21 @@ def create_client():
                 user_id=current_user.id
             )
             db.session.add(new_client)
-            db.session.flush()  # Get the client_id for related entries
+            db.session.flush()  # Ensure `client_id` is available
 
-            # Create the Address entry
+            # Create the Account entry
+            account_number = form.account_number.data or new_client.client_id  # Use client_id if no account number is provided
+            new_account = Account(
+                account_number=account_number,
+                account_name=form.name.data,
+                client_id=new_client.client_id
+            )
+            db.session.add(new_account)
+
+            # Add address, contact, and notes
             if form.street.data and form.city.data and form.state.data and form.zip_code.data:
                 address = Address(
-                    client_id=new_client.client_id,  # Link to client
+                    client_id=new_client.client_id,
                     street=form.street.data,
                     city=form.city.data,
                     state=form.state.data,
@@ -53,10 +63,9 @@ def create_client():
                 )
                 db.session.add(address)
 
-            # Create the Contact entry
             if form.first_name.data and form.last_name.data and form.contact_email.data:
                 contact = Contact(
-                    client_id=new_client.client_id,  # Link to client
+                    client_id=new_client.client_id,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
                     email=form.contact_email.data,
@@ -65,27 +74,23 @@ def create_client():
                 )
                 db.session.add(contact)
 
-            # Create the ContactNote entry
             if form.contact_note.data:
                 contact_note = ContactNote(
-                    client_id=new_client.client_id,  # Link to client
+                    client_id=new_client.client_id,
                     note=form.contact_note.data
                 )
                 db.session.add(contact_note)
 
-            # Commit all changes
             db.session.commit()
-            flash('Client added successfully!', 'success')
+            flash('Client and account created successfully!', 'success')
             return redirect(url_for('customer.customers'))
 
         except Exception as e:
-            # Rollback in case of error
             db.session.rollback()
-            flash(f'An error occurred while adding the client: {str(e)}', 'danger')
+            flash(f'An error occurred: {e}', 'danger')
 
-    # If validation fails, re-render the same page with errors
-    return render_template('crm/customer/customers.html', form=form)
-
+    # Pass `clients` and `form` to the template for rendering
+    return render_template('crm/customer/customers.html', clients=clients, form=form)
 
 @customer.route('/client_report/<int:client_id>', methods=['GET'])
 @login_required
@@ -95,35 +100,38 @@ def client_report(client_id):
     contact, and notes if available.
     """
     client = Client.query.get_or_404(client_id)
+    account = Account.query.filter_by(client_id=client_id).first()
     form = ClientForm(obj=client)
 
-    # Get the first address, contact, and note if they exist
-    first_address = client.addresses[0] if client.addresses else None
-    first_contact = client.contacts[0] if client.contacts else None
-    first_note = client.contact_notes[0] if client.contact_notes else None
+    # Populate the account number field
+    if account:
+        form.account_number.data = account.account_number
 
-    # Populate form fields for the primary address
-    if first_address:
-        form.street.data = first_address.street
-        form.city.data = first_address.city
-        form.state.data = first_address.state
-        form.zip_code.data = first_address.zip_code
+    # Populate the primary address fields
+    address = client.addresses[0] if client.addresses else None
+    if address:
+        form.street.data = address.street
+        form.city.data = address.city
+        form.state.data = address.state
+        form.zip_code.data = address.zip_code
 
-    # Populate form fields for the primary contact
-    if first_contact:
-        form.first_name.data = first_contact.first_name
-        form.last_name.data = first_contact.last_name
-        form.contact_email.data = first_contact.email
-        form.contact_phone.data = first_contact.phone
+    # Populate the primary contact fields
+    contact = client.contacts[0] if client.contacts else None
+    if contact:
+        form.first_name.data = contact.first_name
+        form.last_name.data = contact.last_name
+        form.contact_email.data = contact.email
+        form.contact_phone.data = contact.phone
 
-    # Populate form field for the primary note
-    if first_note:
-        form.contact_note.data = first_note.note
+    # Populate the primary contact note field
+    note = client.contact_notes[0] if client.contact_notes else None
+    if note:
+        form.contact_note.data = note.note
 
-    # Pass related data explicitly to the template
     return render_template(
         'crm/customer/client_report.html',
         client=client,
+        account=account,
         form=form,
         addresses=client.addresses,
         contacts=client.contacts,
@@ -131,18 +139,27 @@ def client_report(client_id):
     )
 
 
+
 @customer.route('/client_report/<int:client_id>/edit', methods=['POST'])
 @login_required
 def edit_client(client_id):
     client = Client.query.get_or_404(client_id)
+    account = Account.query.filter_by(client_id=client_id).first()
     form = ClientForm()
 
     if form.validate_on_submit():
+        # Update client fields
         client.name = form.name.data
         client.website = form.website.data
         client.pricing_tier = form.pricing_tier.data
         client.email = form.email.data
         client.phone = form.phone.data
+
+        # Update account fields
+        if account:
+            # Update account_number only if provided, else keep the existing one
+            if form.account_number.data:
+                account.account_number = form.account_number.data
 
         # Update address
         address = Address.query.filter_by(client_id=client_id).first()
@@ -166,7 +183,7 @@ def edit_client(client_id):
             contact_note.note = form.contact_note.data
 
         db.session.commit()
-        flash('Client information has been updated successfully!', 'success')
+        flash('Client information and account number have been updated successfully!', 'success')
         return redirect(url_for('customer.client_report', client_id=client_id))
 
     flash('Failed to update client. Please correct the errors.', 'danger')

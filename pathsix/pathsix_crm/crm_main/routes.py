@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from pathsix import db
 from pathsix.models import Client, Address, Contact, ContactNote, Account
-from pathsix.pathsix_crm.crm_main.forms import ClientForm
 from flask_login import login_required
 
 crm_main = Blueprint('crm_main', __name__)

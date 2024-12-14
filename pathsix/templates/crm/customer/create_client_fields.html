@@ -1,11 +1,11 @@
 <!-- Client Information -->
 <fieldset>
     <div class="form-group">
-        <label for="account" class="form-label">Account Number</label>
-        {{ form.account(class="form-input") }}
-        {% if form.account.errors %}
+        <label for="account_number" class="form-label">Account Number</label>
+        {{ form.account_number(class="form-input", value=form.account_number.data) }}
+        {% if form.account_number.errors %}
             <ul>
-                {% for error in form.account.errors %}
+                {% for error in form.account_number.errors %}
                     <li style="color: red;">{{ error }}</li>
                 {% endfor %}
             </ul>

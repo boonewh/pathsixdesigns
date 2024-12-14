@@ -44,7 +44,7 @@
                 </tr>
                 {% for lead in leads.items %}
                 <tr>
-                    <td><a href="{{ url_for('leads.report', lead_id=lead.id) }}">{{ lead.name }}</a></td>
+                    <td><a href="{{ url_for('lead.lead_report', lead_id=lead.lead_id) }}">{{ lead.name }}</a></td>
                     <td>{{ lead.website }}</td>
                     <td>{{ lead.email or 'N/A' }}</td>
                     <td>{{ lead.phone or 'N/A' }}</td>
