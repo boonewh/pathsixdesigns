@@ -14,7 +14,7 @@ def logout():
     return redirect(url_for('crm_main.crm'))
 
 
-@users.route('/account', methods=['GET', 'POST'])
+@users.route('/user_account', methods=['GET', 'POST'])
 @login_required
 def account():
     form = UpdateAccountForm()
@@ -27,7 +27,7 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    return render_template('crm/user/account.html', form=form)
+    return render_template('crm/user/user_account.html', form=form)
 
 
 @users.route('/users', methods=['GET'])

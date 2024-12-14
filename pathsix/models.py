@@ -145,6 +145,7 @@ class Address(db.Model):
         return f"Address('{self.street}', '{self.city}', '{self.state}', '{self.zip_code}')"
 
 
+
 # 7. Contact Table
 class Contact(db.Model):
     __tablename__ = 'contacts'
@@ -176,6 +177,7 @@ class ContactNote(db.Model):
 
     def __repr__(self):
         return f"ContactNote('Client ID: {self.client_id}', 'Note: {self.note[:30]}...')"
+
     
 # 9. Leads Table
 class Lead(db.Model):

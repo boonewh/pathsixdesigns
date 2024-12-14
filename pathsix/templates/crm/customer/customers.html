@@ -45,7 +45,7 @@
                 </tr>
                 {% for client in clients.items %}
                 <tr>
-                    <td><a href="{{ url_for('crm_main.report', client_id=client.client_id) }}">{{ client.name }}</a></td>
+                    <td><a href="{{ url_for('customer.client_report', client_id=client.client_id) }}">{{ client.name }}</a></td>
                     <td>{{ client.website }}</td>
                     <td>{{ client.pricing_tier }}</td>
                     <td>{{ client.email or 'N/A' }}</td>
