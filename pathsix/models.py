@@ -50,18 +50,6 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
 
-
-@event.listens_for(User.__table__, 'after_create')
-def insert_default_admin(target, connection, **kwargs):
-    connection.execute(
-        target.insert().values(
-            username='admin',
-            email='admin@example.com',
-            password=hash_password('admin123'),  # Uses Flask-Security-Too's hashing mechanism
-            active=True  # Ensure the admin is active
-        )
-    )
-
 # 3 UserRoles Table
 class UserRoles(db.Model):
     __tablename__ = 'user_roles'
