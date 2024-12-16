@@ -41,6 +41,7 @@
                     <th>Website</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Description</th>
                 </tr>
                 {% for lead in leads.items %}
                 <tr>
@@ -48,6 +49,7 @@
                     <td>{{ lead.website }}</td>
                     <td>{{ lead.email or 'N/A' }}</td>
                     <td>{{ lead.phone or 'N/A' }}</td>
+                    <td>{{ lead.description or 'N/A' }}</td>
                 </tr>
                 {% endfor %}
             </table>

@@ -11,10 +11,6 @@ class ClientForm(FlaskForm):
     email = StringField("Email", validators=[Optional(), Email()])
     phone = StringField("Phone", validators=[Optional(), Length(max=20)])
 
-    # Account information
-    account_number = StringField('Account Number', validators=[Optional(), Length(max=20)])  # Add this line
-
-
     # Contact information
     first_name = StringField('Contact First Name', validators=[DataRequired(), Length(max=50)])
     last_name = StringField('Contact Last Name', validators=[DataRequired(), Length(max=50)])

@@ -12,6 +12,12 @@
 <div class="link-new"> 
     <a href="{{ url_for('project.projects') }}" class="link-a">Back to Project List</a>
     <h1 class="client-detail">{{ project.project_name }}</h1>
+    <!-- Trigger modal for adding additional contact -->
+    <button 
+        type="button" data-bs-toggle="modal" data-bs-target="#addContactModal"
+    >
+        Add Additional Contact
+    </button>
     <!-- Trigger Modal -->
     <button type="button" data-bs-toggle="modal" data-bs-target="#editProjectModal">
         Edit Project
@@ -53,7 +59,35 @@
             <td>{{ project.project_worth or 'N/A' }}</td>
         </tr>
     </table>
+
+    <table class="client-table">
+        {% if primary_contact %}
+        <tr class="thead">
+            <th colspan="2">Primary Contact</th>
+        <tr>
+            <th>First Name:</th>
+            <td>{{ primary_contact.first_name }}</td>
+        </tr>
+        <tr>
+            <th>Last Name:</th>
+            <td>{{ primary_contact.last_name }}</td>
+        </tr>
+        <tr>
+            <th>Email:</th>
+            <td>{{ primary_contact.email or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <th>Phone:</th>
+            <td>{{ primary_contact.phone or 'N/A' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="2">No primary contact assigned for this project.</td>
+        </tr>
+        {% endif %}
+    </table>
 </div>
+
 
 {% if client %}
 <div class="client-detail">
@@ -130,7 +164,9 @@
             <div class="modal-body">
                 <form method="POST" action="{{ url_for('project.edit_project', project_id=project.id) }}">
                     {{ form.hidden_tag() }}
+
                     {% include 'crm/project/create_project_fields.html' %}
+
                     <div class="form-group mt-3">
                         {{ form.submit(class="btn btn-primary") }}
                     </div>

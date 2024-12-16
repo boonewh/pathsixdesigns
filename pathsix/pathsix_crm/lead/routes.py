@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from pathsix import db
-from pathsix.models import Lead, Contact, Address, ContactNote
+from pathsix.models import Project, Lead, Contact, Address, ContactNote
 from pathsix.pathsix_crm.lead.forms import LeadsForm
 
 lead = Blueprint('lead', __name__)
@@ -13,8 +13,8 @@ def leads():
     View all leads with pagination.
     """
     page = request.args.get('page', 1, type=int)
-    leads = Lead.query.paginate(page=page, per_page=25)  # Correctly query leads
-    form = LeadsForm()  # Instantiate the form
+    leads = Lead.query.paginate(page=page, per_page=25)
+    form = LeadsForm()
     return render_template('crm/lead/leads.html', leads=leads, form=form)
 
 
@@ -25,26 +25,25 @@ def create_lead():
     Create a new lead, including associated contacts, addresses, and notes.
     """
     form = LeadsForm()
-    page = request.args.get('page', 1, type=int)  # Get pagination info
-    leads = Lead.query.paginate(page=page, per_page=25)  # Query leads for display
 
     if form.validate_on_submit():
         try:
-            # Create the primary Lead entry
+            # Create the Lead entry
             new_lead = Lead(
                 name=form.name.data,
                 website=form.website.data,
                 email=form.email.data,
                 phone=form.phone.data,
+                lead_description=form.lead_description.data,
                 user_id=current_user.id
             )
             db.session.add(new_lead)
-            db.session.flush()  # Get the lead_id for related entries
+            db.session.flush()  # Ensure lead_id is generated
 
-            # Create the Address entry
-            if form.street.data and form.city.data and form.state.data and form.zip_code.data:
+            # Create Address entry
+            if all([form.street.data, form.city.data, form.state.data, form.zip_code.data]):
                 address = Address(
-                    lead_id=new_lead.lead_id,  # Link to lead
+                    lead_id=new_lead.lead_id,
                     street=form.street.data,
                     city=form.city.data,
                     state=form.state.data,
@@ -52,10 +51,10 @@ def create_lead():
                 )
                 db.session.add(address)
 
-            # Create the Contact entry
-            if form.first_name.data and form.last_name.data and form.contact_email.data:
+            # Create Contact entry
+            if all([form.first_name.data, form.last_name.data, form.contact_email.data]):
                 contact = Contact(
-                    lead_id=new_lead.lead_id,  # Link to lead
+                    lead_id=new_lead.lead_id,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
                     email=form.contact_email.data,
@@ -64,72 +63,58 @@ def create_lead():
                 )
                 db.session.add(contact)
 
-            # Create the ContactNote entry
+            # Create ContactNote entry
             if form.contact_note.data:
                 contact_note = ContactNote(
-                    lead_id=new_lead.lead_id,  # Link to lead
+                    lead_id=new_lead.lead_id,
                     note=form.contact_note.data
                 )
                 db.session.add(contact_note)
 
-            # Commit all changes
             db.session.commit()
-            flash('Lead added successfully!', 'success')
+            flash('Lead created successfully!', 'success')
             return redirect(url_for('lead.leads'))
 
         except Exception as e:
-            # Rollback in case of error
             db.session.rollback()
             flash(f'An error occurred while adding the lead: {str(e)}', 'danger')
 
-    # If validation fails, re-render the same page with errors
-    return render_template('crm/lead/leads.html', form=form, leads=leads)
-
-
-@lead.route('/report/<int:lead_id>/delete', methods=['POST'])
-@login_required
-def delete_lead(lead_id):
-    lead = Lead.query.get_or_404(lead_id)  # Fix: Use Lead instead of Client
-    db.session.delete(lead)  # Correct variable name
-    db.session.commit()
-    flash('Lead has been deleted!', 'success')
-    return redirect(url_for('lead.leads'))
+    return render_template('crm/lead/leads.html', form=form)
 
 
 @lead.route('/leads_report/<int:lead_id>', methods=['GET'])
 @login_required
 def lead_report(lead_id):
     """
-    Displays detailed information about a clead, including associated address,
-    contact, and notes if available.
+    Display detailed information about a lead, including associated address,
+    contact, and notes.
     """
     lead = Lead.query.get_or_404(lead_id)
     form = LeadsForm(obj=lead)
 
     # Get the first address, contact, and note if they exist
-    first_address = lead.addresses[0] if lead.addresses else None
-    first_contact = lead.contacts[0] if lead.contacts else None
-    first_note = lead.contact_notes[0] if lead.contact_notes else None
+    address = lead.addresses[0] if lead.addresses else None
+    contact = lead.contacts[0] if lead.contacts else None
+    note = lead.contact_notes[0] if lead.contact_notes else None
 
-    # Populate form fields for the primary address
-    if first_address:
-        form.street.data = first_address.street
-        form.city.data = first_address.city
-        form.state.data = first_address.state
-        form.zip_code.data = first_address.zip_code
+    # Populate Address fields
+    if address:
+        form.street.data = address.street
+        form.city.data = address.city
+        form.state.data = address.state
+        form.zip_code.data = address.zip_code
 
-    # Populate form fields for the primary contact
-    if first_contact:
-        form.first_name.data = first_contact.first_name
-        form.last_name.data = first_contact.last_name
-        form.contact_email.data = first_contact.email
-        form.contact_phone.data = first_contact.phone
+    # Populate Contact fields
+    if contact:
+        form.first_name.data = contact.first_name
+        form.last_name.data = contact.last_name
+        form.contact_email.data = contact.email
+        form.contact_phone.data = contact.phone
 
-    # Populate form field for the primary note
-    if first_note:
-        form.contact_note.data = first_note.note
+    # Populate ContactNote field
+    if note:
+        form.contact_note.data = note.note
 
-    # Pass related data explicitly to the template
     return render_template(
         'crm/lead/leads_report.html',
         lead=lead,
@@ -138,6 +123,7 @@ def lead_report(lead_id):
         contacts=lead.contacts,
         notes=lead.contact_notes
     )
+
 
 @lead.route('/leads/<int:lead_id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -150,35 +136,64 @@ def edit_lead(lead_id):
 
     if form.validate_on_submit():
         try:
-            # Update the lead fields
+            # Update Lead fields
             lead.name = form.name.data
             lead.website = form.website.data
             lead.email = form.email.data
             lead.phone = form.phone.data
+            lead.lead_description = form.lead_description.data
 
-            # Update the address
+            # Update Address
             address = Address.query.filter_by(lead_id=lead_id).first()
             if address:
                 address.street = form.street.data
                 address.city = form.city.data
                 address.state = form.state.data
                 address.zip_code = form.zip_code.data
+            else:
+                if all([form.street.data, form.city.data, form.state.data, form.zip_code.data]):
+                    new_address = Address(
+                        lead_id=lead_id,
+                        street=form.street.data,
+                        city=form.city.data,
+                        state=form.state.data,
+                        zip_code=form.zip_code.data
+                    )
+                    db.session.add(new_address)
 
-            # Update the contact
+            # Update Contact
             contact = Contact.query.filter_by(lead_id=lead_id).first()
             if contact:
                 contact.first_name = form.first_name.data
                 contact.last_name = form.last_name.data
                 contact.email = form.contact_email.data
                 contact.phone = form.contact_phone.data
+            else:
+                if all([form.first_name.data, form.last_name.data, form.contact_email.data]):
+                    new_contact = Contact(
+                        lead_id=lead_id,
+                        first_name=form.first_name.data,
+                        last_name=form.last_name.data,
+                        email=form.contact_email.data,
+                        phone=form.contact_phone.data,
+                        created_by=current_user.id
+                    )
+                    db.session.add(new_contact)
 
-            # Update the contact note
+            # Update ContactNote
             contact_note = ContactNote.query.filter_by(lead_id=lead_id).first()
             if contact_note:
                 contact_note.note = form.contact_note.data
+            else:
+                if form.contact_note.data:
+                    new_contact_note = ContactNote(
+                        lead_id=lead_id,
+                        note=form.contact_note.data
+                    )
+                    db.session.add(new_contact_note)
 
             db.session.commit()
-            flash('Lead has been updated successfully!', 'success')
+            flash('Lead updated successfully!', 'success')
             return redirect(url_for('lead.lead_report', lead_id=lead_id))
 
         except Exception as e:
@@ -186,3 +201,16 @@ def edit_lead(lead_id):
             flash(f'An error occurred while updating the lead: {str(e)}', 'danger')
 
     return render_template('crm/lead/leads_report.html', form=form, lead=lead)
+
+
+@lead.route('/leads/<int:lead_id>/delete', methods=['POST'])
+@login_required
+def delete_lead(lead_id):
+    """
+    Delete a lead and all associated data.
+    """
+    lead = Lead.query.get_or_404(lead_id)
+    db.session.delete(lead)
+    db.session.commit()
+    flash('Lead deleted successfully!', 'success')
+    return redirect(url_for('lead.leads'))

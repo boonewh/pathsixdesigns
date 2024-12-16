@@ -27,3 +27,26 @@
     <label for="project_worth">Worth</label>
     {{ form.project_worth(class="form-control", type="number", step="0.01") }}
 </div>
+
+<hr>
+<h4>Primary Project Contact</h4>
+
+<div class="form-group">
+    <label for="contact_first_name">First Name</label>
+    {{ form.contact_first_name(class="form-control") }}
+</div>
+
+<div class="form-group">
+    <label for="contact_last_name">Last Name</label>
+    {{ form.contact_last_name(class="form-control") }}
+</div>
+
+<div class="form-group">
+    <label for="contact_email">Email</label>
+    {{ form.contact_email(class="form-control", type="email") }}
+</div>
+
+<div class="form-group">
+    <label for="contact_phone">Phone</label>
+    {{ form.contact_phone(class="form-control", type="tel") }}
+</div>

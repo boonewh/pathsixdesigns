@@ -35,6 +35,13 @@ class LeadsForm(FlaskForm):
             Regexp(r'^\+?[0-9\s-]+$', message="Please provide a valid phone number.")
         ]
     )
+    lead_description = TextAreaField(
+        'Description',
+        validators=[
+            Optional(),
+            Length(max=500, message="Description cannot exceed 500 characters.")
+        ]
+    )
 
     # Contact Person Information
     first_name = StringField(
@@ -97,6 +104,55 @@ class LeadsForm(FlaskForm):
             Optional(),
             Length(max=10, message="Zip Code cannot exceed 10 characters."),
             Regexp(r'^\d{5}(?:-\d{4})?$', message="Please provide a valid zip code (e.g., 12345 or 12345-6789).")
+        ]
+    )
+
+    # Project Information
+    project_name = StringField(
+        'Project Name',
+        validators=[
+            Optional(),
+            Length(max=100, message="Project name cannot exceed 100 characters.")
+        ]
+    )
+
+    project_description = TextAreaField(
+        'Project Description',
+        validators=[
+            Optional(),
+            Length(max=500, message="Project description cannot exceed 500 characters.")
+        ]
+    )
+
+    project_status = StringField(
+        'Project Status',
+        validators=[
+            Optional(),
+            Length(max=50, message="Project status cannot exceed 50 characters.")
+        ]
+    )
+
+    project_start = StringField(
+        'Project Start Date',
+        validators=[
+            Optional(),
+            Regexp(r'^\d{4}-\d{2}-\d{2}$', message="Please provide a valid date (YYYY-MM-DD).")
+        ]
+    )
+
+    project_end = StringField(
+        'Project End Date',
+        validators=[
+            Optional(),
+            Regexp(r'^\d{4}-\d{2}-\d{2}$', message="Please provide a valid date (YYYY-MM-DD).")
+        ]
+    )
+
+    project_worth = StringField(
+        'Project Worth',
+        validators=[
+            Optional(),
+            Regexp(r'^\d+(\.\d{1,2})?$', message="Please provide a valid number.")
         ]
     )
 

@@ -85,6 +85,36 @@ def generate_account_number(mapper, connection, target):
         else:
             # Default for the first account
             target.account_number = "ACC000001"
+        
+# 10. Projects Table
+class Project(db.Model):
+    __tablename__ = 'projects'
+
+    id = db.Column(db.Integer, primary_key=True)
+    lead_id = db.Column(db.Integer, db.ForeignKey('leads.lead_id'), nullable=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)
+    project_name = db.Column(db.String(255), nullable=False)
+    project_description = db.Column(db.Text, nullable=True)
+    project_status = db.Column(db.String(20), nullable=False)
+    project_start = db.Column(db.DateTime, nullable=True)
+    project_end = db.Column(db.DateTime, nullable=True)
+    project_worth = db.Column(db.Float, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+
+    # Relationships
+    creator = db.relationship('User', foreign_keys=[created_by], backref='projects_created')
+    last_updater = db.relationship('User', foreign_keys=[last_updated_by], backref='projects_updated')
+    lead = db.relationship('Lead', backref='lead_projects')
+    client = db.relationship('Client', backref='projects')
+    contacts = db.relationship('Contact', backref='associated_contacts')
+    notes = db.relationship('ContactNote', backref='associated_project')
+
+
+    def __repr__(self):
+        return f"Project('{self.project_name}', 'Status: {self.project_status}')"
 
 # 5. Client Table
 class Client(db.Model):
@@ -104,7 +134,7 @@ class Client(db.Model):
     # Relationships
     accounts = db.relationship('Account', backref='client', lazy=True, cascade="all, delete-orphan")
     addresses = db.relationship('Address', backref='client', lazy=True, cascade="all, delete-orphan")
-    contacts = db.relationship('Contact', backref='client', lazy=True, cascade="all, delete-orphan")
+    contacts = db.relationship('Contact', backref='company_contacts', lazy=True, cascade="all, delete-orphan")
     contact_notes = db.relationship('ContactNote', backref='client', lazy=True, cascade="all, delete-orphan")
     sales = db.relationship('Sale', backref='client', lazy=True, cascade="all, delete-orphan")
     billing_cycles = db.relationship('BillingCycle', backref='client', lazy=True, cascade="all, delete-orphan")
@@ -141,16 +171,21 @@ class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)
     lead_id = db.Column(db.Integer, db.ForeignKey('leads.lead_id'), nullable=True)
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(120), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
+    is_primary = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-    def __repr__(self):
-        return f"Contact('{self.first_name}', '{self.last_name}', '{self.email}', '{self.phone}')"
+    # Relationships
+    client = db.relationship('Client', backref='client_contacts')  
+    lead = db.relationship('Lead', backref='lead_contacts')  
+    project = db.relationship('Project', backref='project_contacts')  
+
 
 
 # 8. ContactNote Table
@@ -160,11 +195,13 @@ class ContactNote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)
     lead_id = db.Column(db.Integer, db.ForeignKey('leads.lead_id'), nullable=True)
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=True)
     note = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __repr__(self):
-        return f"ContactNote('Client ID: {self.client_id}', 'Note: {self.note[:30]}...')"
+    # Relationships
+    project = db.relationship('Project', backref='notes_for_project')
+
 
     
 # 9. Leads Table
@@ -176,6 +213,7 @@ class Lead(db.Model):
     website = db.Column(db.String(255))
     email = db.Column(db.String(120), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
+    lead_description = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
@@ -183,38 +221,12 @@ class Lead(db.Model):
 
     # Relationships
     addresses = db.relationship('Address', backref='lead', lazy=True, cascade="all, delete-orphan")
-    contacts = db.relationship('Contact', backref='lead', lazy=True, cascade="all, delete-orphan")
+    contacts = db.relationship('Contact', backref='associated_lead', lazy=True, cascade="all, delete-orphan")
+    projects = db.relationship('Project', backref='parent_lead', lazy=True, cascade="all, delete-orphan")
     contact_notes = db.relationship('ContactNote', backref='lead', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"Lead('{self.name}', '{self.email}', '{self.phone}')"
-
-# 10. Projects Table
-class Projects(db.Model):
-    __tablename__ = 'projects'
-
-    id = db.Column(db.Integer, primary_key=True)
-    lead_id = db.Column(db.Integer, db.ForeignKey('leads.lead_id'), nullable=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=True)  # Add this foreign key
-    project_name = db.Column(db.String(255), nullable=False)
-    project_description = db.Column(db.Text, nullable=True)
-    project_status = db.Column(db.String(20), nullable=False)  # e.g., 'in progress', 'completed'
-    project_start = db.Column(db.DateTime, nullable=True)
-    project_end = db.Column(db.DateTime, nullable=True)
-    project_worth = db.Column(db.Float, nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
-    last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-
-    # Relationships
-    creator = db.relationship('User', foreign_keys=[created_by], backref='projects_created')
-    last_updater = db.relationship('User', foreign_keys=[last_updated_by], backref='projects_updated')
-    lead = db.relationship('Lead', backref='lead_projects')  # Use renamed backref
-    client = db.relationship('Client', backref='projects')  # Retain this relationship
-
-    def __repr__(self):
-        return f"Project('{self.project_name}', 'Status: {self.project_status}')"
 
 # 11. Sale Table
 class Sale(db.Model):

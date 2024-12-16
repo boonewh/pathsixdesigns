@@ -86,49 +86,9 @@
                     <div class="modal-body">
                         <form method="POST" action="{{ url_for('project.create_project') }}">
                             {{ form.hidden_tag() }}
-                                <div class="mb-3">
-                                    {{ form.project_name.label(class="form-label") }}
-                                    {{ form.project_name(class="form-control") }}
-                                    {% for error in form.project_name.errors %}
-                                    <div class="text-danger">{{ error }}</div>
-                                    {% endfor %}
-                                </div>
-                                <div class="mb-3">
-                                    {{ form.project_description.label(class="form-label") }}
-                                    {{ form.project_description(class="form-control") }}
-                                    {% for error in form.project_description.errors %}
-                                    <div class="text-danger">{{ error }}</div>
-                                    {% endfor %}
-                                </div>
-                                <div class="mb-3">
-                                    {{ form.project_status.label(class="form-label") }}
-                                    {{ form.project_status(class="form-select") }}
-                                    {% for error in form.project_status.errors %}
-                                    <div class="text-danger">{{ error }}</div>
-                                    {% endfor %}
-                                </div>
-                                <div class="mb-3">
-                                    {{ form.project_start.label(class="form-label") }}
-                                    {{ form.project_start(class="form-control", type="date") }}
-                                    {% for error in form.project_start.errors %}
-                                    <div class="text-danger">{{ error }}</div>
-                                    {% endfor %}
-                                </div>
-                                <div class="mb-3">
-                                    {{ form.project_end.label(class="form-label") }}
-                                    {{ form.project_end(class="form-control", type="date") }}
-                                    {% for error in form.project_end.errors %}
-                                    <div class="text-danger">{{ error }}</div>
-                                    {% endfor %}
-                                </div>
-                                <div class="mb-3">
-                                    {{ form.project_worth.label(class="form-label") }}
-                                    {{ form.project_worth(class="form-control") }}
-                                    {% for error in form.project_worth.errors %}
-                                    <div class="text-danger">{{ error }}</div>
-                                    {% endfor %}
-                                </div>
-                            </div>
+                            
+                            {% include 'crm/project/create_project_fields.html' %}
+                            
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <div class="form-group">

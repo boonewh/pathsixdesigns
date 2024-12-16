@@ -11,7 +11,7 @@
 <div class="link-new"> 
     <a href="{{ url_for('lead.leads') }}" class="link-a">Back to Leads List</a>
     <h1 class="client-detail">{{ lead.name }}</h1>
-    <!-- Trigger Modal -->
+    <!-- Trigger Modal for editting lead -->
     <button type="button" data-bs-toggle="modal" data-bs-target="#editLeadModal">
         Edit Lead
     </button>
@@ -42,6 +42,10 @@
         <tr>
             <th>Phone:</th>
             <td>{{ lead.phone or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <th>Description:</th>
+            <td>{{ lead.lead_description or 'N/A' }}</td>
         </tr>
     </table>
 
@@ -102,6 +106,28 @@
     {% endif %}
 </div>
 
+<div class="cust">
+    <div class="cust-table">
+        {% if projects %}
+        <h3>Projects</h3>
+            <ul>
+                {% for project in projects %}
+                    <li>
+                        <strong>Project Name:</strong> {{ project.project_name }}<br>
+                        <strong>Project Description:</strong> {{ project.project_description }}<br>
+                        <strong>Project Status:</strong> {{ project.project_status }}<br>
+                        <strong>Project Start Date:</strong> {{ project.project_start_date.strftime('%Y-%m-%d') }}<br>
+                        <strong>Project End Date:</strong> {{ project.project_end_date.strftime('%Y-%m-%d') }}<br>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No projects available for this lead.</p>
+        {% endif %}
+    </div>
+
+</div>
+
 <div class="client-detail">
     <div class="client-table">
         {% if notes %}
@@ -120,7 +146,8 @@
     </div>
 </div>
 
-<!-- Modal -->
+
+<!-- Modal for editting lead -->
 <div class="modal fade" id="editLeadModal" tabindex="-1" aria-labelledby="editLeadModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
