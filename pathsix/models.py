@@ -109,8 +109,7 @@ class Project(db.Model):
     last_updater = db.relationship('User', foreign_keys=[last_updated_by], backref='projects_updated')
     lead = db.relationship('Lead', backref='lead_projects')
     client = db.relationship('Client', backref='projects')
-    contacts = db.relationship('Contact', backref='associated_contacts')
-    notes = db.relationship('ContactNote', backref='associated_project')
+    notes = db.relationship('ContactNote', backref='associated_project', overlaps="notes_for_project")
 
 
     def __repr__(self):
@@ -134,7 +133,7 @@ class Client(db.Model):
     # Relationships
     accounts = db.relationship('Account', backref='client', lazy=True, cascade="all, delete-orphan")
     addresses = db.relationship('Address', backref='client', lazy=True, cascade="all, delete-orphan")
-    contacts = db.relationship('Contact', backref='company_contacts', lazy=True, cascade="all, delete-orphan")
+    contacts = db.relationship('Contact', backref='company_contacts', lazy=True, cascade="all, delete-orphan", overlaps="client_contacts")
     contact_notes = db.relationship('ContactNote', backref='client', lazy=True, cascade="all, delete-orphan")
     sales = db.relationship('Sale', backref='client', lazy=True, cascade="all, delete-orphan")
     billing_cycles = db.relationship('BillingCycle', backref='client', lazy=True, cascade="all, delete-orphan")
@@ -176,13 +175,12 @@ class Contact(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(120), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
-    is_primary = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
     # Relationships
-    client = db.relationship('Client', backref='client_contacts')  
+    client = db.relationship('Client', backref='client_contacts', overlaps="company_contacts")  
     lead = db.relationship('Lead', backref='lead_contacts')  
     project = db.relationship('Project', backref='project_contacts')  
 
@@ -221,8 +219,8 @@ class Lead(db.Model):
 
     # Relationships
     addresses = db.relationship('Address', backref='lead', lazy=True, cascade="all, delete-orphan")
-    contacts = db.relationship('Contact', backref='associated_lead', lazy=True, cascade="all, delete-orphan")
-    projects = db.relationship('Project', backref='parent_lead', lazy=True, cascade="all, delete-orphan")
+    contacts = db.relationship('Contact', backref='associated_lead', lazy=True, cascade="all, delete-orphan", overlaps="lead_contacts")
+    projects = db.relationship('Project', backref='parent_lead', lazy=True, cascade="all, delete-orphan", overlaps="lead_projects")
     contact_notes = db.relationship('ContactNote', backref='lead', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):

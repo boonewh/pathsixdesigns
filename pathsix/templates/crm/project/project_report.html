@@ -60,82 +60,78 @@
         </tr>
     </table>
 
-    <table class="client-table">
-        {% if primary_contact %}
-        <tr class="thead">
-            <th colspan="2">Primary Contact</th>
-        <tr>
-            <th>First Name:</th>
-            <td>{{ primary_contact.first_name }}</td>
-        </tr>
-        <tr>
-            <th>Last Name:</th>
-            <td>{{ primary_contact.last_name }}</td>
-        </tr>
-        <tr>
-            <th>Email:</th>
-            <td>{{ primary_contact.email or 'N/A' }}</td>
-        </tr>
-        <tr>
-            <th>Phone:</th>
-            <td>{{ primary_contact.phone or 'N/A' }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="2">No primary contact assigned for this project.</td>
-        </tr>
-        {% endif %}
-    </table>
+    {% if client %}
+    <div class="client-detail">
+        <h3>Client Details</h3>
+        <table class="client-table">
+            <tr>
+                <th>Client Name:</th>
+                <td>{{ client.name }}</td>
+            </tr>
+            <tr>
+                <th>Website:</th>
+                <td>{{ client.website or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>{{ client.email or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Phone:</th>
+                <td>{{ client.phone or 'N/A' }}</td>
+            </tr>
+        </table>
+    </div>
+    {% elif lead %}
+    <div class="client-detail">
+        <h3>Lead Details</h3>
+        <table class="client-table">
+            <tr>
+                <th>Lead Name:</th>
+                <td>{{ lead.name }}</td>
+            </tr>
+            <tr>
+                <th>Website:</th>
+                <td>{{ lead.website or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>{{ lead.email or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Phone:</th>
+                <td>{{ lead.phone or 'N/A' }}</td>
+            </tr>
+        </table>
+    </div>
+    {% else %}
+    <p>No client or lead information is associated with this project.</p>
+    {% endif %}
 </div>
-
-
-{% if client %}
-<div class="client-detail">
-    <h3>Client Details</h3>
-    <table class="client-table">
-        <tr>
-            <th>Client Name:</th>
-            <td>{{ client.name }}</td>
-        </tr>
-        <tr>
-            <th>Website:</th>
-            <td>{{ client.website or 'N/A' }}</td>
-        </tr>
-        <tr>
-            <th>Email:</th>
-            <td>{{ client.email or 'N/A' }}</td>
-        </tr>
-        <tr>
-            <th>Phone:</th>
-            <td>{{ client.phone or 'N/A' }}</td>
-        </tr>
-    </table>
-</div>
-{% elif lead %}
-<div class="client-detail">
-    <h3>Lead Details</h3>
-    <table class="client-table">
-        <tr>
-            <th>Lead Name:</th>
-            <td>{{ lead.name }}</td>
-        </tr>
-        <tr>
-            <th>Website:</th>
-            <td>{{ lead.website or 'N/A' }}</td>
-        </tr>
-        <tr>
-            <th>Email:</th>
-            <td>{{ lead.email or 'N/A' }}</td>
-        </tr>
-        <tr>
-            <th>Phone:</th>
-            <td>{{ lead.phone or 'N/A' }}</td>
-        </tr>
-    </table>
-</div>
-{% else %}
-<p>No client or lead information is associated with this project.</p>
-{% endif %}
+<div>
+<table class="project-table">
+    <tr class="thead">
+        <th colspan="4">Project Contacts</th>
+    </tr>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+    </tr>
+    {% for contact in contacts %}
+    <tr>
+        <td>{{ contact.first_name }}</td>
+        <td>{{ contact.last_name }}</td>
+        <td>{{ contact.email or 'N/A' }}</td>
+        <td>{{ contact.phone or 'N/A' }}</td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="4">No contacts are associated with this project.</td>
+    </tr>
+    {% endfor %}
+</table>
 
 <div class="client-detail">
     {% if notes %}
@@ -153,7 +149,8 @@
     {% endif %}
 </div>
 
-<!-- Modal -->
+
+<!-- Edit Project Modal -->
 <div class="modal fade" id="editProjectModal" tabindex="-1" aria-labelledby="editProjectModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -168,7 +165,7 @@
                     {% include 'crm/project/create_project_fields.html' %}
 
                     <div class="form-group mt-3">
-                        {{ form.submit(class="btn btn-primary") }}
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
                     </div>
                 </form>
             </div>

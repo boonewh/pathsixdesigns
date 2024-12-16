@@ -213,6 +213,12 @@ body {
   background-color: lightgrey; /* Optional: add alternating row colors */
 }
 
+.project-table {
+  width: 75%;
+  border-collapse: collapse;
+  margin: 20px auto;
+}
+
 /* Pagination Styles */
 
 .pagination a {

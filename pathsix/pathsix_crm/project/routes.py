@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, flash
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user
 from pathsix import db
 from pathsix.models import Project, Contact
@@ -19,6 +19,7 @@ def projects():
     form = ProjectForm()
     return render_template('crm/project/projects.html', projects=projects, form=form, page=page)
 
+# Create Project
 @project.route('/create_project', methods=['GET', 'POST'])
 @roles_accepted('admin', 'editor')
 def create_project():
@@ -54,83 +55,48 @@ def create_project():
             # Commit both to the database
             db.session.commit()
 
-            flash('Project and Primary Contact created successfully!', 'success')
+            flash('Project Contact created successfully!', 'success')
             return redirect(url_for('project.report', id=new_project.id))
         except Exception as e:
             db.session.rollback()
             flash(f'Error creating project: {e}', 'danger')
 
-    return render_template('crm/project/create_project.html', form=form)
+    return render_template('crm/project/client_report.html', form=form)
 
+# Project Report
 @project.route('/projectreport/<int:id>', methods=['GET'])
 @roles_accepted('admin', 'editor')
 def report(id):
-    """
-    Displays detailed information about a project, including primary and additional contacts.
-    """
     project = Project.query.get_or_404(id)
-    form = ProjectForm()
-
-    # Fetch the primary contact for the project
-    primary_contact = (
-        Contact.query.filter_by(project_id=project.id, is_primary=True).first() or
-        Contact.query.filter_by(project_id=project.id).order_by(Contact.created_at.asc()).first()
-    )
-
-    # Fetch additional contacts for the project (excluding the primary)
-    additional_contacts = Contact.query.filter_by(project_id=project.id).filter(
-        (Contact.is_primary == False) | (Contact.is_primary.is_(None))
-    ).all()
+    contacts = Contact.query.filter_by(project_id=project.id).order_by(Contact.created_at.asc()).all()
+    notes = project.notes
+    form = ProjectForm(obj=project)  # Bind project data for the modal
 
     return render_template(
         'crm/project/project_report.html',
         project=project,
-        primary_contact=primary_contact,
-        additional_contacts=additional_contacts,
-        form=form 
+        contacts=contacts,
+        notes=notes,
+        form=form  # Pass the form to the template
     )
 
+
+# Edit Project
 @project.route('/projects/edit/<int:project_id>', methods=['GET', 'POST'])
 @roles_accepted('admin', 'editor')
 def edit_project(project_id):
-    project = Project.query.get_or_404(project_id)
-    primary_contact = Contact.query.filter_by(project_id=project.id).first()
-    form = ProjectForm(obj=project)
-
-    # Prepopulate contact fields if a primary contact exists
-    if primary_contact:
-        form.contact_first_name.data = primary_contact.first_name
-        form.contact_last_name.data = primary_contact.last_name
-        form.contact_email.data = primary_contact.email
-        form.contact_phone.data = primary_contact.phone
+    project = Project.query.get_or_404(project_id)  # Fetch the project
+    form = ProjectForm(obj=project)  # Bind the project data to the form
 
     if form.validate_on_submit():
         try:
-            # Update Project fields
+            # Update project fields
             project.project_name = form.project_name.data
             project.project_description = form.project_description.data
             project.project_status = form.project_status.data
             project.project_start = form.project_start.data
             project.project_end = form.project_end.data
             project.project_worth = form.project_worth.data
-
-            # Update or create Primary Contact
-            if primary_contact:
-                primary_contact.first_name = form.contact_first_name.data
-                primary_contact.last_name = form.contact_last_name.data
-                primary_contact.email = form.contact_email.data
-                primary_contact.phone = form.contact_phone.data
-            else:
-                new_contact = Contact(
-                    first_name=form.contact_first_name.data,
-                    last_name=form.contact_last_name.data,
-                    email=form.contact_email.data,
-                    phone=form.contact_phone.data,
-                    project_id=project.id,
-                    created_at=datetime.utcnow(),
-                    created_by=current_user.id
-                )
-                db.session.add(new_contact)
 
             db.session.commit()
             flash('Project updated successfully!', 'success')
@@ -139,8 +105,15 @@ def edit_project(project_id):
             db.session.rollback()
             flash(f'Error updating project: {e}', 'danger')
 
-    return render_template('crm/project/edit_project.html', form=form, project=project)
+    return render_template(
+        'crm/project/edit_project.html',
+        form=form,
+        project=project  # Pass project data explicitly for context
+    )
 
+
+
+# Delete Project
 @project.route('/projects/delete/<int:project_id>', methods=['POST'])
 @roles_accepted('admin', 'editor')
 def delete_project(project_id):
@@ -158,6 +131,7 @@ def delete_project(project_id):
 
     return redirect(url_for('project.projects'))
 
+# Add Additional Contact
 @project.route('/projects/<int:project_id>/add_contact', methods=['POST'])
 @roles_accepted('admin', 'editor')
 def add_contact(project_id):
@@ -173,7 +147,6 @@ def add_contact(project_id):
             project_id=project.id,
             created_at=datetime.utcnow(),
             created_by=current_user.id,
-            is_primary=False  # Explicitly set this as not primary
         )
         try:
             db.session.add(new_contact)
@@ -184,4 +157,3 @@ def add_contact(project_id):
             flash(f'Error adding contact: {e}', 'danger')
 
     return redirect(url_for('project.report', id=project_id))
-
