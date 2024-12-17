@@ -70,26 +70,45 @@ def report(id):
     project = Project.query.get_or_404(id)
     contacts = Contact.query.filter_by(project_id=project.id).order_by(Contact.created_at.asc()).all()
     notes = project.notes
-    form = ProjectForm(obj=project)  # Bind project data for the modal
+    
+    # Create form and populate with project data
+    form = ProjectForm(obj=project)
+    
+    # If there's a contact, populate contact fields
+    if contacts and contacts[0]:  # Get the first contact if it exists
+        contact = contacts[0]
+        form.contact_first_name.data = contact.first_name
+        form.contact_last_name.data = contact.last_name
+        form.contact_email.data = contact.email
+        form.contact_phone.data = contact.phone
 
     return render_template(
         'crm/project/project_report.html',
         project=project,
         contacts=contacts,
         notes=notes,
-        form=form  # Pass the form to the template
+        form=form
     )
-
 
 # Edit Project
 @project.route('/projects/edit/<int:project_id>', methods=['GET', 'POST'])
 @roles_accepted('admin', 'editor')
 def edit_project(project_id):
-    project = Project.query.get_or_404(project_id)  # Fetch the project
-    form = ProjectForm(obj=project)  # Bind the project data to the form
+    project = Project.query.get_or_404(project_id)
+    contacts = Contact.query.filter_by(project_id=project_id).all()
+    contact = contacts[0] if contacts else None
+
+    print(f"Initial contact data: {contact.__dict__ if contact else 'No contact'}")  # Debug
+
+    form = ProjectForm(obj=project)
+    
+    if request.method == 'POST':
+        print(f"Form data received: {request.form}")  # Debug
 
     if form.validate_on_submit():
         try:
+            print("Form validated successfully")  # Debug
+            
             # Update project fields
             project.project_name = form.project_name.data
             project.project_description = form.project_description.data
@@ -98,20 +117,49 @@ def edit_project(project_id):
             project.project_end = form.project_end.data
             project.project_worth = form.project_worth.data
 
+            print(f"Project updated with: {project.__dict__}")  # Debug
+
+            # Handle contact update
+            if contact:
+                print(f"Contact before update: {contact.__dict__}")  # Debug
+                contact.first_name = form.contact_first_name.data
+                contact.last_name = form.contact_last_name.data
+                contact.email = form.contact_email.data
+                contact.phone = form.contact_phone.data
+                contact.updated_at = datetime.utcnow()
+                print(f"Contact after update: {contact.__dict__}")  # Debug
+            else:
+                print("Creating new contact")  # Debug
+                new_contact = Contact(
+                    project_id=project.id,
+                    first_name=form.contact_first_name.data,
+                    last_name=form.contact_last_name.data,
+                    email=form.contact_email.data,
+                    phone=form.contact_phone.data,
+                    created_by=current_user.id
+                )
+                db.session.add(new_contact)
+            
             db.session.commit()
-            flash('Project updated successfully!', 'success')
+            print("Database committed successfully")  # Debug
+            
+            # Verify the changes
+            updated_contact = Contact.query.filter_by(project_id=project_id).first()
+            print(f"Contact after commit: {updated_contact.__dict__}")  # Debug
+            
+            flash('Project and contact information updated successfully!', 'success')
             return redirect(url_for('project.report', id=project.id))
+            
         except Exception as e:
             db.session.rollback()
+            print(f"Error occurred: {str(e)}")  # Debug
             flash(f'Error updating project: {e}', 'danger')
 
     return render_template(
         'crm/project/edit_project.html',
         form=form,
-        project=project  # Pass project data explicitly for context
+        project=project
     )
-
-
 
 # Delete Project
 @project.route('/projects/delete/<int:project_id>', methods=['POST'])

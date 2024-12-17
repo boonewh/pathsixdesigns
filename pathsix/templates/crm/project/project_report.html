@@ -159,7 +159,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ url_for('project.edit_project', project_id=project.id) }}">
+                <form id="editProjectForm" method="POST" action="{{ url_for('project.edit_project', project_id=project.id) }}">
                     {{ form.hidden_tag() }}
 
                     {% include 'crm/project/create_project_fields.html' %}
@@ -175,5 +175,26 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ super() }}  <!-- Keep any existing scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('editProjectModal').addEventListener('show.bs.modal', function (event) {
+            var form = document.getElementById('editProjectForm');
+            form.reset();
+            
+            // Get current contact values from the page
+            var currentFirstName = "{{ contacts[0].first_name if contacts else '' }}";
+            var currentLastName = "{{ contacts[0].last_name if contacts else '' }}";
+            var currentEmail = "{{ contacts[0].email if contacts else '' }}";
+            var currentPhone = "{{ contacts[0].phone if contacts else '' }}";
+            
+            // Set form fields
+            if (currentFirstName) {
+                document.getElementById('contact_first_name').value = currentFirstName;
+                document.getElementById('contact_last_name').value = currentLastName;
+                document.getElementById('contact_email').value = currentEmail;
+                document.getElementById('contact_phone').value = currentPhone;
+            }
+        });
+    </script>
 {% endblock %}
