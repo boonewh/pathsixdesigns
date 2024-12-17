@@ -17,7 +17,7 @@ def leads():
     form = LeadsForm()
     return render_template('crm/lead/leads.html', leads=leads, form=form)
 
-
+# Create Leads
 @lead.route('/leads/new', methods=['GET', 'POST'])
 @login_required
 def create_lead():
@@ -46,7 +46,7 @@ def create_lead():
                     lead_id=new_lead.lead_id,
                     street=form.street.data,
                     city=form.city.data,
-                    state=form.state.data,
+                    state=form.state.data.upper(),
                     zip_code=form.zip_code.data
                 )
                 db.session.add(address)
@@ -81,7 +81,7 @@ def create_lead():
 
     return render_template('crm/lead/leads.html', form=form)
 
-
+# Lead Report
 @lead.route('/leads_report/<int:lead_id>', methods=['GET'])
 @login_required
 def lead_report(lead_id):
@@ -101,7 +101,7 @@ def lead_report(lead_id):
     if address:
         form.street.data = address.street
         form.city.data = address.city
-        form.state.data = address.state
+        form.state.data = address.state.upper()
         form.zip_code.data = address.zip_code
 
     # Populate Contact fields
@@ -124,7 +124,7 @@ def lead_report(lead_id):
         notes=lead.contact_notes
     )
 
-
+# Edit Leads
 @lead.route('/leads/<int:lead_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_lead(lead_id):
@@ -136,6 +136,7 @@ def edit_lead(lead_id):
 
     if form.validate_on_submit():
         try:
+            print("Form submitted with data:", request.form.to_dict())
             # Update Lead fields
             lead.name = form.name.data
             lead.website = form.website.data
@@ -148,7 +149,7 @@ def edit_lead(lead_id):
             if address:
                 address.street = form.street.data
                 address.city = form.city.data
-                address.state = form.state.data
+                address.state = form.state.data.upper()
                 address.zip_code = form.zip_code.data
             else:
                 if all([form.street.data, form.city.data, form.state.data, form.zip_code.data]):
@@ -156,7 +157,7 @@ def edit_lead(lead_id):
                         lead_id=lead_id,
                         street=form.street.data,
                         city=form.city.data,
-                        state=form.state.data,
+                        state=form.state.data.upper(),
                         zip_code=form.zip_code.data
                     )
                     db.session.add(new_address)
@@ -202,7 +203,7 @@ def edit_lead(lead_id):
 
     return render_template('crm/lead/leads_report.html', form=form, lead=lead)
 
-
+# Delete Leads
 @lead.route('/leads/<int:lead_id>/delete', methods=['POST'])
 @login_required
 def delete_lead(lead_id):

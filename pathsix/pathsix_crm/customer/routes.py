@@ -55,10 +55,22 @@ def create_client():
                     client_id=new_client.client_id,
                     street=form.street.data,
                     city=form.city.data,
-                    state=form.state.data,
+                    state=form.state.data.upper(),
                     zip_code=form.zip_code.data
                 )
                 db.session.add(address)
+
+            # Create Contact entry
+            if all([form.first_name.data, form.last_name.data, form.contact_email.data]):
+                contact = Contact(
+                    client_id=new_client.client_id,
+                    first_name=form.first_name.data,
+                    last_name=form.last_name.data,
+                    email=form.contact_email.data,
+                    phone=form.contact_phone.data,
+                    created_by=current_user.id
+                )
+                db.session.add(contact)
 
             db.session.commit()
             flash('Client, account, and address created successfully!', 'success')
@@ -90,7 +102,7 @@ def client_report(client_id):
     if address:
         form.street.data = address.street
         form.city.data = address.city
-        form.state.data = address.state
+        form.state.data = address.state.upper() 
         form.zip_code.data = address.zip_code
 
     return render_template(
@@ -138,7 +150,7 @@ def edit_client(client_id):
         if address:
             address.street = form.street.data
             address.city = form.city.data
-            address.state = form.state.data
+            address.state = form.state.data.upper()
             address.zip_code = form.zip_code.data
         else:
             if all([form.street.data, form.city.data, form.state.data, form.zip_code.data]):
@@ -146,7 +158,7 @@ def edit_client(client_id):
                     client_id=client.client_id,
                     street=form.street.data,
                     city=form.city.data,
-                    state=form.state.data,
+                    state=form.state.data.upper(),
                     zip_code=form.zip_code.data
                 )
                 db.session.add(new_address)

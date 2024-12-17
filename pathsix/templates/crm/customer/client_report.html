@@ -148,5 +148,58 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ super() }}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('editClientModal').addEventListener('show.bs.modal', function (event) {
+            var form = document.getElementById('editClientForm');
+            form.reset();
+            
+            // Client values
+            var clientName = "{{ client.name }}";
+            var clientWebsite = "{{ client.website or '' }}";
+            var clientPricingTier = "{{ client.pricing_tier }}";
+            var clientEmail = "{{ client.email or '' }}";
+            var clientPhone = "{{ client.phone or '' }}";
+            var accountNumber = "{{ account.account_number if account else '' }}";
+            
+            // Contact values
+            var currentFirstName = "{{ contacts[0].first_name if contacts else '' }}";
+            var currentLastName = "{{ contacts[0].last_name if contacts else '' }}";
+            var currentEmail = "{{ contacts[0].email if contacts else '' }}";
+            var currentPhone = "{{ contacts[0].phone if contacts else '' }}";
+            
+            // Address values
+            var currentStreet = "{{ addresses[0].street if addresses else '' }}";
+            var currentCity = "{{ addresses[0].city if addresses else '' }}";
+            var currentState = "{{ addresses[0].state if addresses else '' }}";
+            var currentZip = "{{ addresses[0].zip_code if addresses else '' }}";
+            
+            // Note value
+            var currentNote = "{{ notes[0].note if notes else '' }}";
+            
+            // Set client fields
+            document.getElementById('name').value = clientName;
+            document.getElementById('website').value = clientWebsite;
+            document.getElementById('pricing_tier').value = clientPricingTier;
+            document.getElementById('email').value = clientEmail;
+            document.getElementById('phone').value = clientPhone;
+            document.getElementById('account_number').value = accountNumber;
+            
+            // Set contact fields
+            document.getElementById('first_name').value = currentFirstName;
+            document.getElementById('last_name').value = currentLastName;
+            document.getElementById('contact_email').value = currentEmail;
+            document.getElementById('contact_phone').value = currentPhone;
+            
+            // Set address fields
+            document.getElementById('street').value = currentStreet;
+            document.getElementById('city').value = currentCity;
+            document.getElementById('state').value = currentState;
+            document.getElementById('zip_code').value = currentZip;
+            
+            // Set note field
+            document.getElementById('contact_note').value = currentNote;
+        });
+    </script>
 {% endblock %}
