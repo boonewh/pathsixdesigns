@@ -16,5 +16,8 @@ class ProjectForm(FlaskForm):
     contact_email = StringField('Email', validators=[Optional(), Email()])
     contact_phone = StringField('Phone', validators=[Optional()])
 
+    # Notes Field
+    note = TextAreaField('Notes', validators=[Optional()])
+
 # Submit button
     submit = SubmitField('Submit')  # Add this field

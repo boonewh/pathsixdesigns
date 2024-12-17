@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user
 from pathsix import db
-from pathsix.models import Project, Contact
+from pathsix.models import Project, Contact, ContactNote
 from pathsix.pathsix_crm.project.forms import ProjectForm
 from flask_security import roles_accepted
 from datetime import datetime
@@ -52,6 +52,15 @@ def create_project():
             )
             db.session.add(new_contact)
 
+            # Create the Notes
+            if form.note.data:
+                new_note = ContactNote(
+                    project_id=new_project.id,
+                    note=form.note.data,
+                    created_at=datetime.utcnow()
+                )
+                db.session.add(new_note)
+
             # Commit both to the database
             db.session.commit()
 
@@ -61,7 +70,7 @@ def create_project():
             db.session.rollback()
             flash(f'Error creating project: {e}', 'danger')
 
-    return render_template('crm/project/client_report.html', form=form)
+    return render_template('crm/project/project_report.html', form=form)
 
 # Project Report
 @project.route('/projectreport/<int:id>', methods=['GET'])
@@ -139,6 +148,15 @@ def edit_project(project_id):
                     created_by=current_user.id
                 )
                 db.session.add(new_contact)
+
+                        # Add new note if provided
+            if form.note.data:
+                new_note = ContactNote(
+                    project_id=project.id,
+                    note=form.note.data,
+                    created_at=datetime.utcnow()
+                )
+                db.session.add(new_note)
             
             db.session.commit()
             print("Database committed successfully")  # Debug
@@ -156,7 +174,7 @@ def edit_project(project_id):
             flash(f'Error updating project: {e}', 'danger')
 
     return render_template(
-        'crm/project/edit_project.html',
+        'crm/project/project_report.html',
         form=form,
         project=project
     )
@@ -184,24 +202,25 @@ def delete_project(project_id):
 @roles_accepted('admin', 'editor')
 def add_contact(project_id):
     project = Project.query.get_or_404(project_id)
-    form = ProjectForm()
-
-    if form.validate_on_submit():
+    
+    try:
+        # Create new contact directly from form data
         new_contact = Contact(
-            first_name=form.contact_first_name.data,
-            last_name=form.contact_last_name.data,
-            email=form.contact_email.data,
-            phone=form.contact_phone.data,
-            project_id=project.id,
+            project_id=project_id,
+            first_name=request.form.get('contact_first_name'),
+            last_name=request.form.get('contact_last_name'),
+            email=request.form.get('contact_email'),
+            phone=request.form.get('contact_phone'),
             created_at=datetime.utcnow(),
-            created_by=current_user.id,
+            created_by=current_user.id
         )
-        try:
-            db.session.add(new_contact)
-            db.session.commit()
-            flash('Additional contact added successfully!', 'success')
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Error adding contact: {e}', 'danger')
-
+        
+        db.session.add(new_contact)
+        db.session.commit()
+        flash('Additional contact added successfully!', 'success')
+        
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error adding contact: {e}', 'danger')
+    
     return redirect(url_for('project.report', id=project_id))
