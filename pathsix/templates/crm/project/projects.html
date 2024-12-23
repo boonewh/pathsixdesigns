@@ -41,6 +41,8 @@
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Worth ($)</th>
+                    <th>Client/Lead</th>
+                    <th>Actions</th>
                 </tr>
                 {% for project in projects.items %}
                 <tr>
@@ -49,6 +51,21 @@
                     <td>{{ project.project_start.strftime('%Y-%m-%d') if project.project_start else 'N/A' }}</td>
                     <td>{{ project.project_end.strftime('%Y-%m-%d') if project.project_end else 'N/A' }}</td>
                     <td>{{ project.project_worth }}</td>
+                    <td>
+                        {% if project.client %}
+                            {{ project.client.name }}
+                        {% elif project.lead %}
+                            {{ project.lead.name }} (Lead)
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('project.edit_project', project_id=project.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                        <form method="POST" action="{{ url_for('project.delete_project', project_id=project.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this project?');">Delete</button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </table>
@@ -69,33 +86,42 @@
             {% endif %}
         </div>
 
-        <!-- Modal for creating a new project -->
+       <!-- Modal for creating a new project -->
         <div 
-            class="modal fade" 
-            id="createProjectModal" 
-            tabindex="-1" 
-            aria-labelledby="createProjectModalLabel" 
-            aria-hidden="true"
+        class="modal fade" 
+        id="createProjectModal" 
+        tabindex="-1" 
+        aria-labelledby="createProjectModalLabel" 
+        aria-hidden="true"
         >
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createProjectModalLabel">Create New Project</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="{{ url_for('project.create_project') }}">
-                            {{ form.hidden_tag() }}
-                            
-                            {% include 'crm/project/create_project_fields.html' %}
-                            
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Create Project</button>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createProjectModalLabel">Create New Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- In your modal form section -->
+                    <form method="POST" action="{{ url_for('project.create_project') }}">
+                        {{ form.csrf_token }}
+                        
+                        {% for field in form if field.name != 'csrf_token' %}
+                        <div class="mb-3">
+                            {{ field.label }}
+                            {{ field(class="form-control") }}
+                            {% if field.errors %}
+                            <div class="invalid-feedback">
+                                {{ field.errors[0] }}
                             </div>
-                        </form>
-                    </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Create Project</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -103,5 +129,44 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const clientSelect = document.getElementById('client_id');
+    const leadSelect = document.getElementById('lead_id');
+    
+    // Handle client selection
+    if (clientSelect) {
+        clientSelect.addEventListener('change', function() {
+            if (this.value) {
+                leadSelect.value = '';
+                leadSelect.disabled = true;
+            } else {
+                leadSelect.disabled = false;
+            }
+        });
+    }
+
+    // Handle lead selection
+    if (leadSelect) {
+        leadSelect.addEventListener('change', function() {
+            if (this.value) {
+                clientSelect.value = '';
+                clientSelect.disabled = true;
+            } else {
+                clientSelect.disabled = false;
+            }
+        });
+    }
+
+    // Check initial state
+    if (clientSelect && clientSelect.value) {
+        leadSelect.disabled = true;
+    }
+    if (leadSelect && leadSelect.value) {
+        clientSelect.disabled = true;
+    }
+});
+</script>
 {% endblock %}

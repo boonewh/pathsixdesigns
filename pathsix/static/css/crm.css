@@ -251,7 +251,6 @@ body {
 }
 
 /* Registration Form Styles */
-/* Centering the form on the page */
 .register-container {
   display: flex;
   flex-direction: column;
@@ -367,6 +366,11 @@ select {
 }
 
 /* Submit Button Styling */
+.edit-buttons-section {
+  width: 75%;
+  margin: auto;
+}
+
 .submit-btn {
   width: 100%;
   padding: 10px;

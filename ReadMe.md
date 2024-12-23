@@ -1,4 +1,4 @@
-# PathSix CRM - Version 0.2.2
+# PathSix CRM - Version 0.2.3
 
 Welcome to **PathSix CRM**, a lightweight and intuitive CRM solution designed for small businesses. This is the initial release, providing the following core features:
 

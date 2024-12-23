@@ -1,0 +1,181 @@
+{
+    "project": {
+        "client_id": {
+            "type": "select",
+            "label": "Client",
+            "required": false,
+            "placeholder": "Select Client"
+        },
+        "lead_id": {
+            "type": "select",
+            "label": "Lead",
+            "required": false,
+            "placeholder": "Select Lead"
+        },
+        "project_name":{
+            "type": "text",
+            "label": "Project Name",
+            "required": true,
+            "placeholder": "Enter Project Name"
+        }, 
+        "project_description": {
+            "type": "textarea",
+            "label": "Project Description",
+            "required": false,
+            "placeholder": "Enter Project Description"
+        },
+        "project_status": {
+            "type": "select",
+            "label": "Project Status",
+            "required": true,
+            "placeholder": "Select Project Status"
+        },
+        "project_start": {
+            "type": "date",
+            "label": "Project Start Date",
+            "required": false,
+            "placeholder": "Select Project Start Date"
+        },
+        "project_end": {
+            "type": "date",
+            "label": "Project End Date",
+            "required": false,
+            "placeholder": "Select Project End Date"
+        },
+        "project_worth": {
+            "type": "number",
+            "label": "Project Worth",
+            "required": false,
+            "placeholder": "Enter Project Worth"
+        }
+    },
+
+    "lead": {
+        "name": {
+            "type": "text",
+            "label": "Lead Name",
+            "required": true,
+            "placeholder": "Enter Lead Name"
+        },
+        "website": {
+            "type": "text",
+            "label": "Website",
+            "required": false,
+            "placeholder": "Enter Company Website"
+        },
+        "email": {
+            "type": "email",
+            "label": "Email",
+            "required": false,
+            "placeholder": "Enter Company Email"
+        },
+        "phone": {
+            "type": "text",
+            "label": "Phone",
+            "required": false,
+            "placeholder": "Enter Company Phone"
+        },
+        "lead_description": {
+            "type": "textarea",
+            "label": "Description",
+            "required": false,
+            "placeholder": "Enter Company Description"
+        }
+    },
+
+    "client": {
+        "name": {
+            "type": "text",
+            "label": "Client Name",
+            "required": true,
+            "placeholder": "Enter Client Name"
+        },
+        "website": {
+            "type": "text",
+            "label": "Website",
+            "required": false,
+            "placeholder": "Enter Company Website"
+        },
+        "pricing_tier": {
+            "type": "text",
+            "label": "Price Tier",
+            "required": false,
+            "placeholder": "Enter Price Tier"
+        },
+        "email": {
+            "type": "email",
+            "label": "Email",
+            "required": false,
+            "placeholder": "Enter Company Email"
+        },
+        "phone": {
+            "type": "text",
+            "label": "Phone",
+            "required": false,
+            "placeholder": "Enter Company Phone"
+        }
+    },
+
+    "contact": {
+        "first_name": {
+            "type": "text",
+            "label": "First Name",
+            "required": true,
+            "placeholder": "Enter First Name"
+        },
+        "last_name": {
+            "type": "text",
+            "label": "Last Name",
+            "required": true,
+            "placeholder": "Enter Last Name"
+        },
+        "email": {
+            "type": "email",
+            "label": "Email",
+            "required": false,
+            "placeholder": "Enter Contact Email"
+        },
+        "phone": {
+            "type": "text",
+            "label": "Phone",
+            "required": false,
+            "placeholder": "Enter Contact Phone"
+        }
+    },
+
+    "address": {
+        "street": {
+            "type": "text",
+            "label": "Street Address",
+            "required": true,
+            "placeholder": "Enter Street Address"
+        },
+        "city": {
+            "type": "text",
+            "label": "City",
+            "required": true,
+            "placeholder": "Enter City"
+        },
+        "state": {
+            "type": "text",
+            "label": "State",
+            "required": true,
+            "placeholder": "Enter State"
+        },
+        "zip_code": {
+            "type": "text",
+            "label": "Zip Code",
+            "required": true,
+            "placeholder": "Enter Zip Code"
+        }
+    },
+
+    "notes": {
+        "note": {
+            "type": "textarea",
+            "label": "Note",
+            "required": true,
+            "placeholder": "Enter Note"
+        }
+    }
+}
