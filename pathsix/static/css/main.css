@@ -461,9 +461,21 @@ footer ul li a:hover {
     padding: 20px;
   }
 
+  .parent-container {
+    overflow-x: hidden; /* Prevents horizontal scroll from child */
+    position: relative; /* Creates positioning context */
+    width: 100%;
+  }
+
   .rocket_back {
     display: block;
-    width: 100%;
+    position: relative;
+    width: 150%; /* Makes image wider than viewport */
+    max-width: none; /* Prevents constraining to parent width */
+    left: -35%; /* Shifts image left to focus on rocket */
+    overflow-x: hidden; /* Prevents horizontal scroll */
+    object-fit: cover; /* Maintains aspect ratio */
+    object-position: left; /* Focuses on left side where rocket is */
   }
 
   .header-top {
