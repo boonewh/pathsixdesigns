@@ -26,6 +26,16 @@ def projects():
     form.client_id.choices = [('', 'Select Client')] + [(str(c.client_id), c.name) for c in Client.query.all()]
     form.lead_id.choices = [('', 'Select Lead')] + [(str(l.lead_id), l.name) for l in Lead.query.all()]
     
+    # Add this: Populate project status choices
+    form.project_status.choices = [
+        ('', 'Select Status'),
+        ('not_started', 'Not Started'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+        ('on_hold', 'On Hold'),
+        ('canceled', 'Canceled')
+    ]
+    
     return render_template('crm/project/projects.html', projects=projects, form=form)
 
 
@@ -50,24 +60,61 @@ def create_project():
     # Populate select field choices
     form.client_id.choices = [('', 'Select Client')] + [(str(c.client_id), c.name) for c in Client.query.all()]
     form.lead_id.choices = [('', 'Select Lead')] + [(str(l.lead_id), l.name) for l in Lead.query.all()]
+    form.project_status.choices = [
+        ('', 'Select Status'),
+        ('not_started', 'Not Started'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+        ('on_hold', 'On Hold'),
+        ('canceled', 'Canceled')
+    ]
     
-    if form.validate_on_submit():
+    if request.method == 'POST':
+        print("Form Data:", request.form)  # Debug print
+        
         try:
-            # Create new project with form data
+            # Create new project
             new_project = Project()
-            for field in form:
-                if field.name != 'csrf_token':
-                    setattr(new_project, field.name, field.data)
             
+            # Handle client_id and lead_id (convert to int or None)
+            client_id = request.form.get('client_id')
+            new_project.client_id = int(client_id) if client_id and client_id != '' else None
+            
+            lead_id = request.form.get('lead_id')
+            new_project.lead_id = int(lead_id) if lead_id and lead_id != '' else None
+            
+            # Handle required fields
+            new_project.project_name = request.form.get('project_name')
+            new_project.project_status = request.form.get('project_status')
+            
+            # Handle optional fields
+            new_project.project_description = request.form.get('project_description')
+            
+            # Handle dates
+            project_start = request.form.get('project_start')
+            if project_start:
+                new_project.project_start = datetime.strptime(project_start, '%Y-%m-%d')
+                
+            project_end = request.form.get('project_end')
+            if project_end:
+                new_project.project_end = datetime.strptime(project_end, '%Y-%m-%d')
+            
+            # Handle project worth (convert to float or None)
+            project_worth = request.form.get('project_worth')
+            new_project.project_worth = float(project_worth) if project_worth else None
+            
+            # Set creation metadata
             new_project.created_at = datetime.utcnow()
             new_project.created_by = current_user.id
             
             db.session.add(new_project)
             db.session.flush()  # Get the new project ID
 
-            # Create associated contact
+            # Create associated contact with minimal data
             new_contact = Contact(
                 project_id=new_project.id,
+                first_name="TBD",  # Required field
+                last_name="TBD",   # Required field
                 created_at=datetime.utcnow(),
                 created_by=current_user.id
             )
@@ -79,20 +126,20 @@ def create_project():
             
         except Exception as e:
             db.session.rollback()
+            print(f"Database Error: {str(e)}")  # Debug print
             flash(f'Error creating project: {e}', 'danger')
-    
-    return render_template('create_project.html', form=form)
+            return redirect(url_for('project.projects'))
+        
+    return redirect(url_for('project.projects'))
 
 # Project Report
 @project.route('/project_report/<int:id>', methods=['GET'])
 @roles_accepted('admin', 'editor')
 def report(id):
-    # Get the project and related data
     project = Project.query.get_or_404(id)
     contacts = Contact.query.filter_by(project_id=project.id).all()
     notes = ContactNote.query.filter_by(project_id=project.id).order_by(ContactNote.created_at.desc()).all()
    
-    # Create forms using your existing JSON structure
     project_form = create_dynamic_form('project')
     contact_form = create_dynamic_form('contact')
     note_form = create_dynamic_form('notes')
@@ -100,6 +147,14 @@ def report(id):
     # Populate select fields for project form
     project_form.client_id.choices = [('', 'Select Client')] + [(str(c.client_id), c.name) for c in Client.query.all()]
     project_form.lead_id.choices = [('', 'Select Lead')] + [(str(l.lead_id), l.name) for l in Lead.query.all()]
+    project_form.project_status.choices = [  # Add this!
+        ('', 'Select Status'),
+        ('not_started', 'Not Started'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+        ('on_hold', 'On Hold'),
+        ('canceled', 'Canceled')
+    ]
     
     # Pre-populate project form with existing data
     for field in project_form:
@@ -121,7 +176,6 @@ def report(id):
                          note_form=note_form)
 
 # Edit Project
-from datetime import datetime
 
 @project.route('/edit_project/<int:project_id>', methods=['GET', 'POST'])
 @roles_accepted('admin', 'editor')
@@ -138,6 +192,7 @@ def edit_project(project_id):
         ('on_hold', 'On Hold'),
         ('canceled', 'Canceled')
     ]
+    print("Project status choices:", form.project_status.choices) 
     
     form.client_id.choices = [('', 'Select Client')] + [(str(c.client_id), c.name) for c in Client.query.all()]
     form.lead_id.choices = [('', 'Select Lead')] + [(str(l.lead_id), l.name) for l in Lead.query.all()]

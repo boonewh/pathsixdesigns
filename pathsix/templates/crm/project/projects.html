@@ -8,8 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="link-create">
-        <!-- Button to trigger modal for creating a new project -->
+    <div class="action-bar">
         <button 
             type="button" 
             data-bs-toggle="modal" 
@@ -19,23 +18,13 @@
             + Add New Project
         </button>
     </div>
-    <div class="body-container">
-        <aside class="report-nav">
-            <nav>
-                <ul>
-                    <li><a href="#">Project Overview</a></li>
-                    <li><a href="#">Active Projects</a></li>
-                    <li><a href="#">Completed Projects</a></li>
-                </ul>
-            </nav>
-        </aside>
-
-        <div class="customer">
-            <table class="cust-table">
-                <tr class="thead">
-                    <th colspan="5">PROJECTS</th>
+    <div class="crm-container">
+        <div class="data-content">
+            <table class="crm-table">
+                <tr class="table-header">
+                    <th colspan="7">PROJECTS</th>
                 </tr>
-                <tr class="sm-thead">
+                <tr class="table-subheader">
                     <th>Project Name</th>
                     <th>Status</th>
                     <th>Start Date</th>
@@ -101,17 +90,23 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- In your modal form section -->
-                    <form method="POST" action="{{ url_for('project.create_project') }}">
+                    <!-- Create Project modal form section -->
+                    <form method="POST" action="{{ url_for('project.create_project') }}" id="createProjectForm">
                         {{ form.csrf_token }}
                         
                         {% for field in form if field.name != 'csrf_token' %}
                         <div class="mb-3">
                             {{ field.label }}
-                            {{ field(class="form-control") }}
+                            {% if field.type == 'DateField' %}
+                                {{ field(class="form-control", type="date") }}
+                            {% else %}
+                                {{ field(class="form-control") }}
+                            {% endif %}
                             {% if field.errors %}
-                            <div class="invalid-feedback">
-                                {{ field.errors[0] }}
+                            <div class="invalid-feedback d-block">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
                             </div>
                             {% endif %}
                         </div>

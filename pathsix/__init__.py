@@ -41,14 +41,14 @@ def create_app(config_class=Config):
     from pathsix.main.routes import main
     from pathsix.errors.handlers import errors
     from pathsix.pathsix_crm.crm_main.routes import crm_main
-    from pathsix.pathsix_crm.customer.routes import customer
+    from pathsix.pathsix_crm.client.routes import client
     from pathsix.pathsix_crm.users.routes import users
     from pathsix.pathsix_crm.project.routes import project
     from pathsix.pathsix_crm.lead.routes import lead
     
     app.register_blueprint(main)
     app.register_blueprint(crm_main)
-    app.register_blueprint(customer)
+    app.register_blueprint(client)
     app.register_blueprint(users)
     app.register_blueprint(errors)
     app.register_blueprint(project)

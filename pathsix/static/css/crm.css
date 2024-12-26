@@ -8,6 +8,22 @@
   --light-background: #16b8e7;
   --border-radius: 30px;
   --transition: all 0.3s linear;
+  --text-color: #050a30;
+  --secondary-color: #fa26a0;
+  --background-light: #f8f9f3;
+  --highlight-color: gold;
+
+  /* Table Colors */
+  --table-header: var(--light-color);
+  --table-subheader: lightblue;
+  --table-alternate: lightgrey;
+  --table-border: #ddd;
+
+  /* Common Values */
+  --border-radius: 30px;
+  --transition: all 0.3s linear;
+  --container-width: 80%;
+  --card-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Global Styles */
@@ -282,6 +298,48 @@ body {
   font-weight: bold;
   text-align: center;
   margin-bottom: 10px;
+}
+
+.lead-info-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.lead-details {
+  flex: 3;
+}
+
+.lead-address {
+  flex: 1;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  max-width: 300px;
+}
+
+.address-card {
+  padding: 1rem;
+  border-left: 4px solid #0d6efd;
+  background: white;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.address-card .street {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.address-card .city-state,
+.address-card .zip {
+  margin: 0.2rem 0;
+  color: #666;
+}
+
+.no-address {
+  color: #666;
+  font-style: italic;
 }
 
 /* Label and Input Styling */
@@ -924,6 +982,265 @@ footer ul li a:hover {
 
 .phone {
   color: var(--secondary-text);
+}
+
+/* Navigation Link Styles */
+.link-new {
+  width: var(--container-width);
+  margin: 20px auto;
+}
+
+.link-a {
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 5px;
+  border: 1px solid var(--dark-color);
+  border-radius: 10px;
+  background-color: var(--table-subheader);
+  transition: background-color 0.3s ease;
+}
+
+.link-a:hover {
+  background-color: var(--highlight-color);
+}
+
+/* Main Container Styles */
+.info-container {
+  display: flex;
+  width: var(--container-width);
+  margin: 20px auto;
+  gap: 2rem;
+}
+
+/* Main Content Area */
+.entity-detail {
+  flex: 2;
+  min-width: 0; /* Prevents flex item from overflowing */
+}
+
+/* Side Panel Styles */
+.side-panel {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid var(--table-border);
+  padding: 1rem;
+}
+
+/* Info Card Styles */
+.info-card {
+  background: white;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--light-color);
+  border-radius: 4px;
+}
+
+.info-card p {
+  margin: 0.3rem 0;
+}
+
+.no-info {
+  color: #666;
+  font-style: italic;
+}
+
+/* Table Styles */
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.detail-table th,
+.detail-table td {
+  padding: 10px;
+  border: 1px solid var(--table-border);
+}
+
+.detail-table th {
+  background-color: var(--table-header);
+  color: var(--text-color);
+  text-align: left;
+  width: 30%;
+}
+
+.detail-table tr:nth-child(even) td {
+  background-color: var(--table-alternate);
+}
+
+/* Notes Styles */
+.note-list {
+  margin: 1rem 0;
+}
+
+.note-item {
+  background: white;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  box-shadow: var(--card-shadow);
+}
+
+.note-text {
+  margin: 0 0 0.5rem 0;
+}
+
+.note-date {
+  color: #666;
+}
+
+/* Button Section Styles */
+.edit-buttons-section {
+  width: var(--container-width);
+  margin: 2rem auto;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* CRM Main Pages (Leads, Projects, Clients listing pages) */
+.action-bar {
+  width: 90%;
+  text-align: end;
+  margin-top: 10px;
+}
+
+.action-bar button {
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 5px;
+  transition: background-color 0.7s ease;
+  border: 1px solid var(--dark-color);
+  border-radius: 10px;
+  background-color: var(--table-subheader);
+}
+
+.action-bar button:hover {
+  background-color: var(--highlight-color);
+}
+
+.crm-container {
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  display: flex;
+  width: 95%;
+  justify-content: center;
+}
+
+.data-content {
+  width: 100%;
+}
+
+.crm-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.crm-table th,
+.crm-table td {
+  border: 1px solid var(--table-border);
+  padding: 10px;
+}
+
+.table-header th {
+  background-color: var(--table-header);
+  font-weight: bold;
+  text-align: center;
+}
+
+.table-subheader th {
+  background-color: var(--table-subheader);
+  font-weight: bold;
+}
+
+.crm-table tr:nth-child(even) {
+  background-color: var(--table-alternate);
+}
+
+/* Options Page Styles */
+.options {
+  display: flex;
+  justify-content: space-evenly;
+  padding-top: 60px;
+  flex-wrap: wrap;
+}
+
+.options img {
+  width: 300px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+  object-fit: cover;
+}
+
+.options img:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+/* Search Results Styles */
+.search-container {
+  padding-left: 20%;
+  width: 60%;
+  border: black 1px solid;
+  margin: auto;
+}
+
+/* Pagination Styles */
+.pagination {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 0 4px;
+  text-decoration: none;
+  color: #007bff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination a:hover {
+  background-color: #f1f1f1;
+  color: #0056b3;
+}
+
+.pagination a.active {
+  background-color: #007bff;
+  color: #ffffff;
+  border: 1px solid #007bff;
+}
+
+.pagination span {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 0 4px;
+  color: #6c757d;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .info-container {
+    flex-direction: column;
+  }
+
+  .side-panel {
+    max-width: none;
+  }
+
+  .detail-table {
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: 768px) {
