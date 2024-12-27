@@ -6,8 +6,8 @@
   --link-text: white;
   --primary-background: rgba(5, 10, 48, 0.95);
   --light-background: #16b8e7;
-  --border-radius: 30px;
-  --transition: all 0.3s linear;
+  --darker-background: #007bff;
+  --dark-background: #0056b3;
   --text-color: #050a30;
   --secondary-color: #fa26a0;
   --background-light: #f8f9f3;
@@ -22,36 +22,101 @@
   /* Common Values */
   --border-radius: 30px;
   --transition: all 0.3s linear;
+  --transform-ease: transform 0.3s ease;
   --container-width: 80%;
   --card-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  --login-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  --options-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+  --border: 1px solid black;
+  --input-field-border: 1px solid #ccc;
 }
 
-/* Global Styles */
+/**************** Global Styles ****************/
 
 html,
 body {
   margin: 0;
   padding: 0;
-  background: #f8f9f3;
+  background: var(--background-light);
 }
 
 * {
   box-sizing: border-box;
 }
 
-/* Header and Navigation Styles */
+/**************** General Form Styles (used throughout) ****************/
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-label {
+  font-size: 1.1em;
+  color: var(--text);
+  margin-bottom: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.form-input {
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #0066cc;
+  outline: none;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #f5c6cb;
+  margin-bottom: 10px;
+}
+
+.error-input {
+  border-color: #f5c6cb; /* Red border for error */
+  background-color: #f8d7da; /* Light red background for error */
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  color: white;
+  background-color: #0066cc;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: gold;
+  color: var(--text);
+}
+
+/**************** Header and Nav Styles ****************/
 
 .header-top {
   width: 80%;
-  margin: 20px auto; /* Centers the header-top div */
+  margin: 20px auto;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Space between elements in the header */
+  justify-content: space-between;
   padding: 10px 20px;
-  background: var(--light-background); /* Consistent background variable */
-  border-radius: 25px; /* Rounded corners */
-  font-family: Arial, Helvetica, sans-serif; /* Consistent font styling */
-  z-index: 3; /* Ensures it stays above other elements */
+  background: var(--light-background);
+  border-radius: 25px;
+  font-family: Arial, Helvetica, sans-serif;
+  z-index: 3;
 }
 
 .header-top nav {
@@ -92,7 +157,7 @@ body {
   display: none; /* Hide checkbox and icon for desktop */
 }
 
-/* Logo Styles */
+/**************** Logo Styles ****************/
 
 .logo-container {
   display: flex;
@@ -105,33 +170,7 @@ body {
   height: auto;
 }
 
-/* Left Navigation Styles */
-
-.body-container {
-  margin: 0 auto;
-  font-family: Arial, sans-serif;
-  display: flex;
-  width: 95%;
-  justify-content: space-between;
-}
-
-.report-nav nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  border: 1px solid var(--dark-color);
-}
-
-.report-nav nav ul li {
-  border: 1px solid var(--dark-color);
-}
-
-.report-nav nav ul li a {
-  color: var(--text);
-  text-decoration: none;
-  padding: 15px 20px;
-  display: block;
-}
+/**************** Search Bar Styles (mostly on crm-base.html) ****************/
 
 .search-bar {
   margin: 10px 0;
@@ -152,35 +191,25 @@ body {
 
 .search-bar button {
   padding: 5px 15px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--darker-background);
+  color: var(--link-text);
   border: none;
   cursor: pointer;
 }
 
 .search-bar button:hover {
-  background-color: #0056b3;
+  background-color: var(--dark-background);
 }
 
+/* Search Results Styles (only class actually on search_results.html) */
 .search-container {
   padding-left: 20%;
   width: 60%;
-  border: black 1px solid;
+  border: var(--border);
   margin: auto;
 }
 
-.report-nav nav ul li a:hover {
-  background-color: #555; /* Change color on hover */
-}
-
-/* Style for the left-side nav (aside) */
-.report-nav {
-  color: var(--text);
-  padding-top: 20px;
-  overflow-y: auto; /* Enables scroll if nav gets too long */
-}
-
-/* Options Styles */
+/**************** Options Styles (only class on crm.html, the option boxes) ****************/
 
 .options {
   display: flex;
@@ -193,270 +222,41 @@ body {
   width: 300px;
   height: auto;
   border-radius: 10px;
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--options-shadow);
   object-fit: cover;
 }
 
 .options img:hover {
   transform: scale(1.1);
-  transition: transform 0.3s ease;
+  transition: var(--transform-ease);
 }
 
-/* CRM Table Styles */
+/**************** Login Styles ****************/
 
-.customer {
-  width: 83%;
-}
-
-.cust-table {
-  width: 100%; /* Full width for the table */
-  border-collapse: collapse; /* Remove double borders */
-  margin: 20px 0; /* Add space above and below the table */
-}
-
-.cust-table th,
-.cust-table td {
-  border: 1px solid #ddd; /* Add a thin border around each cell */
-  padding: 10px; /* Add padding for spacing within cells */
-}
-
-.cust-table th {
-  background-color: lightblue; /* Add a background color to headers */
-  font-weight: bold;
-}
-
-.cust-table tr:nth-child(even) {
-  background-color: lightgrey; /* Optional: add alternating row colors */
-}
-
-.project-table {
-  width: 75%;
-  border-collapse: collapse;
-  margin: 20px auto;
-}
-
-/* Pagination Styles */
-
-.pagination a {
-  display: inline-block;
-  padding: 8px 16px;
-  margin: 0 4px;
-  text-decoration: none;
-  color: #007bff; /* Main link color */
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.pagination a:hover {
-  background-color: #f1f1f1;
-  color: #0056b3;
-}
-
-.pagination a.active {
-  background-color: #007bff;
-  color: #ffffff;
-  border: 1px solid #007bff;
-}
-
-.pagination span {
-  display: inline-block;
-  padding: 8px 16px;
-  margin: 0 4px;
-  color: #6c757d;
-}
-
-/* Registration Form Styles */
-.register-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background-color: #f9f9f9;
-}
-
-/* Form Styling */
-.register-form {
-  width: 100%;
-  max-width: 400px;
-  background: white;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.register-form fieldset {
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-
-.register-form legend {
-  font-size: 1.5em;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.lead-info-container {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.lead-details {
-  flex: 3;
-}
-
-.lead-address {
-  flex: 1;
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  max-width: 300px;
-}
-
-.address-card {
-  padding: 1rem;
-  border-left: 4px solid #0d6efd;
-  background: white;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.address-card .street {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.address-card .city-state,
-.address-card .zip {
-  margin: 0.2rem 0;
-  color: #666;
-}
-
-.no-address {
-  color: #666;
-  font-style: italic;
-}
-
-/* Label and Input Styling */
-
-.link-new,
-.link-create {
-  width: 90%;
-  text-align: end;
-  margin-top: 10px;
-}
-
-.link-create button {
-  color: var(--text);
-  text-decoration: none;
-  padding: 5px;
-  transition: background-color 0.7s ease;
-  border: 1px solid var(--dark-color);
-  border-radius: 10px;
-  background-color: lightblue;
-}
-
-.link-a {
-  color: var(--text);
-  text-decoration: none;
-  padding: 5px;
-  transition: background-color 0.7s ease;
-  border: 1px solid var(--dark-color);
-  border-radius: 10px;
-  background-color: lightblue;
-}
-
-.link-new a {
-  text-decoration: none;
-}
-
-.link-new button {
-  color: var(--text);
-  text-decoration: none;
-  padding: 5px;
-  transition: background-color 0.7s ease;
-  border: 1px solid var(--dark-color);
-  border-radius: 10px;
-  background-color: lightblue;
-  box-sizing: border-box; /* Consistent box-sizing */
-  margin: 0; /* Removes any default margin */
-}
-
-.link-new button:hover {
-  background-color: gold;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-}
-
-.form-label {
-  font-size: 1.1em;
-  color: var(--text);
-  margin-bottom: 5px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.form-input {
-  padding: 10px;
-  font-size: 1em;
-  border: 1px solid lightgray;
-  border-radius: 4px;
-  transition: border-color 0.3s ease;
-}
-
-.form-input:focus {
-  border-color: #0066cc;
-  outline: none;
-}
-
-select {
-  -webkit-appearance: menulist; /* Restore default dropdown arrow */
-  -moz-appearance: menulist; /* For Firefox */
-  appearance: menulist; /* Standard */
-}
-
-/* Submit Button Styling */
-.edit-buttons-section {
-  width: 75%;
-  margin: auto;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 10px;
-  font-size: 1em;
-  font-weight: bold;
-  color: white;
-  background-color: #0066cc;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.submit-btn:hover {
-  background-color: gold;
-  color: var(--text);
-}
-
-/* Login Form Styles */
-/* General Container Styling */
 .login-container {
   max-width: 400px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
+  background-color: var(--link-text);
+  border: 1px solid var(--table-border);
   border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
+}
+
+/* Links (Menu Below the Form) */
+.login-container a {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  margin-top: 10px;
+  color: #007bff;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-container a:hover {
+  color: #0056b3;
 }
 
 /* Page Heading */
@@ -481,7 +281,7 @@ select {
 .login-container input[type="email"] {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: var(--input-field-border);
   border-radius: 5px;
   font-size: 1rem;
 }
@@ -489,15 +289,15 @@ select {
 .login-container input[type="text"]:focus,
 .login-container input[type="password"]:focus,
 .login-container input[type="email"]:focus {
-  border-color: #007bff;
-  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+  border-color: var(--darker-background);
+  box-shadow: var(--login-shadow);
   outline: none;
 }
 
 /* Submit Button */
 .login-container input[type="submit"] {
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--darker-background);
+  color: var(--link-text);
   padding: 10px;
   font-size: 1rem;
   border: none;
@@ -507,7 +307,7 @@ select {
 }
 
 .login-container input[type="submit"]:hover {
-  background-color: #0056b3;
+  background-color: var(--dark-background);
 }
 
 /* Remember Me Checkbox */
@@ -527,53 +327,16 @@ select {
   margin-bottom: 10px;
 }
 
-/* Flash Messages */
-.alert {
-  margin-bottom: 20px;
-  font-size: 0.9rem;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
-}
+/**************** Password Reset Form Styles ****************/
 
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-/* Links (Menu Below the Form) */
-.login-container a {
-  display: inline-block;
-  text-align: center;
-  width: 100%;
-  margin-top: 10px;
-  color: #007bff;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.login-container a:hover {
-  color: #0056b3;
-}
-
-/* Password Reset Form Styles */
-/* General Container Styling */
 .password-reset-container {
   max-width: 400px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
+  background-color: var(--link-text);
+  border: 1px solid var(--table-border);
   border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
 }
 
 /* Header Styling */
@@ -595,116 +358,41 @@ select {
 .password-reset-container input[type="email"] {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: var(--input-field-border);
   border-radius: 5px;
   font-size: 1rem;
 }
 
 .password-reset-container input[type="text"]:focus,
 .password-reset-container input[type="email"]:focus {
-  border-color: #007bff;
-  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+  border-color: var(--darker-background);
+  box-shadow: var(--login-shadow);
   outline: none;
 }
 
-/* Submit Button */
-.password-reset-container input[type="submit"] {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.password-reset-container input[type="submit"]:hover {
-  background-color: #0056b3;
-}
-
-/* Flash Messages */
-.alert {
-  margin-bottom: 20px;
-  font-size: 0.9rem;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-/* Links (Menu Below the Form) */
-.password-reset-container a {
-  display: inline-block;
-  text-align: center;
-  width: 100%;
-  margin-top: 10px;
-  color: #007bff;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.password-reset-container a:hover {
-  color: #0056b3;
-  text-decoration: underline;
-}
-
-/* General Container Styling */
-.password-reset-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Header Styling */
-.password-reset-header {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #333;
-}
-
-/* Form Group Styling */
-.password-reset-container .form-group {
-  margin-bottom: 15px;
-}
-
-/* Input Fields */
 .password-reset-container input[type="password"] {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: var(--input-field-border);
   border-radius: 5px;
   font-size: 1rem;
 }
 
 .password-reset-container input[type="password"]:focus {
-  border-color: #007bff;
-  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+  border-color: var(--darker-background);
+  box-shadow: var(--login-shadow);
   outline: none;
+}
+
+.password-reset-container a:hover {
+  color: var(--dark-background);
+  text-decoration: underline;
 }
 
 /* Submit Button */
 .password-reset-container input[type="submit"] {
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--darker-background);
+  color: var(--link-text);
   padding: 10px;
   font-size: 1rem;
   border: none;
@@ -714,397 +402,104 @@ select {
 }
 
 .password-reset-container input[type="submit"]:hover {
-  background-color: #0056b3;
-}
-
-/* Flash Messages */
-.alert {
-  margin-bottom: 20px;
-  font-size: 0.9rem;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-/* Links (Menu Below the Form) */
-.password-reset-container a {
-  display: inline-block;
-  text-align: center;
-  width: 100%;
-  margin-top: 10px;
-  color: #007bff;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: color 0.3s ease;
+  background-color: var(--dark-background);
 }
 
 .password-reset-container a:hover {
-  color: #0056b3;
+  color: var(--dark-background);
   text-decoration: underline;
 }
 
-/* Create Client Form Styles */
+/**************** Registration Form Styles ****************/
 
-.create-client-container {
+.register-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 80vh;
   padding: 20px;
-  background-color: #f8f9f3;
+  background-color: var(--background-light);
 }
 
-.create-client-form {
+/* Form Styling */
+.register-form {
   width: 100%;
-  max-width: 500px;
-  background: white;
+  max-width: 400px;
+  background: var(--link-text);
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: var(--input-field-border);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
 }
 
-.create-client-form fieldset {
+.register-form fieldset {
   border: none;
   margin: 0;
   padding: 0;
 }
 
-.create-client-form legend {
+.register-form legend {
   font-size: 1.5em;
   font-weight: bold;
-  color: var(--dark-color);
   text-align: center;
   margin-bottom: 10px;
 }
 
-/* Single Client Detail Styles */
+/**************** Admin Users Page Style ****************/
 
-.client-detail {
-  display: flex;
-  width: 80%;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+.customer {
+  width: 83%;
 }
 
-.client-detail h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 24px;
-}
-
-.client-table {
+.cust-table {
   width: 100%;
   border-collapse: collapse;
+  margin: 20px 0;
 }
 
-.client-table th {
-  text-align: left;
-  width: 30%;
+.cust-table th,
+.cust-table td {
+  border: var(--input-field-border);
   padding: 10px;
-  background-color: #f4f4f4;
+}
+
+.cust-table th {
+  background-color: var(--table-header);
   font-weight: bold;
 }
 
-.client-table td {
-  padding: 10px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ddd;
+.cust-table tr:nth-child(even) {
+  background-color: var(--table-alternate);
 }
 
-/* Optional: Styling for N/A values */
-.client-table td:empty::before {
-  content: "N/A";
-  color: #888;
-}
-
-/* Label and Input Styling for Create Client Form */
-.create-client-form .form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-}
-
-.create-client-form .form-label {
-  font-size: 1.1em;
-  color: var(--text);
-  margin-bottom: 5px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.create-client-form .form-input {
-  padding: 10px;
-  font-size: 1em;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: border-color 0.3s ease;
-}
-
-.create-client-form .form-input:focus {
-  border-color: var(--light-color);
-  outline: none;
-}
-
-/* Submit Button Styling for Create Client Form */
-.create-client-form .submit-btn {
-  width: 100%;
-  padding: 10px;
-  font-size: 1em;
-  font-weight: bold;
-  color: white;
-  background-color: var(--light-color);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.create-client-form .submit-btn:hover {
-  background-color: gold;
-  color: var(--text);
-}
-
-/* Success message styling */
-.success {
-  background-color: #d4edda;
-  color: #155724;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid lightgrey;
-  margin-bottom: 10px;
-}
-
-/* Error message styling */
-
-.container {
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  text-align: center;
-  padding: 20px;
-}
-
-.row {
-  max-width: 600px; /* Limit content width for readability */
-  width: 100%; /* Full width on smaller screens */
-  background-color: #ffffff; /* White background for the message */
-  padding: 40px;
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  border: 1px solid #e0e0e0; /* Light border for contrast */
-}
-
-.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #f5c6cb;
-  margin-bottom: 10px;
-}
-
-/* Info message styling */
-.info {
-  background-color: #d1ecf1;
-  color: #0c5460;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #bee5eb;
-  margin-bottom: 10px;
-}
-
-.form-input {
-  /* Regular input styles */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.error-input {
-  border-color: #f5c6cb; /* Red border for error */
-  background-color: #f8d7da; /* Light red background for error */
-}
-
-/* Account Page Styles */
+/**************** Account Page Style ****************/
 .account {
   width: 80%;
   margin: 20px auto;
 }
 
-/* Footer Styles */
+/**************** Error Pages Styling ****************/
 
-footer {
+.container {
   display: flex;
-  color: var(--link-text);
-  background-color: var(--dark-color);
-  text-align: left;
-  padding: 20px 0;
-  font-family: Arial, Helvetica, sans-serif;
-  margin-top: 150px;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
 }
 
-footer div {
-  padding: 0 10px;
-  width: 25%;
-}
-
-footer ul {
-  list-style: none;
-}
-
-footer li {
-  margin: 10px 0;
-}
-
-footer ul li a {
-  color: var(--link-text);
-  text-decoration: none;
-}
-
-footer ul li a:hover {
-  color: var(--light-color);
-}
-
-.phone {
-  color: var(--secondary-text);
-}
-
-/* Navigation Link Styles */
-.link-new {
-  width: var(--container-width);
-  margin: 20px auto;
-}
-
-.link-a {
-  color: var(--text-color);
-  text-decoration: none;
-  padding: 5px;
-  border: 1px solid var(--dark-color);
-  border-radius: 10px;
-  background-color: var(--table-subheader);
-  transition: background-color 0.3s ease;
-}
-
-.link-a:hover {
-  background-color: var(--highlight-color);
-}
-
-/* Main Container Styles */
-.info-container {
-  display: flex;
-  width: var(--container-width);
-  margin: 20px auto;
-  gap: 2rem;
-}
-
-/* Main Content Area */
-.entity-detail {
-  flex: 2;
-  min-width: 0; /* Prevents flex item from overflowing */
-}
-
-/* Side Panel Styles */
-.side-panel {
-  flex: 1;
-  min-width: 250px;
-  max-width: 300px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid var(--table-border);
-  padding: 1rem;
-}
-
-/* Info Card Styles */
-.info-card {
-  background: white;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-left: 4px solid var(--light-color);
-  border-radius: 4px;
-}
-
-.info-card p {
-  margin: 0.3rem 0;
-}
-
-.no-info {
-  color: #666;
-  font-style: italic;
-}
-
-/* Table Styles */
-.detail-table {
+.row {
+  max-width: 600px;
   width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
-}
-
-.detail-table th,
-.detail-table td {
-  padding: 10px;
-  border: 1px solid var(--table-border);
-}
-
-.detail-table th {
-  background-color: var(--table-header);
-  color: var(--text-color);
-  text-align: left;
-  width: 30%;
-}
-
-.detail-table tr:nth-child(even) td {
-  background-color: var(--table-alternate);
-}
-
-/* Notes Styles */
-.note-list {
-  margin: 1rem 0;
-}
-
-.note-item {
-  background: white;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 4px;
+  background-color: var(--link-text);
+  padding: 40px;
+  border-radius: 8px;
   box-shadow: var(--card-shadow);
+  border: var(--input-field-border);
 }
 
-.note-text {
-  margin: 0 0 0.5rem 0;
-}
+/**************** Common Styles for leads, clients and projects main page ****************/
 
-.note-date {
-  color: #666;
-}
-
-/* Button Section Styles */
-.edit-buttons-section {
-  width: var(--container-width);
-  margin: 2rem auto;
-}
-
-.button-group {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-/* CRM Main Pages (Leads, Projects, Clients listing pages) */
 .action-bar {
   width: 90%;
   text-align: end;
@@ -1164,35 +559,6 @@ footer ul li a:hover {
   background-color: var(--table-alternate);
 }
 
-/* Options Page Styles */
-.options {
-  display: flex;
-  justify-content: space-evenly;
-  padding-top: 60px;
-  flex-wrap: wrap;
-}
-
-.options img {
-  width: 300px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
-  object-fit: cover;
-}
-
-.options img:hover {
-  transform: scale(1.1);
-  transition: transform 0.3s ease;
-}
-
-/* Search Results Styles */
-.search-container {
-  padding-left: 20%;
-  width: 60%;
-  border: black 1px solid;
-  margin: auto;
-}
-
 /* Pagination Styles */
 .pagination {
   text-align: center;
@@ -1204,21 +570,21 @@ footer ul li a:hover {
   padding: 8px 16px;
   margin: 0 4px;
   text-decoration: none;
-  color: #007bff;
-  border: 1px solid #ddd;
+  color: var(--darker-background);
+  border: var(--input-field-border);
   border-radius: 4px;
   transition: background-color 0.3s, color 0.3s;
 }
 
 .pagination a:hover {
-  background-color: #f1f1f1;
-  color: #0056b3;
+  background-color: var(--table-border);
+  color: var(--dark-background);
 }
 
 .pagination a.active {
-  background-color: #007bff;
-  color: #ffffff;
-  border: 1px solid #007bff;
+  background-color: var(--darker-background);
+  color: var(--link-text);
+  border: 1px solid var(--darker-background);
 }
 
 .pagination span {
@@ -1226,6 +592,258 @@ footer ul li a:hover {
   padding: 8px 16px;
   margin: 0 4px;
   color: #6c757d;
+}
+
+/**************** Common Report Styles ****************/
+
+.link-new,
+.link-create {
+  width: 90%;
+  text-align: end;
+  margin-top: 10px;
+}
+
+.link-create button {
+  color: var(--text);
+  text-decoration: none;
+  padding: 5px;
+  transition: background-color 0.7s ease;
+  border: 1px solid var(--dark-color);
+  border-radius: 10px;
+  background-color: lightblue;
+}
+
+.link-a {
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 5px;
+  border: 1px solid var(--dark-color);
+  border-radius: 10px;
+  background-color: var(--table-subheader);
+  transition: background-color 0.7s ease;
+}
+
+.link-a:hover {
+  background-color: var(--highlight-color);
+}
+
+.link-new a {
+  text-decoration: none;
+}
+
+.link-new button {
+  color: var(--text);
+  text-decoration: none;
+  padding: 5px;
+  transition: background-color 0.7s ease;
+  border: 1px solid var(--dark-color);
+  border-radius: 10px;
+  background-color: lightblue;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.link-new button:hover {
+  background-color: gold;
+}
+
+/* Main Container Styles */
+.info-container {
+  display: flex;
+  width: var(--container-width);
+  margin: 20px auto;
+  gap: 2rem;
+}
+
+/* Main Content Area */
+.entity-detail {
+  flex: 2;
+  min-width: 0;
+}
+
+/* Table Styles */
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.detail-table th,
+.detail-table td {
+  padding: 10px;
+  border: 1px solid var(--table-border);
+}
+
+.detail-table th {
+  background-color: var(--table-header);
+  color: var(--text-color);
+  text-align: left;
+  width: 30%;
+}
+
+.detail-table tr:nth-child(even) td {
+  background-color: var(--table-alternate);
+}
+
+/* Side Panel Styles */
+.side-panel {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid var(--table-border);
+  padding: 1rem;
+}
+
+/* Info Card Styles */
+.info-card {
+  background: white;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--light-color);
+  border-radius: 4px;
+}
+
+.info-card p {
+  margin: 0.3rem 0;
+}
+
+.no-info {
+  color: #666;
+  font-style: italic;
+}
+
+/* Notes Styles */
+.note-list {
+  margin: 1rem 0;
+}
+
+.note-item {
+  background: white;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  box-shadow: var(--card-shadow);
+}
+
+.note-text {
+  margin: 0 0 0.5rem 0;
+}
+
+.note-date {
+  color: #666;
+}
+
+/* Button Section Styles */
+.edit-buttons-section {
+  width: var(--container-width);
+  margin: 2rem auto;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Address Styles */
+.street {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.city-state,
+.zip {
+  margin: 0.2rem 0;
+  color: #666;
+}
+
+/* Select Dropdown Styling */
+select {
+  -webkit-appearance: menulist; /* Restore default dropdown arrow */
+  -moz-appearance: menulist; /* For Firefox */
+  appearance: menulist; /* Standard */
+}
+
+/* Flash Messages */
+.alert {
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Success message styling */
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid lightgrey;
+  margin-bottom: 10px;
+}
+
+/* Info message styling */
+.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #bee5eb;
+  margin-bottom: 10px;
+}
+
+/**************** Footer Styles ****************/
+
+footer {
+  display: flex;
+  color: var(--link-text);
+  background-color: var(--dark-color);
+  text-align: left;
+  padding: 20px 0;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 150px;
+  justify-content: space-around;
+}
+
+footer div {
+  padding: 0 10px;
+  width: 25%;
+}
+
+footer ul {
+  list-style: none;
+}
+
+footer li {
+  margin: 10px 0;
+}
+
+footer ul li a {
+  color: var(--link-text);
+  text-decoration: none;
+}
+
+footer ul li a:hover {
+  color: var(--light-color);
+}
+
+footer .phone {
+  color: var(--secondary-text);
 }
 
 /* Responsive Styles */
@@ -1241,9 +859,7 @@ footer ul li a:hover {
   .detail-table {
     font-size: 0.9rem;
   }
-}
 
-@media (max-width: 768px) {
   .header-top {
     flex-direction: column;
   }
