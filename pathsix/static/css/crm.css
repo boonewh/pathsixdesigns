@@ -603,6 +603,10 @@ body {
   margin-top: 10px;
 }
 
+.link-new h1 {
+  text-align: start;
+}
+
 .link-create button {
   color: var(--text);
   text-decoration: none;
@@ -658,7 +662,12 @@ body {
 /* Main Content Area */
 .entity-detail {
   flex: 2;
-  min-width: 0;
+  width: 80%;
+  margin: auto;
+}
+
+.entity-detail h1 {
+  text-align: center;
 }
 
 /* Table Styles */
