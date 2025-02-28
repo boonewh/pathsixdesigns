@@ -307,6 +307,11 @@ section h3 {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+#verified {
+  width: 20%;
+  padding-top: 40px;
+}
+
 .bottom {
   background: var(--light-background);
 }
